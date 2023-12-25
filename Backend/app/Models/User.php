@@ -10,6 +10,8 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
+    protected $table = 'user';
+
     use HasApiTokens, HasFactory, Notifiable;
 
     /**
@@ -18,9 +20,17 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'nombre',
+        'correo',
+        'contrasena',
+        'sabiduria',
+        'nobleza',
+        'virtud',
+        'maldad',
+        'audacia',
+        'tipo',
+        'dios_id',
+        'humano_id',
     ];
 
     /**
@@ -42,4 +52,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function dios(){
+        return $this->belongsTo(Dios::class, 'dios_id');
+    }
+
+    public function humano(){
+        return $this->belongsTo(Humano::class, 'humano_id');
+    }
 }
