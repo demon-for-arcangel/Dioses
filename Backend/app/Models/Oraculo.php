@@ -31,11 +31,13 @@ class Oraculo extends Model
         return $this->belongsTo(PruebaValoracion::class, 'prueba_valoracion_id');
     }
 
-    public function resultadosPrueba(){
-        return $this->hasMany(ResultadoPrueba::class, 'prueba_id');
+    public function asignacionesOraculo()
+    {
+        return $this->hasMany(AsignacionOraculo::class, 'oraculo_id');
     }
 
-    public function humanoDestino(){
-        return $this->belongsTo(Humano::class, 'cantidad_destino');
+    public function resultadosOraculo()
+    {
+        return $this->hasMany(ResultadoOraculo::class, 'prueba_id');
     }
 }

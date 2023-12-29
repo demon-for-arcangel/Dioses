@@ -11,7 +11,6 @@ class PruebaEleccion extends Model
 
     protected $fillable = [
         'opciones',
-        'palabras_clave_correctas',
     ];
 
     public function oraculos(){

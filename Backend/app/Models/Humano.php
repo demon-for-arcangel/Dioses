@@ -11,31 +11,23 @@ class Humano extends Model
 
     protected $fillable = [
         'destino',
+        'afinidad',
+        'fecha_muerte',
         'dios_id',
+        'created_at',
+        'updated_at',
     ];
 
     public function dios(){
         return $this -> belongsTo(Dios::class, 'dios_id');
     }
 
-    public function acciones(){
-        return $this -> hasMany(Accion::class, 'objetivo_accion');
+    public function asignacionesOraculo(){
+        return $this -> hasMany(AsignacionOraculo::class, 'humano_id');
     }
 
-    public function afinidades(){
-        return $this -> hasMany(AfinidadDiosHumano::class, 'humano_id');
-    }
-
-    public function eliminado(){
-        return $this -> hasOne(Eliminado::class, 'humano_id');
-    }
-
-    public function oraculos(){
-        return $this -> hasMany(Oraculo::class, 'cantidad_destino');
-    }
-
-    public function resultadosPruebas(){
-        return $this -> hayMany(ResultadoPrueba::class, 'humano_id');
+    public function resultadosOraculos(){
+        return $this -> hayMany(ResultadoOraculo::class, 'humano_id');
     }
 
     public function usuario(){
