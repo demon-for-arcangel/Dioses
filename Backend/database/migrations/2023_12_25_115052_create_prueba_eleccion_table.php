@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('prueba_eleccion', function (Blueprint $table) {
             $table->id();
             $table->string('opciones');
-            $table->string('palabras_clave_correctas');
             $table->timestamps();
         });
     }

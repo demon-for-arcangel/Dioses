@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('resultado_prueba', function (Blueprint $table) {
+        Schema::create('resultado_oraculo', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('humano_id')->constrained('humano');
+            $table->foreignId('humano_id')->constrained();
             $table->foreignId('prueba_id')->constrained('oraculo');
             $table->string('resultado');
             $table->timestamps();
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('resultado_prueba');
+        Schema::dropIfExists('resultado_oraculo');
     }
 };

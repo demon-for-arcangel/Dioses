@@ -14,8 +14,12 @@ return new class extends Migration
         Schema::create('humano', function (Blueprint $table) {
             $table->id();
             $table->integer('destino');
-            $table->foreignId('dios_id')->constrained('dios');
+            $table->integer('afinidad');
+            $table->string('fecha_muerte')->nullable();
+            $table->bigInteger('dios_id')->unsigned();
             $table->timestamps();
+
+            $table->foreign('dios_id')->references('id')->on('dios');
         });
     }
 

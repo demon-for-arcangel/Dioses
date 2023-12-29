@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('prueba_libre', function (Blueprint $table) {
+        Schema::create('asignacion_oraculo', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('dios_id')->constrained();
+            $table->foreignId('oraculo_id')->constrained();
+            $table->foreignId('humano_id')->constrained();
             $table->timestamps();
         });
     }
@@ -22,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('prueba_libre');
+        Schema::dropIfExists('asignacion_oraculo');
     }
 };

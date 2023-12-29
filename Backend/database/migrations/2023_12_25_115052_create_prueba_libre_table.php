@@ -11,10 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('eliminado', function (Blueprint $table) {
+        Schema::create('prueba_libre', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('humano_id')->constrained('humano');
-            $table->date('fecha_muerte');
+            $table->string('palabra_clave');
             $table->timestamps();
         });
     }
@@ -24,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('eliminado');
+        Schema::dropIfExists('prueba_libre');
     }
 };
