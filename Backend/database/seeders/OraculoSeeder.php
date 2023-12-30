@@ -16,12 +16,11 @@ class OraculoSeeder extends Seeder
         DB::table('oraculo')->insert([
             'id' => 1,
             'pregunta' => '¿Cuál es tu destino?',
-            'palabras_clave_correctas' => 'destino, futuro, predestinación',
             'caracteristica' => 'Adivinación',
-            'cantidad_destino' => 3,
+            'cantidad_destino' => 70,
             'prueba_libre_id' => 1,
-            'prueba_eleccion_id' => 2,
-            'prueba_valoracion_id' => 3,
+            'prueba_eleccion_id' => 1,
+            'prueba_valoracion_id' => 1,
         ]);
     }
 }

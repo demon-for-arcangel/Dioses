@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('asignacion_oraculo', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('dios_id')->constrained();
-            $table->foreignId('oraculo_id')->constrained();
-            $table->foreignId('humano_id')->constrained();
+            $table->foreignId('dios_id')->constrained('dios');
+            $table->foreignId('oraculo_id')->constrained('oraculo');
+            $table->foreignId('humano_id')->constrained('humano');
             $table->timestamps();
         });
     }

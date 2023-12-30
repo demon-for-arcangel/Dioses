@@ -14,8 +14,10 @@ class HumanoSeeder extends Seeder
     public function run(): void
     {
         DB::table('humano')->insert([
-            'id' => 2,
-            'destino' => 3,
+            'id' => 1,
+            'destino' => 40,
+            'afinidad' => 30,
+            'fecha_muerte' => '20/06/2050',
             'dios_id' => 1,
         ]);
     }

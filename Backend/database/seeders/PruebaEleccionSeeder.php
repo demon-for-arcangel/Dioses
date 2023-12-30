@@ -16,7 +16,6 @@ class PruebaEleccionSeeder extends Seeder
         DB::table('prueba_eleccion')->insert([
             'id' => 1,
             'opciones' => 'Opción A, Opción B, Opción C',
-            'palabras_clave_correctas' => 'correcta',
         ]);
     }
 }

@@ -16,16 +16,28 @@ class UserSeeder extends Seeder
         DB::table('user')->insert([
             'id' => 1,
             'nombre' => 'Usuario1',
-            'correo' => 'usuario1@example.com',
-            'contrasena' => bcrypt('contrasena1'),
+            'email' => 'usuario1@example.com',
+            'password' => bcrypt('contrasena1'),
             'sabiduria' => 80,
             'nobleza' => 75,
             'virtud' => 90,
             'maldad' => 20,
             'audacia' => 85,
-            'tipo' => 'dios',
             'dios_id' => 1,
-            'humano_id' => 2,
+            'humano_id' => null,
+        ],
+        [
+            'id' => 2,
+            'nombre' => 'Usuario2',
+            'email' => 'usuario2@example.com',
+            'password' => bcrypt('contrasena2'),
+            'sabiduria' =>40,
+            'nobleza' => 95,
+            'virtud' => 60,
+            'maldad' => 50,
+            'audacia' => 35,
+            'dios_id' => null,
+            'humano_id' => 1,
         ]);
     }
 }

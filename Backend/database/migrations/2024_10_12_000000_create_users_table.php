@@ -22,8 +22,8 @@ return new class extends Migration
             $table->integer('virtud')->nullable();
             $table->integer('maldad')->nullable();
             $table->integer('audacia')->nullable();
-            $table->foreignId('dios_id')->nullable()->constrained();
-            $table->foreignId('humano_id')->nullable()->constrained();
+            $table->foreignId('dios_id')->nullable()->constrained('dios');
+            $table->foreignId('humano_id')->nullable()->constrained('humano');
             $table->timestamps();
         });
     }

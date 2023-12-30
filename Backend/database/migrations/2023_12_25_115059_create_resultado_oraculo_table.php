@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('resultado_oraculo', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('humano_id')->constrained();
+            $table->foreignId('humano_id')->constrained('humano');
             $table->foreignId('prueba_id')->constrained('oraculo');
             $table->string('resultado');
             $table->timestamps();
