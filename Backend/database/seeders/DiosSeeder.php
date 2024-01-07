@@ -16,5 +16,11 @@ class DiosSeeder extends Seeder
         DB::table('dios')->insert([
             'id' => 1,
         ]);
+        DB::table('dios')->insert([
+            'id' => 2,
+        ]);
+        DB::table('dios')->insert([
+            'id' => 3,
+        ]);
     }
 }
