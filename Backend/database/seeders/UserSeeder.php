@@ -23,8 +23,6 @@ class UserSeeder extends Seeder
             'virtud' => 1,
             'maldad' => 2,
             'audacia' => 5,
-            'dios_id' => 1,
-            'humano_id' => null,
         ],);
         DB::table('user')->insert([
             'id' => 2,
@@ -36,8 +34,6 @@ class UserSeeder extends Seeder
             'virtud' => 2,
             'maldad' => 2,
             'audacia' => 5,
-            'dios_id' => 2,
-            'humano_id' => null,
         ]);
         DB::table('user')->insert([
             'id' => 3,
@@ -49,8 +45,6 @@ class UserSeeder extends Seeder
             'virtud' => 4,
             'maldad' => 4,
             'audacia' => 2,
-            'dios_id' => 3,
-            'humano_id' => null,
         ]);
         DB::table('user')->insert([
             'id' => 4,
@@ -62,8 +56,6 @@ class UserSeeder extends Seeder
             'virtud' => 2,
             'maldad' => 5,
             'audacia' => 1,
-            'dios_id' => null,
-            'humano_id' => 1,
         ]);
     }
 }

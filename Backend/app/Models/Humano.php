@@ -14,6 +14,7 @@ class Humano extends Model
         'afinidad',
         'fecha_muerte',
         'dios_id',
+        'user_id',
         'created_at',
         'updated_at',
     ];
@@ -22,15 +23,15 @@ class Humano extends Model
         return $this -> belongsTo(Dios::class, 'dios_id');
     }
 
+    public function user(){
+        return $this -> belongsTo(User::class, 'user_id');
+    }
+
     public function asignacionesOraculo(){
         return $this -> hasMany(AsignacionOraculo::class, 'humano_id');
     }
 
     public function resultadosOraculos(){
         return $this -> hayMany(ResultadoOraculo::class, 'humano_id');
-    }
-
-    public function usuario(){
-        return $this -> hasOne(User::class, 'humano_id');
     }
 }

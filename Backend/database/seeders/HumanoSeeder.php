@@ -19,6 +19,7 @@ class HumanoSeeder extends Seeder
             'afinidad' => 30,
             'fecha_muerte' => '20/06/2050',
             'dios_id' => 1,
+            'user_id' => 4
         ]);
     }
 }

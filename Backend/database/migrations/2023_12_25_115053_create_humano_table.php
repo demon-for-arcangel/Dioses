@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('humano', function (Blueprint $table) {
             $table->id();
-            $table->integer('destino');
+            $table->integer('destino')->default(0);
             $table->integer('afinidad');
             $table->string('fecha_muerte')->nullable();
             $table->bigInteger('dios_id')->unsigned();
+            $table->foreignId('user_id')->nullable()->constrained('user');
             $table->timestamps();
 
             $table->foreign('dios_id')->references('id')->on('dios');
