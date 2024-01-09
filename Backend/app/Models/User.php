@@ -28,7 +28,6 @@ class User extends Authenticatable
         'virtud',
         'maldad',
         'audacia',
-        'tipo',
     ];
 
     /**
