@@ -1,8 +1,13 @@
+body{
+    background-color: black;
+}
+
 .container {
-    max-width: 400px;
+    max-width: 450px;
     margin: 0 auto;
-    padding: 20px;
-    background-color: #f1f1f1;
+    padding: 45px;
+    background-color: #2c2929;
+    color: white;
     border-radius: 5px;
 }
 
@@ -32,13 +37,14 @@ button {
     display: block;
     width: 100%;
     padding: 10px;
-    background-color: #4CAF50;
-    color: white;
+    background-color: #4591a0;
+    color: black;
     border: none;
     border-radius: 4px;
     cursor: pointer;
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #0f444e;
+    color: white;
 }
