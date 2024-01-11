@@ -36,9 +36,9 @@ btnRegistro.addEventListener("click", async function(){
             error.style.color="red";
             error.innerHTML="Usuario no creado";
         });
-        /* setTimeout(function(){
+        setTimeout(function(){
             window.location.href = "../index.html"
-        },5000) */
+        },5000)
     }else{
         console.log('Validation failed')
     }
