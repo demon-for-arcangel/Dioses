@@ -21,16 +21,13 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'nombre',
-        'correo',
-        'contrasena',
+        'email',
+        'password',
         'sabiduria',
         'nobleza',
         'virtud',
         'maldad',
         'audacia',
-        'tipo',
-        'dios_id',
-        'humano_id',
     ];
 
     /**
@@ -54,10 +51,10 @@ class User extends Authenticatable
     ];
 
     public function dios(){
-        return $this->belongsTo(Dios::class, 'dios_id');
+        return $this->hasOne(Dios::class, 'user_id');
     }
 
     public function humano(){
-        return $this->belongsTo(Humano::class, 'humano_id');
+        return $this->hasOne(Humano::class, 'user_id');
     }
 }

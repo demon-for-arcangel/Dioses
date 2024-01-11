@@ -9,6 +9,12 @@ class Dios extends Model
 {
     protected $table = 'dios';
 
+    protected $fillable = [
+        'user_id',
+        'created_at',
+        'updated_at',
+    ];
+
     public function asignacionesOraculo()
     {
         return $this->hasMany(AsignacionOraculo::class, 'dios_id');
@@ -19,8 +25,7 @@ class Dios extends Model
         return $this->hasMany(Humano::class, 'dios_id');
     }
 
-    public function usuarios()
-    {
-        return $this->hasMany(User::class, 'dios_id');
+    public function user(){
+        return $this -> belongsTo(Dios::class, 'user_id');
     }
 }
