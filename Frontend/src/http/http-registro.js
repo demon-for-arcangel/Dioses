@@ -16,8 +16,9 @@ export async function crearUsuario(datos){
     });
 
     if (!response.ok) {
-        throw new Error('Error')
-    }else{
+        let message = `An error has occurred: ${response.status}`;
+        throw new Error(message);
+    } else {
         let data = await response.json();
         return data;
     }
