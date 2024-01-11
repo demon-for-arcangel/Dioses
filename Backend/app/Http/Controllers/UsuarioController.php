@@ -24,7 +24,6 @@ class UsuarioController extends Controller
                 'password' => 'required|string|min:8',
             ]);
     
-            // Crear usuario
             $usuario = User::create([
                 'nombre' => $request->input('nombre'),
                 'email' => $request->input('email'),
@@ -36,20 +35,26 @@ class UsuarioController extends Controller
                 'audacia' => rand(1, 5),
             ]);
     
-            // Asignar valores aleatorios y protección
-            $this -> asignarProteccion($usuario);
+            $diosSeleccionado = $this -> asignarProteccion($usuario);
     
-            // Verificar si el usuario tiene un humano asociado
             $humano = Humano::where('user_id', $usuario->id)->first();
     
-            if (!$humano) {
-                // Si no hay un humano asociado, crear uno con valores predeterminados
-                $humano = Humano::create([
-                    'user_id' => $usuario->id,
-                    'dios_id' => null,
-                    'destino' => null,
-                    'afinidad' => null,
-                ]);
+            if (!$humano || !$humano->dios_id) {
+                if ($diosSeleccionado && $diosSeleccionado->user){
+                    $afinidad = $this->calcularAfinidad(
+                        $usuario->sabiduria, $usuario->nobleza, $usuario->virtud, $usuario->maldad, $usuario->audacia,
+                        $diosSeleccionado->user->sabiduria, $diosSeleccionado->user->nobleza, $diosSeleccionado->user->virtud, $diosSeleccionado->user->maldad, $diosSeleccionado->user->audacia
+                    );
+
+                    $humano = Humano::create([
+                        'user_id' => $usuario->id,
+                        'dios_id' => $diosSeleccionado->id,
+                        'destino' => null,
+                        'afinidad' => $afinidad,
+                    ]); 
+                }else{
+                    throw new Exception('No se encontró un dios seleccionado o falta la relación de usuario en el dios seleccionado', 404);
+                }           
             }
     
             $msg = ['message' => 'Humano creado exitosamente', 'usuario' => $usuario];
@@ -61,77 +66,60 @@ class UsuarioController extends Controller
     
         return response()->json(['mens' => $msg], $cod);
     }  
-    
-    public function asignarProteccion(User $usuario)
-    {
-        // Características de los humanos
+    public function asignarProteccion(User $usuario){
         $sabiduriaUsuario = $usuario->sabiduria;
         $noblezaUsuario = $usuario->nobleza;
         $virtudUsuario = $usuario->virtud;
         $maldadUsuario = $usuario->maldad;
         $audaciaUsuario = $usuario->audacia;
-    
-        // Características de los dioses
-        $dioses = Dios::whereIn('id', [1, 2, 3])->get();
-    
-        $afinidadMaxima = 0;
+
+        $dioses = Dios::with('user')->whereIn('user_id', [1, 2, 3])->get();
+
+        $afinidadMaxima = PHP_INT_MAX;
         $diosSeleccionado = null;
-    
+
         // Lógica
         foreach ($dioses as $dios) {
             $afinidad = $this->calcularAfinidad(
                 $sabiduriaUsuario, $noblezaUsuario, $virtudUsuario, $maldadUsuario, $audaciaUsuario,
-                $dios->sabiduria, $dios->nobleza, $dios->virtud, $dios->maldad, $dios->audacia
+                $dios->user->sabiduria, $dios->user->nobleza, $dios->user->virtud, $dios->user->maldad, $dios->user->audacia
             );
-    
-            if ($afinidad > $afinidadMaxima) {
+
+            if ($afinidad < $afinidadMaxima) {
                 $afinidadMaxima = $afinidad;
                 $diosSeleccionado = $dios;
             }
         }
-    
+
         if ($diosSeleccionado) {
-            // Asignar las características del dios al usuario
-            /*$usuario->update([
-                'sabiduria' => $diosSeleccionado->sabiduria,
-                'nobleza' => $diosSeleccionado->nobleza,
-                'virtud' => $diosSeleccionado->virtud,
-                'maldad' => $diosSeleccionado->maldad,
-                'audacia' => $diosSeleccionado->audacia,
-            ]);*/
-    
-            // Verificar si el usuario tiene un humano asociado
-            $humano = Humano::where('user_id', $usuario->id)->first();
-    
-            if ($humano) {
-                // Asignar el dios a la tabla Humano
-                $humano->update([
-                    'dios_id' => $diosSeleccionado->id,
-                ]);
-            } else {
-                // Si no hay un humano asociado, crear uno con el dios asignado
-                Humano::create([
-                    'user_id' => $usuario->id,
-                    'dios_id' => $diosSeleccionado->id,
-                    'destino' => null,
-                    'afinidad' => $afinidad,
+            $humanoExistente = Humano::where('dios_id', $diosSeleccionado->id)->first();
+
+            if (!$humanoExistente) {
+                $usuario->update([
+                    'sabiduria' => $diosSeleccionado->sabiduria,
+                    'nobleza' => $diosSeleccionado->nobleza,
+                    'virtud' => $diosSeleccionado->virtud,
+                    'maldad' => $diosSeleccionado->maldad,
+                    'audacia' => $diosSeleccionado->audacia,
                 ]);
             }
-    
-            return $diosSeleccionado->id;
+            return $diosSeleccionado;
         } else {
             throw new Exception('No se pudo asignar la protección correctamente', 404);
         }
     }
-    
-    private function calcularAfinidad($sabiduriaUsuario, $noblezaUsuario, $virtudUsuario, $maldadUsuario, $audaciaUsuario, $sabiduriaDios, $noblezaDios, $virtudDios, $maldadDios, $audaciaDios){
-        $afinidad = (
-            abs($sabiduriaUsuario - $sabiduriaDios) +
-            abs($noblezaUsuario - $noblezaDios) +
-            abs($virtudUsuario - $virtudDios) +
-            abs($maldadUsuario - $maldadDios) +
-            abs($audaciaUsuario - $audaciaDios)
-        );
+    public function calcularAfinidad($sabiduriaUsuario, $noblezaUsuario, $virtudUsuario, $maldadUsuario, $audaciaUsuario, $sabiduriaDios, $noblezaDios, $virtudDios, $maldadDios, $audaciaDios)
+    {
+        // Calculamos la diferencia absoluta entre cada par de características
+        $diferenciaSabiduria = abs($sabiduriaUsuario - $sabiduriaDios);
+        $diferenciaNobleza = abs($noblezaUsuario - $noblezaDios);
+        $diferenciaVirtud = abs($virtudUsuario - $virtudDios);
+        $diferenciaMaldad = abs($maldadUsuario - $maldadDios);
+        $diferenciaAudacia = abs($audaciaUsuario - $audaciaDios);
+
+        // Sumamos todas las diferencias para obtener una puntuación total
+        $afinidad = $diferenciaSabiduria + $diferenciaNobleza + $diferenciaVirtud + $diferenciaMaldad + $diferenciaAudacia;
+
         return $afinidad;
     }
 }

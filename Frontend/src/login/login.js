@@ -28,7 +28,7 @@ async function realizarInicioSesion() {
             sessionStorage.setItem('usuario', JSON.stringify(datosUsuario));
             sessionStorage.setItem('token', JSON.stringify(datosUsuario.token));
             localStorage.setItem('usuarioId', datosUsuario.id);
-            window.location.href = '/src/rolUsuario/rolUsuario.html';
+            window.location.href = '/src/inicio/inicio.html';
         } else {
             mostrarError(respuestaServidor.message || "Inicio de sesión fallido.");
         }
