@@ -1,6 +1,6 @@
 export async function inicioSesion(datos) {
     let bodyContent = JSON.stringify({
-        "correo": datos.correo,
+        "email": datos.email,
         "password": datos.password,
     });
 
