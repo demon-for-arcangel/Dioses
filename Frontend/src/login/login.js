@@ -4,17 +4,17 @@ let btnIniciarSesion = document.getElementById("btn-iniciar-sesion");
 let errorContainer = document.getElementById('error');
 
 async function realizarInicioSesion() {
-    let correo = document.getElementById('email').value;
+    let email = document.getElementById('email').value;
     let contrasena = document.getElementById('password').value;
 
-    if (!correo || !contrasena) {
-        mostrarError('No se encontraron los campos de correo electrónico o contraseña');
+    if (!email || !contrasena) {
+        mostrarError('No se encontraron los campos de email electrónico o contraseña');
         return;
     }
 
     try {
         let datos = {
-            correo: correo,
+            email: email,
             password: contrasena,
         };
 
@@ -33,7 +33,6 @@ async function realizarInicioSesion() {
             mostrarError(respuestaServidor.message || "Inicio de sesión fallido.");
         }
     } catch (error) {
-        console.error("Error al iniciar sesión:", error);
         mostrarError("Inicio de sesión fallido.");
     }
 }
