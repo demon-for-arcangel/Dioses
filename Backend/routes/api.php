@@ -3,6 +3,7 @@
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +17,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('/registro', [UsuarioController::class, 'crearUsuario']);
+Route::post('inicioSesion', [AuthController::class, 'inicioSesion']);
+Route::post('cerrarSesion/{id}', [AuthController::class, 'cerrarSesion']);
+
+Route::get('', function () {
+    return response()->json("No logeado", 203);
+})->name('nologin');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
