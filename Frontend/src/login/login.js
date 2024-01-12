@@ -1,11 +1,11 @@
-import { inicioSesion } from "../http/inicioSesion.js";
+import { inicioSesion } from "../http/http-login.js";
 
 let btnIniciarSesion = document.getElementById("btn-iniciar-sesion");
 let errorContainer = document.getElementById('error');
 
 async function realizarInicioSesion() {
-    let correo = document.getElementById('correoElectronico').value;
-    let contrasena = document.getElementById('contrasena').value;
+    let correo = document.getElementById('email').value;
+    let contrasena = document.getElementById('password').value;
 
     if (!correo || !contrasena) {
         mostrarError('No se encontraron los campos de correo electrónico o contraseña');
