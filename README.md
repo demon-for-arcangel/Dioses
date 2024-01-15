@@ -34,17 +34,6 @@ Para arrancar el Backend usaremos el comando `php artisan serve` y para el Front
 ## Autor/es
 
 - [@demon-for-arcangel](https://github.com/demon-for-arcangel)
-## Requisitos
-- Tener instalado NodeJS. Si no tenemos NodeJS en nuestro dispositivo:<br>
-Lo instalaremos en la página oficial de <a href="https://nodejs.org/en">NodeJS</a>.
-- Tener una cuenta en GitHub. Si no tenemos una cuenta de GitHub:<br>
-Podremos crearnos una cuenta en GitHub en la pagina oficial de <a href="https://github.com">GitHub</a>.
-
-- Tener instalado Visual Studio Code u otro IDE:<br>
-Para poder instalarlo nos dirigiremos a la página oficial de <a href="https://code.visualstudio.com/download">Visual Studio Code</a>.
-- Deberemos tener instalado xampp:<br>
-Para poder gestionar la base de datos con xampp nos dirigiremos a la pagina oficial de xampp <a href="https://www.apachefriends.org/es/download.html"></a>.
-
 ## Manual para la API
 
 ### Manual para los Dioses
