@@ -16,8 +16,8 @@ use App\Http\Controllers\AuthController;
 |
 */
 
-Route::post('/registro', [UsuarioController::class, 'crearUsuario']);
-Route::post('inicioSesion', [AuthController::class, 'inicioSesion']);
+Route::post('registro', [UsuarioController::class, 'crearUsuario']);
+Route::post('login', [AuthController::class, 'inicioSesion']);
 Route::post('cerrarSesion/{id}', [AuthController::class, 'cerrarSesion']);
 
 Route::get('', function () {

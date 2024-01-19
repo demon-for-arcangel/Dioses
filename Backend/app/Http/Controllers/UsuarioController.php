@@ -28,6 +28,7 @@ class UsuarioController extends Controller
                 'nombre' => $request->input('nombre'),
                 'email' => $request->input('email'),
                 'password' => bcrypt($request->input('password')),
+                'tipo' => 'humano',
                 'sabiduria' => rand(1, 5),
                 'nobleza' => rand(1, 5),
                 'virtud' => rand(1, 5),
@@ -49,14 +50,14 @@ class UsuarioController extends Controller
                     $humano = Humano::create([
                         'user_id' => $usuario->id,
                         'dios_id' => $diosSeleccionado->id,
-                        'destino' => null,
+                        'destino' => 0,
                         'afinidad' => $afinidad,
                     ]); 
                 }else{
                     throw new Exception('No se encontró un dios seleccionado o falta la relación de usuario en el dios seleccionado', 404);
                 }           
             }
-    
+     
             $msg = ['message' => 'Humano creado exitosamente', 'usuario' => $usuario];
             $cod = 200;
         } catch (Exception $e) {

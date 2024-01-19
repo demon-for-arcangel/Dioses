@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Exception;
 use App\Models\User;
+use App\Models\Dios;
 use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
@@ -20,10 +21,11 @@ class AuthController extends Controller
             if (Auth::attempt(['email' => $request->input('email'), 'password' => $request->input('password')])) {
                 $usuario = Auth::user();
 
-                $array=[];  
+                $array = [];
 
                 $success['token'] = $usuario->createToken('access_token',$array)->plainTextToken;
                 $success['id'] = $usuario->id;
+                $success['tipoUsuario'] = $usuario->tipo;
                 $success['nombre'] = $usuario->nombre;
                 $success['email'] = $usuario->email;
                 $success['password'] = $usuario->password;

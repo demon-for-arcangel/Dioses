@@ -1,51 +1,41 @@
-import { inicioSesion } from "../http/http-login.js";
+import { obtenerDatos, enviarSessionStorage } from "../http/http-login.js";
 
 let btnIniciarSesion = document.getElementById("btn-iniciar-sesion");
 let errorContainer = document.getElementById('error');
+let correo = document.getElementById('email');
+let contrasena = document.getElementById('password');
 
-async function realizarInicioSesion() {
-    let email = document.getElementById('email').value;
-    let contrasena = document.getElementById('password').value;
+btnIniciarSesion.addEventListener('click', function(event){
+    event.preventDefault();
 
-    if (!email || !contrasena) {
-        mostrarError('No se encontraron los campos de email electrónico o contraseña');
-        return;
-    }
+    obtenerDatos(correo.value, contrasena.value)
+    .then(response => {
+        mostrarError('');
+        var token = response.data.token;
+        var id = response.data.id;
+        var tipoUsuario = response.data.tipoUsuario;
+        //sessionStorage.setItem('foto-url',data.foto)
+        sessionStorage.setItem('nombre',response.data.nombre)
+        enviarSessionStorage(id, token)
 
-    try {
-        let datos = {
-            email: email,
-            password: contrasena,
-        };
-
-        let respuestaServidor = await inicioSesion(datos);
-
-        if (respuestaServidor.success && respuestaServidor.data) {
-            let datosUsuario = respuestaServidor.data;
-            let token = datosUsuario.token;
-            var match = token.replace(/^'(.*)'$/, '$1');
-            console.log(match);
-            sessionStorage.setItem('usuario', JSON.stringify(datosUsuario));
-            sessionStorage.setItem('token', JSON.stringify(datosUsuario.token));
-            localStorage.setItem('usuarioId', datosUsuario.id);
-            window.location.href = '/src/inicio/inicio.html';
+        if (tipoUsuario === 'dios'){
+            window.location.href='./dashboard/dashboard.html';
+        } else if (tipoUsuario === 'humano'){
+            window.location.href='./inicio/inicio.html';
         } else {
-            mostrarError(respuestaServidor.message || "Inicio de sesión fallido.");
+            mostrarError('Tipo de usuario desconocido. Por favor, inténtelo de nuevo')
         }
-    } catch (error) {
-        mostrarError("Inicio de sesión fallido.");
-    }
-}
-
-if (btnIniciarSesion) {
-    btnIniciarSesion.addEventListener('click', realizarInicioSesion);
-} else {
-    console.error('No se encontró el botón de inicio de sesión');
-}
+    })
+    .catch(error => {
+        console.error('Error durante el inicio de sesión:', error);
+    mostrarError('Error durante el inicio de sesión. Por favor, inténtalo de nuevo.');
+        errorContainer.style.color = 'red';
+    });
+})
 
 function mostrarError(mensaje) {
     errorContainer.textContent = mensaje;
     setTimeout(() => {
         errorContainer.textContent = "";
-    }, 3500);
+    }, 5000);
 }
