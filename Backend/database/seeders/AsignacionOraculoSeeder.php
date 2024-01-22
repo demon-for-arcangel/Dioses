@@ -22,13 +22,13 @@ class AsignacionOraculoSeeder extends Seeder
         DB::table('asignacion_oraculo')->insert([
             'id' => 2,
             'dios_id' => 1,
-            'oraculo_id' => 2,
+            'oraculo_id' => 8,
             'humano_id' => 1,
         ]);
         DB::table('asignacion_oraculo')->insert([
             'id' => 3,
             'dios_id' => 1,
-            'oraculo_id' => 3,
+            'oraculo_id' => 9,
             'humano_id' => 1,
         ]);
     }

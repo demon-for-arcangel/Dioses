@@ -15,7 +15,14 @@ class PruebaEleccionSeeder extends Seeder
     {
         DB::table('prueba_eleccion')->insert([
             'id' => 1,
-            'opciones' => 'Opción A, Opción B, Opción C',
+            'opcion_1' => 'Gato',
+            'opcion_2' => 'Cuadro Valioso'
+        ]);
+
+        DB::table('prueba_eleccion')->insert([
+            'id' => 2,
+            'opcion_1' => 'Si',
+            'opcion_2' => 'No'
         ]);
     }
 }
