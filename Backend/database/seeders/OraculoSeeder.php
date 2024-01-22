@@ -19,8 +19,44 @@ class OraculoSeeder extends Seeder
             'caracteristica' => 'Adivinación',
             'cantidad_destino' => 70,
             'prueba_libre_id' => 1,
-            'prueba_eleccion_id' => 1,
-            'prueba_valoracion_id' => 1,
+            'prueba_eleccion_id' => null,
+            'prueba_valoracion_id' => null,
+        ]);
+        DB::table('oraculo')->insert([
+            'id' => 2,
+            'pregunta' => '¿Cuál es el secreto para ser feliz?',
+            'caracteristica' => 'Adivinación',
+            'cantidad_destino' => 70,
+            'prueba_libre_id' => 2,
+            'prueba_eleccion_id' => null,
+            'prueba_valoracion_id' => null,
+        ]);
+        DB::table('oraculo')->insert([
+            'id' => 3,
+            'pregunta' => '¿Por qué hay algo en vez de nada?',
+            'caracteristica' => 'Adivinación',
+            'cantidad_destino' => 70,
+            'prueba_libre_id' => 3,
+            'prueba_eleccion_id' => null,
+            'prueba_valoracion_id' => null,
+        ]);
+        DB::table('oraculo')->insert([
+            'id' => 4,
+            'pregunta' => '¿Es el altruismo real o un mito?',
+            'caracteristica' => 'Adivinación',
+            'cantidad_destino' => 70,
+            'prueba_libre_id' => 4,
+            'prueba_eleccion_id' => null,
+            'prueba_valoracion_id' => null,
+        ]);
+        DB::table('oraculo')->insert([
+            'id' => 5,
+            'pregunta' => '¿Tenemos libre albedrío?',
+            'caracteristica' => 'Adivinación',
+            'cantidad_destino' => 70,
+            'prueba_libre_id' => 5,
+            'prueba_eleccion_id' => null,
+            'prueba_valoracion_id' => null,
         ]);
     }
 }
