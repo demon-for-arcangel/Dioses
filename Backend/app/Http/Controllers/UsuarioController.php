@@ -57,7 +57,7 @@ class UsuarioController extends Controller
                     throw new Exception('No se encontró un dios seleccionado o falta la relación de usuario en el dios seleccionado', 404);
                 }           
             }
-     
+                 
             $msg = ['message' => 'Humano creado exitosamente', 'usuario' => $usuario];
             $cod = 200;
         } catch (Exception $e) {

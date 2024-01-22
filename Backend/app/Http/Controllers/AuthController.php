@@ -21,9 +21,7 @@ class AuthController extends Controller
             if (Auth::attempt(['email' => $request->input('email'), 'password' => $request->input('password')])) {
                 $usuario = Auth::user();
 
-                $array = [];
-
-                $success['token'] = $usuario->createToken('access_token',$array)->plainTextToken;
+                $success['token'] = $usuario->createToken('LaravelSanctumAuth')->plainTextToken;
                 $success['id'] = $usuario->id;
                 $success['tipoUsuario'] = $usuario->tipo;
                 $success['nombre'] = $usuario->nombre;
@@ -39,13 +37,15 @@ class AuthController extends Controller
         }
     }
 
-    public function cerrarSesion($id){
-        $usuario = User::find($id);
-        if($usuario){
-            $usuario->tokens()->delete();
-            return response()->json(["success"=>true, "message"=>"Tokens Revoked: "], 200);
-        }else{
-            return response()->json("Unauthorised", 204);
+    public function logout(Request $request)
+    {
+        if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
+            $cantidad = Auth::user()->tokens()->delete();
+            return response()->json(["success"=>true, "message" => "Tokens Revoked: ".$cantidad],200);
         }
+        else {
+            return response()->json("Unauthorised",204);
+        }
+
     }
 }
