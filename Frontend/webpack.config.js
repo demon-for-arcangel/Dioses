@@ -5,7 +5,8 @@ module.exports = {
   entry: {
       registro: './src/registro/registro.js',
       login: './src/login/login.js',
-      dashboard: './src/dashboard/dashboard.js'
+      dashboard: './src/dashboard/dashboard.js',
+      inicio: './src/inicio/inicio.js'
   },
     output: {
       filename: '[name].main.js',
