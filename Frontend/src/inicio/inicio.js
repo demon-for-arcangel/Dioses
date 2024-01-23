@@ -62,19 +62,29 @@ obtenerPruebasAsignadas(userId, token).then(pruebas => {
                     let preguntaEleccion = document.createElement('p');
                     preguntaEleccion.textContent = prueba.pregunta;
                     modal.appendChild(preguntaEleccion);
-
-                    let checkbox1 = document.createElement('input');
-                    checkbox1.type = 'checkbox';
-                    modal.appendChild(checkbox1);
-
-                    let checkbox2 = document.createElement('input');
-                    checkbox2.type = 'checkbox';
-                    modal.appendChild(checkbox2);
-
+                
+                    let labelOpcion1 = document.createElement('label');
+                    let radioOpcion1 = document.createElement('input');
+                    radioOpcion1.type = 'radio';
+                    radioOpcion1.name = 'eleccion'; 
+                    radioOpcion1.value = prueba.opcion_1;
+                    labelOpcion1.appendChild(radioOpcion1);
+                    labelOpcion1.appendChild(document.createTextNode(prueba.opcion_1 || 'Opción 1'));
+                    modal.appendChild(labelOpcion1);
+                
+                    let labelOpcion2 = document.createElement('label');
+                    let radioOpcion2 = document.createElement('input');
+                    radioOpcion2.type = 'radio';
+                    radioOpcion2.name = 'eleccion'; 
+                    radioOpcion2.value = prueba.opcion_2;
+                    labelOpcion2.appendChild(radioOpcion2);
+                    labelOpcion2.appendChild(document.createTextNode(prueba.opcion_2 || 'Opción 2'));
+                    modal.appendChild(labelOpcion2);
+                
                     let enviarEleccion = document.createElement('button');
                     enviarEleccion.textContent = 'Enviar';
                     modal.appendChild(enviarEleccion);
-
+                
                     let cancelarEleccion = document.createElement('button');
                     cancelarEleccion.textContent = 'Cancelar';
                     cancelarEleccion.addEventListener('click', () => {
@@ -94,11 +104,9 @@ obtenerPruebasAsignadas(userId, token).then(pruebas => {
                     rangeInput.step = 1;
                     modal.appendChild(rangeInput);
                 
-                    // Create container for number spans
                     let numberSpanContainer = document.createElement('div');
                     modal.appendChild(numberSpanContainer);
                 
-                    // Create span elements for displaying numbers
                     let numberSpans = [];
                     for (let i = 1; i <= 5; i++) {
                         let span = document.createElement('span');
@@ -108,7 +116,6 @@ obtenerPruebasAsignadas(userId, token).then(pruebas => {
                         numberSpans.push(span);
                     }
                 
-                    // Update number spans when slider value changes
                     rangeInput.addEventListener('input', (event) => {
                         let value = parseInt(event.target.value);
                         for (let i = 0; i < numberSpans.length; i++) {
