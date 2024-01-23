@@ -1,4 +1,4 @@
-import { obtenerPruebasAsignadas } from '../http/http-inicio.js';
+import { obtenerPruebasAsignadas,guardarRespuesta } from '../http/http-inicio.js';
 
 const modal = document.querySelector('#modal');
 
@@ -25,125 +25,174 @@ obtenerPruebasAsignadas(userId, token).then(pruebas => {
 
         let resolveButton = document.createElement('button');
         resolveButton.textContent = 'Resolver';
-        resolveButton.addEventListener('click', () => {
-            while (modal.firstChild) {
-                modal.removeChild(modal.firstChild);
-            }
+        if (resolveButton){
+            resolveButton.addEventListener('click', () => {
+                while (modal.firstChild) {
+                    modal.removeChild(modal.firstChild);
+                }
 
-            switch (prueba.tipo) {
-                case 'libre':
-                    let preguntaLibre = document.createElement('p');
-                    preguntaLibre.textContent = prueba.pregunta;
-                    modal.appendChild(preguntaLibre);
+                switch (prueba.tipo) {
+                    case 'libre':
+                        let preguntaLibre = document.createElement('p');
+                        preguntaLibre.textContent = prueba.pregunta;
+                        modal.appendChild(preguntaLibre);
 
-                    let inputElement = document.createElement('input');
-                    inputElement.type = 'text';
-                    inputElement.placeholder = 'Introduce tu respuesta aquí';
-                    modal.appendChild(inputElement);
-
-                    let buttonContainer = document.createElement('div');
-                    buttonContainer.className = 'button-container'
-
-                    let enviarLibre = document.createElement('button');
-                    enviarLibre.textContent = 'Enviar';
-                    modal.appendChild(enviarLibre);
-
-                    let cancelarLibre = document.createElement('button');
-                    cancelarLibre.textContent = 'Cancelar';
-                    cancelarLibre.addEventListener('click', () => {
-                        modal.close();
-                    });
-                    buttonContainer.appendChild(enviarLibre);
-                    buttonContainer.appendChild(cancelarLibre);
-
-                    modal.appendChild(buttonContainer);
-                    break;
-                case 'eleccion':
-                    let preguntaEleccion = document.createElement('p');
-                    preguntaEleccion.textContent = prueba.pregunta;
-                    modal.appendChild(preguntaEleccion);
-                
-                    let labelOpcion1 = document.createElement('label');
-                    let radioOpcion1 = document.createElement('input');
-                    radioOpcion1.type = 'radio';
-                    radioOpcion1.name = 'eleccion'; 
-                    radioOpcion1.value = prueba.opcion_1;
-                    labelOpcion1.appendChild(radioOpcion1);
-                    labelOpcion1.appendChild(document.createTextNode(prueba.opcion_1 || 'Opción 1'));
-                    modal.appendChild(labelOpcion1);
-                
-                    let labelOpcion2 = document.createElement('label');
-                    let radioOpcion2 = document.createElement('input');
-                    radioOpcion2.type = 'radio';
-                    radioOpcion2.name = 'eleccion'; 
-                    radioOpcion2.value = prueba.opcion_2;
-                    labelOpcion2.appendChild(radioOpcion2);
-                    labelOpcion2.appendChild(document.createTextNode(prueba.opcion_2 || 'Opción 2'));
-                    modal.appendChild(labelOpcion2);
-                
-                    let enviarEleccion = document.createElement('button');
-                    enviarEleccion.textContent = 'Enviar';
-                    modal.appendChild(enviarEleccion);
-                
-                    let cancelarEleccion = document.createElement('button');
-                    cancelarEleccion.textContent = 'Cancelar';
-                    cancelarEleccion.addEventListener('click', () => {
-                        modal.close();
-                    });
-                    modal.appendChild(cancelarEleccion);
-                    break;
-                case 'valoracion':
-                    let preguntaValoracion = document.createElement('p');
-                    preguntaValoracion.textContent = prueba.pregunta;
-                    modal.appendChild(preguntaValoracion);
-
-                    let rangeInput = document.createElement('input');
-                    rangeInput.type = 'range';
-                    rangeInput.min = 1;
-                    rangeInput.max = 5;
-                    rangeInput.step = 1;
-                    modal.appendChild(rangeInput);
-                
-                    let numberSpanContainer = document.createElement('div');
-                    modal.appendChild(numberSpanContainer);
-                
-                    let numberSpans = [];
-                    for (let i = 1; i <= 5; i++) {
-                        let span = document.createElement('span');
-                        span.textContent = i;
-                        span.className = 'number-span';
-                        numberSpanContainer.appendChild(span);
-                        numberSpans.push(span);
-                    }
-                
-                    rangeInput.addEventListener('input', (event) => {
-                        let value = parseInt(event.target.value);
-                        for (let i = 0; i < numberSpans.length; i++) {
-                            if (i < value) {
-                                numberSpans[i].style.color = 'blue';
-                            } else {
-                                numberSpans[i].style.color = '';
+                        let inputElement = document.createElement('input');
+                        inputElement.type = 'text';
+                        inputElement.placeholder = 'Introduce tu respuesta aquí';
+                        modal.appendChild(inputElement);
+                        
+                        let buttonContainer = document.createElement('div');
+                        buttonContainer.className = 'button-container'
+                        
+                        let enviarLibre = document.createElement('button');
+                        enviarLibre.textContent = 'Enviar';
+                        console.log('Creando event listener para enviarLibre'); // Mensaje de registro
+                        enviarLibre.addEventListener('click', () => {
+                            console.log('Botón enviarLibre presionado'); // Mensaje de registro
+                            const respuesta = inputElement.value;
+                            console.log('Respuesta:', respuesta); // Mensaje de registro
+                            console.log('Antes de la llamada a guardarRespuesta');
+                            guardarRespuesta(userId, prueba.id, respuesta, token)
+                                .then(data => {
+                                    console.log('Datos recibidos:', data);
+                                    modal.close();
+                                })
+                                .catch(error => {
+                                    console.error('Error al guardar la respuesta: ', error);
+                                });
+                            console.log('Después de la llamada a guardarRespuesta');
+                        })
+                        modal.appendChild(enviarLibre);
+                        
+                        let cancelarLibre = document.createElement('button');
+                        cancelarLibre.textContent = 'Cancelar';
+                        cancelarLibre.addEventListener('click', () => {
+                            modal.close();
+                        });
+                        buttonContainer.appendChild(enviarLibre);
+                        buttonContainer.appendChild(cancelarLibre);
+                        
+                        modal.appendChild(buttonContainer);
+                        break;
+                    case 'eleccion':
+                        let preguntaEleccion = document.createElement('p');
+                        preguntaEleccion.textContent = prueba.pregunta;
+                        modal.appendChild(preguntaEleccion);
+                    
+                        let labelOpcion1 = document.createElement('label');
+                        let radioOpcion1 = document.createElement('input');
+                        radioOpcion1.type = 'radio';
+                        radioOpcion1.name = 'eleccion'; 
+                        radioOpcion1.value = prueba.opcion_1;
+                        labelOpcion1.appendChild(radioOpcion1);
+                        labelOpcion1.appendChild(document.createTextNode(prueba.opcion_1 || 'Opción 1'));
+                        modal.appendChild(labelOpcion1);
+                    
+                        let labelOpcion2 = document.createElement('label');
+                        let radioOpcion2 = document.createElement('input');
+                        radioOpcion2.type = 'radio';
+                        radioOpcion2.name = 'eleccion'; 
+                        radioOpcion2.value = prueba.opcion_2;
+                        labelOpcion2.appendChild(radioOpcion2);
+                        labelOpcion2.appendChild(document.createTextNode(prueba.opcion_2 || 'Opción 2'));
+                        modal.appendChild(labelOpcion2);
+                    
+                        let enviarEleccion = document.createElement('button');
+                        enviarEleccion.textContent = 'Enviar';
+                        enviarEleccion.addEventListener('click', () => {
+                            const radios = document.getElementsByName('eleccion');
+                            let respuesta;
+                            for (let i = 0; i < radios.length; i++) {
+                                if (radios[i].checked) {
+                                    respuesta = radios[i].value;
+                                    break;
+                                }
                             }
+                            guardarRespuesta(userId, prueba.id, respuesta, token)
+                                .then(data => {
+                                    console.log(data);
+                                    modal.close();
+                                })
+                                .catch(error => {
+                                    console.error('Error al guardar la respuesta: ', error);
+                                });
+                        });
+                        modal.appendChild(enviarEleccion);
+                    
+                        let cancelarEleccion = document.createElement('button');
+                        cancelarEleccion.textContent = 'Cancelar';
+                        cancelarEleccion.addEventListener('click', () => {
+                            modal.close();
+                        });
+                        modal.appendChild(cancelarEleccion);
+                        break;
+                    case 'valoracion':
+                        let preguntaValoracion = document.createElement('p');
+                        preguntaValoracion.textContent = prueba.pregunta;
+                        modal.appendChild(preguntaValoracion);
+
+                        let rangeInput = document.createElement('input');
+                        rangeInput.type = 'range';
+                        rangeInput.min = 1;
+                        rangeInput.max = 5;
+                        rangeInput.step = 1;
+                        modal.appendChild(rangeInput);
+                    
+                        let numberSpanContainer = document.createElement('div');
+                        modal.appendChild(numberSpanContainer);
+                    
+                        let numberSpans = [];
+                        for (let i = 1; i <= 5; i++) {
+                            let span = document.createElement('span');
+                            span.textContent = i;
+                            span.className = 'number-span';
+                            numberSpanContainer.appendChild(span);
+                            numberSpans.push(span);
                         }
-                    });
+                    
+                        rangeInput.addEventListener('input', (event) => {
+                            let value = parseInt(event.target.value);
+                            for (let i = 0; i < numberSpans.length; i++) {
+                                if (i < value) {
+                                    numberSpans[i].style.color = 'blue';
+                                } else {
+                                    numberSpans[i].style.color = '';
+                                }
+                            }
+                        });
 
-                    let enviarValoracion = document.createElement('button');
-                    enviarValoracion.textContent = 'Enviar';
-                    modal.appendChild(enviarValoracion);
+                        let enviarValoracion = document.createElement('button');
+                        enviarValoracion.textContent = 'Enviar';
+                        enviarValoracion.addEventListener('click', () => {
+                            const respuesta = rangeInput.value;
+                            guardarRespuesta(userId, prueba.id, respuesta, token)
+                                .then(data => {
+                                    console.log(data);
+                                    modal.close();
+                                })
+                                .catch(error => {
+                                    console.error('Error al guardar la respuesta: ', error);
+                                });
+                        });
+                        modal.appendChild(enviarValoracion);
 
-                    let cancelarValoracion = document.createElement('button');
-                    cancelarValoracion.textContent = 'Cancelar';
-                    cancelarValoracion.addEventListener('click', () => {
-                        modal.close();
-                    });
-                    modal.appendChild(cancelarValoracion);
-                    break;
-            }
-            modal.showModal();
-        });
-        card.appendChild(resolveButton);
+                        let cancelarValoracion = document.createElement('button');
+                        cancelarValoracion.textContent = 'Cancelar';
+                        cancelarValoracion.addEventListener('click', () => {
+                            modal.close();
+                        });
+                        modal.appendChild(cancelarValoracion);
+                        break;
+                }
+                modal.showModal();
+            });
+            card.appendChild(resolveButton);
 
-        cardContainer.appendChild(card);
+            cardContainer.appendChild(card);
+        }else{
+            console.error('Error: resolveButton es nulo');
+        }
     });
 
     document.querySelector('#close-button').addEventListener('click', () => {
