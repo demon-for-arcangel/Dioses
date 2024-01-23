@@ -67,3 +67,28 @@ a:visited{
     margin: 10px;
     padding: 10px;
 }
+
+#modal button {
+    margin-top: 10px;
+    margin-left: 10px;
+    padding: 5px 15px;
+    border: none;
+    border-radius: 7px;
+}
+
+#modal input[type="text"] {
+    width: 100%; /* Hace que el input ocupe todo el ancho disponible */
+    padding: 10px; /* Añade un poco de espacio interno para que sea más grande */
+    margin-top: 10px; /* Añade un margen en la parte superior */
+    box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
+}
+
+#modal .button-container {
+    display: flex;
+    justify-content: space-around; /* Separa los botones uniformemente */
+}
+
+#modal .number-span {
+    display: inline-block;
+    margin: 0 9px;
+}
