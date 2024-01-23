@@ -30,6 +30,7 @@ Route::group(['middleware' => ['cors']], function () {
         Route::middleware('HumanoMid')->group(function () {
             Route::prefix('humano')->group(function () {
                 Route::get('/pruebas-asignadas/{userId}', [AsignacionController::class, 'mostrarAsignacionesUsuario']);
+                Route::put('/guardar-respuesta', [AsignacionController::class, 'guardarRespuesta']);
             });
         });
     });
