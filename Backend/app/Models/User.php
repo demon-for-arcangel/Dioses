@@ -23,6 +23,7 @@ class User extends Authenticatable
         'nombre',
         'email',
         'password',
+        'tipo',
         'sabiduria',
         'nobleza',
         'virtud',

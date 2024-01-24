@@ -15,7 +15,23 @@ class PruebaLibreSeeder extends Seeder
     {
         DB::table('prueba_libre')->insert([
             'id' => 1,
-            'palabra_clave' => 'futuro'
+            'palabra_clave' => 'destino'
+        ]);
+        DB::table('prueba_libre')->insert([
+            'id' => 2,
+            'palabra_clave' => 'felicidad'
+        ]);
+        DB::table('prueba_libre')->insert([
+            'id' => 3,
+            'palabra_clave' => 'nada'
+        ]);
+        DB::table('prueba_libre')->insert([
+            'id' => 4,
+            'palabra_clave' => 'mito'
+        ]);
+        DB::table('prueba_libre')->insert([
+            'id' => 5,
+            'palabra_clave' => 'si'
         ]);
     }
 }

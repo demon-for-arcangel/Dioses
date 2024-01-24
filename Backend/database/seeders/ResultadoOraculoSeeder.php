@@ -17,7 +17,7 @@ class ResultadoOraculoSeeder extends Seeder
             'id' => 1,
             'humano_id' => 1,
             'prueba_id' => 1,
-            'resultado' => 'Éxito',
+            'resultado' => 'mi destino es...',
         ]);
     }
 }

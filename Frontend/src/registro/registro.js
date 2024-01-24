@@ -21,28 +21,23 @@ btnRegistro.addEventListener("click", async function(){
     event.preventDefault();
     console.log('Click event triggered')
     if (comprobarValidaciones(nombre.value, email.value, password.value, confpass.value)) {
-        console.log('Validation pased')
         var datos=cargarDatos();
         await crearUsuario(datos).then(function(data){
-            console.log('User creation succeddful', data)
             var error=document.getElementById("errores");
             error.innerHTML="";
             error.style.color="green";
             error.innerHTML="Usuario Creado";
+            setTimeout(function(){
+                window.location.href = "../index.html"
+            }, 5000)
         }).catch(function(error){
-            console.log('User creation failed', error)
             var error=document.getElementById("errores");
             error.innerHTML="";
             error.style.color="red";
-            error.innerHTML="Usuario no creado";
+            error.innerHTML="Usuario no creado. Intentelo de nuevo";
         });
-        setTimeout(function(){
-            window.location.href = "../index.html"
-        },5000)
-    }else{
-        console.log('Validation failed')
-    }
-})
+    }}
+)
 
 function cargarDatos(){
     var datos={

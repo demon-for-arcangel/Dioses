@@ -1,28 +1,35 @@
-export async function inicioSesion(datos) {
-    let bodyContent = JSON.stringify({
-        "email": datos.email,
-        "password": datos.password,
-    });
-
-    let headersList = {
-        "Content-Type": "application/json",
+export async function obtenerDatos(email, password) {
+    let data = {
+        "email": email,
+        "password": password,
     };
 
     try {
-        let response = await fetch("http://127.0.0.1:8000/api/inicioSesion", {
+        let response = await fetch("http://127.0.0.1:8000/api/login", {
             method: "POST",
-            headers: headersList,
-            body: bodyContent,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
         });
 
         if (!response.ok) {
-            let errorData = await response.json();
-            throw new Error(`Error en la solicitud: ${response.status} - ${errorData.message}`);
+            throw new Error(`Error en la solicitud: ${response.status}`);
+        } else {
+            return response.json();
         }
-
-        let data = await response.json();
-        return data;
     } catch (error) {
         throw error;
     }
 }
+
+ export function enviarSessionStorage(id, token){
+    try {
+      sessionStorage.setItem('id-usuario', id);
+      sessionStorage.setItem('token', token);
+      
+    } catch (error) {
+      console.error('Error al guardar datos en sessionStorage:', error);
+    }
+  }
+ 

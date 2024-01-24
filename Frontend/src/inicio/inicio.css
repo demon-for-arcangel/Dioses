@@ -1,0 +1,94 @@
+:root{
+    color-scheme: light dark;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.content {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0; /* Elimina cualquier margen para alinear con el sidebar */
+}
+.logo h2 {
+    padding-left: 75px;
+}
+
+.dashboard-container{
+    display: flex;
+}
+
+.dashboard{
+    background-color: #201f1f;
+    margin-top: 20px;    
+    border-radius: 15px;
+}
+
+.sidebar {
+    width: 200px;
+    background-color: #3c3b3b;
+    height: 100vh;
+    padding: 20px;
+    margin: 0px;
+    color: black;
+}
+a{
+    text-decoration: none;
+    color: red;
+}
+a:hover {
+    color: rgb(38, 142, 72);
+}
+a:visited{
+    color: black;
+}
+
+.main-content {
+    padding: 20px;
+}
+
+.individual-card {
+    border-radius: 15px;
+    background-color: #161515;
+    margin: 10px;
+    padding: 10px;
+}
+
+#modal button {
+    margin-top: 10px;
+    margin-left: 10px;
+    padding: 5px 15px;
+    border: none;
+    border-radius: 7px;
+}
+
+#modal input[type="text"] {
+    width: 100%; /* Hace que el input ocupe todo el ancho disponible */
+    padding: 10px; /* Añade un poco de espacio interno para que sea más grande */
+    margin-top: 10px; /* Añade un margen en la parte superior */
+    box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
+}
+
+#modal .button-container {
+    display: flex;
+    justify-content: space-around; /* Separa los botones uniformemente */
+}
+
+#modal .number-span {
+    display: inline-block;
+    margin: 0 9px;
+}
