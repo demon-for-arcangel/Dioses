@@ -15,8 +15,7 @@ use Illuminate\Support\Facades\DB;
 
 class UsuarioController extends Controller
 {
-    public function crearUsuario(Request $request)
-    {
+    public function crearUsuario(Request $request){
         try {
             $request->validate([
                 'nombre' => 'required|string',
@@ -66,7 +65,8 @@ class UsuarioController extends Controller
         }
     
         return response()->json(['mens' => $msg], $cod);
-    }  
+    } 
+
     public function asignarProteccion(User $usuario){
         $sabiduriaUsuario = $usuario->sabiduria;
         $noblezaUsuario = $usuario->nobleza;
@@ -109,8 +109,7 @@ class UsuarioController extends Controller
             throw new Exception('No se pudo asignar la protección correctamente', 404);
         }
     }
-    public function calcularAfinidad($sabiduriaUsuario, $noblezaUsuario, $virtudUsuario, $maldadUsuario, $audaciaUsuario, $sabiduriaDios, $noblezaDios, $virtudDios, $maldadDios, $audaciaDios)
-    {
+    public function calcularAfinidad($sabiduriaUsuario, $noblezaUsuario, $virtudUsuario, $maldadUsuario, $audaciaUsuario, $sabiduriaDios, $noblezaDios, $virtudDios, $maldadDios, $audaciaDios){
         // Calculamos la diferencia absoluta entre cada par de características
         $diferenciaSabiduria = abs($sabiduriaUsuario - $sabiduriaDios);
         $diferenciaNobleza = abs($noblezaUsuario - $noblezaDios);
@@ -122,5 +121,11 @@ class UsuarioController extends Controller
         $afinidad = $diferenciaSabiduria + $diferenciaNobleza + $diferenciaVirtud + $diferenciaMaldad + $diferenciaAudacia;
 
         return $afinidad;
+    }
+
+    public function listarHumanos(){
+        $humanos = DB::select('select * from humano');
+
+        return response()->json(['humanos' => $humanos], 200);
     }
 }

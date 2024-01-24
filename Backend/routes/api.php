@@ -32,5 +32,11 @@ Route::group(['middleware' => ['cors']], function () {
                 Route::get('/pruebas-asignadas/{userId}', [AsignacionController::class, 'mostrarAsignacionesUsuario']);
             });
         });
+
+        Route::middleware('DiosMid')->group(function() {
+            Route::prefix('dios')->group(function () {
+                Route::get('listar-humanos', [UsuarioController::class, 'listarHumanos']);
+            });
+        });
     });
 });

@@ -17,7 +17,7 @@ class DiosMid
     {
         $user = $request->user();
 
-        if ($user->tipo == 'humano') {
+        if ($user->tokenCan("access-token")) {
             return $next($request);
         }
         else {
