@@ -30,7 +30,7 @@ export async function guardarRespuesta(humano_id, prueba_id, respuesta, token) {
         }
 
         let response = await fetch(`http://127.0.0.1:8000/api/humano/guardar-respuesta`, {
-            method: "PUT",
+            method: "POST",
             headers: headersList,
             body: JSON.stringify({
                 humano_id: humano_id,

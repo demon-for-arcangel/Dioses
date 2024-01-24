@@ -47,21 +47,22 @@ obtenerPruebasAsignadas(userId, token).then(pruebas => {
                         
                         let enviarLibre = document.createElement('button');
                         enviarLibre.textContent = 'Enviar';
-                        console.log('Creando event listener para enviarLibre'); // Mensaje de registro
-                        enviarLibre.addEventListener('click', () => {
-                            console.log('Botón enviarLibre presionado'); // Mensaje de registro
-                            const respuesta = inputElement.value;
-                            console.log('Respuesta:', respuesta); // Mensaje de registro
-                            console.log('Antes de la llamada a guardarRespuesta');
+                        enviarLibre.prueba = prueba;
+                        enviarLibre.addEventListener('click', () =>{
+                            let respuesta = inputElement.value;
                             guardarRespuesta(userId, prueba.id, respuesta, token)
                                 .then(data => {
-                                    console.log('Datos recibidos:', data);
                                     modal.close();
                                 })
-                                .catch(error => {
-                                    console.error('Error al guardar la respuesta: ', error);
-                                });
-                            console.log('Después de la llamada a guardarRespuesta');
+                                .catch(error =>{
+                                    console.error('Error al guardar la respuesta: ', error)
+                                    if (error.response) {
+                                        console.error('Respuesta del servidor:', error.response.data);
+                                        console.error('Código de estado HTTP:', error.response.status);
+                                    }  else {
+                                        console.error('Error en la configuración de la solicitud:', error.message);
+                                    }
+                                })
                         })
                         modal.appendChild(enviarLibre);
                         
@@ -193,10 +194,6 @@ obtenerPruebasAsignadas(userId, token).then(pruebas => {
         }else{
             console.error('Error: resolveButton es nulo');
         }
-    });
-
-    document.querySelector('#close-button').addEventListener('click', () => {
-        modal.close();
     });
 }).catch(error => {
     console.error('Error al mostrar las pruebas asignadas: ', error);
