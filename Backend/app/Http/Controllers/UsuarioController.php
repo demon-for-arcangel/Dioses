@@ -15,8 +15,7 @@ use Illuminate\Support\Facades\DB;
 
 class UsuarioController extends Controller
 {
-    public function crearUsuario(Request $request)
-    {
+    public function crearUsuario(Request $request){
         try {
             $request->validate([
                 'nombre' => 'required|string',
@@ -28,6 +27,7 @@ class UsuarioController extends Controller
                 'nombre' => $request->input('nombre'),
                 'email' => $request->input('email'),
                 'password' => bcrypt($request->input('password')),
+                'tipo' => 'humano',
                 'sabiduria' => rand(1, 5),
                 'nobleza' => rand(1, 5),
                 'virtud' => rand(1, 5),
@@ -49,14 +49,14 @@ class UsuarioController extends Controller
                     $humano = Humano::create([
                         'user_id' => $usuario->id,
                         'dios_id' => $diosSeleccionado->id,
-                        'destino' => null,
+                        'destino' => 0,
                         'afinidad' => $afinidad,
                     ]); 
                 }else{
                     throw new Exception('No se encontró un dios seleccionado o falta la relación de usuario en el dios seleccionado', 404);
                 }           
             }
-    
+                 
             $msg = ['message' => 'Humano creado exitosamente', 'usuario' => $usuario];
             $cod = 200;
         } catch (Exception $e) {
@@ -65,7 +65,8 @@ class UsuarioController extends Controller
         }
     
         return response()->json(['mens' => $msg], $cod);
-    }  
+    } 
+
     public function asignarProteccion(User $usuario){
         $sabiduriaUsuario = $usuario->sabiduria;
         $noblezaUsuario = $usuario->nobleza;
@@ -108,8 +109,7 @@ class UsuarioController extends Controller
             throw new Exception('No se pudo asignar la protección correctamente', 404);
         }
     }
-    public function calcularAfinidad($sabiduriaUsuario, $noblezaUsuario, $virtudUsuario, $maldadUsuario, $audaciaUsuario, $sabiduriaDios, $noblezaDios, $virtudDios, $maldadDios, $audaciaDios)
-    {
+    public function calcularAfinidad($sabiduriaUsuario, $noblezaUsuario, $virtudUsuario, $maldadUsuario, $audaciaUsuario, $sabiduriaDios, $noblezaDios, $virtudDios, $maldadDios, $audaciaDios){
         // Calculamos la diferencia absoluta entre cada par de características
         $diferenciaSabiduria = abs($sabiduriaUsuario - $sabiduriaDios);
         $diferenciaNobleza = abs($noblezaUsuario - $noblezaDios);
@@ -121,5 +121,14 @@ class UsuarioController extends Controller
         $afinidad = $diferenciaSabiduria + $diferenciaNobleza + $diferenciaVirtud + $diferenciaMaldad + $diferenciaAudacia;
 
         return $afinidad;
+    }
+
+    public function listarHumanos(){
+        $humanos = DB::table('humano')
+            ->join('user', 'humano.user_id', '=', 'user.id')
+            ->select('user.nombre', 'user.email')
+            ->get();
+    
+        return response()->json(['humanos' => $humanos], 200);
     }
 }

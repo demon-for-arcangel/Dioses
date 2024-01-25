@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="./dashboard.css">
+   <link rel="icon" href="../assets/logo1.png">
+   <title>Dashboard</title>
+</head>
+
+<body>
+    <div class = "dashboard-container">
+        <div class="sidebar">
+            <ul>
+                <li><a href="#section1">Humanos Asignados</a></li>
+                <li><a href="#section2">Crear Humano</a></li>
+                <li><a href="#section3">Editar Humano</a></li>
+                <li><a href="#section4">Pruebas</a></li>
+                <li><a href="#section5">Mi perfil</a></li>
+            </ul>
+        </div>
+
+        <div class="content">
+            <div class = "logo">
+                <img src="../assets/logo1.png" alt="logo" width="350px"/>
+                <h2 id="mensaje-bienvenida">Bienvenido/a </h2>
+            </div>
+            <div class="dashboard">
+                <div class="main-content">
+                    <h2>Humanos</h2>
+                    <table class="table" id="tabla-humanos">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Correo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <br>
+            <div class="dashboard">
+                <div class="main-content">
+                    <h2>Pruebas</h2>
+                    <table class="table" id="tabla-oraculos">
+                        <thead>
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Pregunta</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="../../dist/dashboard.main.js"></script>
+</html>

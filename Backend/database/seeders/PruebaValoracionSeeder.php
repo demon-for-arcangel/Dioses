@@ -15,7 +15,15 @@ class PruebaValoracionSeeder extends Seeder
     {
         DB::table('prueba_valoracion')->insert([
             'id' => 1,
-            'valor_maximo' => 100,
+            'valor_maximo' => 3,
+        ]);
+        DB::table('prueba_valoracion')->insert([
+            'id' => 2,
+            'valor_maximo' => 4,
+        ]);
+        DB::table('prueba_valoracion')->insert([
+            'id' => 3,
+            'valor_maximo' => 5,
         ]);
     }
 }

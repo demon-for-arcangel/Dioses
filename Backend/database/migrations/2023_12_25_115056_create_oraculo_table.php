@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('oraculo', function (Blueprint $table) {
             $table->id();
             $table->string('pregunta');
-            $table->string('caracteristica');
+            $table->enum('tipo', ['libre', 'eleccion', 'valoracion']);
             $table->integer('cantidad_destino');
             $table->foreignId('prueba_libre_id')->nullable()->constrained('prueba_libre');
             $table->foreignId('prueba_eleccion_id')->nullable()->constrained('prueba_eleccion');

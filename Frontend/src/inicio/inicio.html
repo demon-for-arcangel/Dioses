@@ -1,11 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+
+    <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>hola</h1>
-</body>
+    <link rel="stylesheet" href="./inicio.css">
+    <link rel="icon" href="../assets/logo_humano.png">
+    <title>Inicio</title>
+    </head>
+
+    <body>
+        <div class = "dashboard-container">
+            <div class="sidebar">
+                <ul>
+                    <li><a href="#section1">Mi perfil</a></li>
+                </ul>
+            </div>
+
+            <div class="content">
+                <div class = "logo">
+                    <img src="../assets/logo_humano.png" alt="logo" width="150px"/>
+                    <h2 id="mensaje-bienvenida">Bienvenido/a </h2>
+                </div>
+                <div class="dashboard">
+                    <div class="main-content">
+                        <h2>Pruebas Asignadas</h2>
+                        <div class="card-container">
+                            <dialog id="modal">
+                            </dialog>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script src="../../dist/inicio.main.js"></script>
 </html>
