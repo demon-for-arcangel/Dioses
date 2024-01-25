@@ -124,8 +124,11 @@ class UsuarioController extends Controller
     }
 
     public function listarHumanos(){
-        $humanos = DB::select('select * from humano');
-
+        $humanos = DB::table('humano')
+            ->join('user', 'humano.user_id', '=', 'user.id')
+            ->select('user.nombre', 'user.email')
+            ->get();
+    
         return response()->json(['humanos' => $humanos], 200);
     }
 }

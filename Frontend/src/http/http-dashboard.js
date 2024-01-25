@@ -1,11 +1,11 @@
-export async function obtenerHumanos(user_id, token) {
+export async function obtenerHumanos(token) {
     try {
         let headersList = {
             "Content-Type": "application/json",
             "Authorization": "Bearer " + token
         };
 
-        let response = await fetch(`http://127.0.0.1:8000/api/dios/listar-humanos/${user_id}`, {
+        let response = await fetch(`http://127.0.0.1:8000/api/dios/listar-humanos`, {
             method: "GET",    
             headers: headersList
         });
