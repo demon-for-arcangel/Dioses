@@ -36,6 +36,7 @@ Route::group(['middleware' => ['cors']], function () {
         Route::middleware('DiosMid')->group(function() {
             Route::prefix('dios')->group(function () {
                 Route::get('listar-humanos', [UsuarioController::class, 'listarHumanos']);
+                Route::get('mostrar-pruebas', [OraculoController::class, 'mostrarOraculos']);
             });
         });
     });

@@ -15,7 +15,13 @@ class OraculoController extends Controller
                 ->leftJoin('prueba_libre', 'oraculo.prueba_libre_id', '=', 'prueba_libre.id')
                 ->leftJoin('prueba_eleccion', 'oraculo.prueba_eleccion_id', '=', 'prueba_eleccion.id')
                 ->leftJoin('prueba_valoracion', 'oraculo.prueba_valoracion_id', '=', 'prueba_valoracion.id')
-                ->select('oraculo.*', 'prueba_libre.palabra_clave', 'prueba_eleccion.opciones', 'prueba_valoracion.valor_maximo')
+                ->select(
+                    'oraculo.*',
+                    'prueba_libre.palabra_clave',
+                    'prueba_eleccion.opcion_1',
+                    'prueba_eleccion.opcion_2',
+                    'prueba_valoracion.valor_maximo'
+                )
                 ->get();
             return response()->json(['oraculos' => $oraculos], 200);
         } catch (Exception $e) {
