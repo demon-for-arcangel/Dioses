@@ -30,6 +30,8 @@ body {
 
 .dashboard-container{
     display: flex;
+    flex-direction: row;
+    min-height: 100vh;
 }
 
 .dashboard{
@@ -41,10 +43,11 @@ body {
 .sidebar {
     width: 200px;
     background-color: #ddb665;
-    height: 100vh;
+    min-height: 100vh;
     padding: 20px;
     margin: 0px;
     color: black;
+    flex-shrink: 0;
 }
 a{
     text-decoration: none;
@@ -69,6 +72,7 @@ a:visited{
     border: 1px solid #ddd;
     padding: 8px;
 }
+
 
 .table th {
     padding-top: 12px;
