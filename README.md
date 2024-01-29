@@ -36,8 +36,6 @@ Para arrancar el Backend usaremos el comando `php artisan serve` y para el Front
 - [@demon-for-arcangel](https://github.com/demon-for-arcangel)
 ## Manual para la API
 
-### Manual para los Dioses
-
 #### Registro 
 
 ```http
@@ -63,6 +61,8 @@ Para arrancar el Backend usaremos el comando `php artisan serve` y para el Front
 | `email` | `string` | **Requerido**.  |
 | `password` | `string` | **Requerido**. |
 
+
+### Manual para los Dioses
 #### Get item
 
 ```http
