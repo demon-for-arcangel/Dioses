@@ -72,7 +72,8 @@ form {
 
 .column {
     flex: 1;
-    margin-right: 20px; /* Añade un margen a la derecha para separar las columnas */
+    margin-right: 90px;
+    margin-left: 50px;
 }
 
 form .column:last-child {
@@ -94,10 +95,6 @@ form .column:last-child {
     font-weight: bold;
 }
 
-.form-group {
-    margin-bottom: 15px;
-}
-
 .form-group input[type="text"],
 .form-group input[type="email"],
 .form-group input[type="password"] {
@@ -106,6 +103,10 @@ form .column:last-child {
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
+}
+
+.form-group button{
+    margin-right: 60px;
 }
 
 .radio-group {

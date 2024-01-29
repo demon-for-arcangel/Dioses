@@ -15,7 +15,7 @@ export async function crearUsuario(datos, token) {
         "Authorization": `Bearer ${token}`, 
     };
 
-    let response = await fetch("http://127.0.0.1:8000/api/dios/crear-humano", {
+    let response = await fetch("http://127.0.0.1:8000/api/dios/crear-usuario", {
         method: "POST",
         body: bodyContent,
         headers: headersList,
