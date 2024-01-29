@@ -73,6 +73,11 @@ class UsuarioController extends Controller
                 'nombre' => 'required|string',
                 'email' => 'required|email|unique:user,email',
                 'password' => 'required|string|min:8',
+                'sabiduria' => 'required|integer',
+                'nobleza' => 'required|integer',
+                'virtud' => 'required|integer',
+                'maldad' => 'required|integer',
+                'audacia' => 'required|integer',
             ]);
     
             $usuario = User::create([

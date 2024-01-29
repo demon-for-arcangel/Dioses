@@ -1,4 +1,4 @@
-export async function crearUsuario(datos, token) {
+export async function crearHumano(datos, token) {
     let bodyContent = JSON.stringify({
         "nombre": datos.nombre,
         "email": datos.email,
@@ -22,10 +22,15 @@ export async function crearUsuario(datos, token) {
     });
 
     if (!response.ok) {
-        let message = `An error has occurred: ${response.status}`;
-        throw new Error(message);
-    } else {
+        let errorMessage = `An error has occurred: ${response.status}`;
+        throw new Error(errorMessage);
+    }
+
+    try {
         let data = await response.json();
         return data;
+    } catch (error) {
+        console.error("Error parsing response JSON:", error);
+        throw new Error("Error parsing response JSON");
     }
 }
