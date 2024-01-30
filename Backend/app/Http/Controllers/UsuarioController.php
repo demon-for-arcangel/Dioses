@@ -188,4 +188,38 @@ class UsuarioController extends Controller
     
         return response()->json(['humanos' => $humanos], 200);
     }
+
+    public function restablecerPass(){
+        $email = $request->get('email');
+        $vecValidator = [
+            "email" => $email,
+        ];
+        $messages = [
+            'email' => [
+                'required' => 'Es necesario el email del usuario',
+                'exists' => 'Este usuario no existe'
+            ]
+        ];
+
+        $validator = Validator::make($vecValidator, [
+            'email' => 'required|exists:users,email',
+        ], $messages);
+
+        if ($validator->fails()) {
+            return response()->json(["msg" => $validator->errors(), "status" => 400], 400);
+        }
+        $idUser = User::where('email', $email)->get();
+        $user = User::find($idUser[0]->id);
+        $randPass = Str::random(12);
+        $newPass['password'] = bcrypt($randPass);
+
+        try {
+
+            $user->update($newPass);
+            MailController::sendmail('forget', $user['name'], $user['email'], ['username' => $user['name'], 'password' => $randPass], 'Recuperación de contraseña');
+            return response()->json(["msg" => $randPass, "status" => 200], 200);
+        } catch (\Exception $exception) {
+            return response()->json(["msg" => $exception->getMessage()], 500);
+        }
+    }
 }

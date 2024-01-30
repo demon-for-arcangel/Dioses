@@ -7,7 +7,8 @@ module.exports = {
       login: './src/login/login.js',
       dashboard: './src/dashboard/dashboard.js',
       inicio: './src/inicio/inicio.js',
-      crearHumanos: './src/crearHumanos/crearHumanos.js'
+      crearHumanos: './src/crearHumanos/crearHumanos.js',
+      restablecerPass: './src/http/http-restablecerPass.js'
   },
     output: {
       filename: '[name].main.js',
