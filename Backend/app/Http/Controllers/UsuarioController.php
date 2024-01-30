@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 
 class UsuarioController extends Controller
 {
-    public function crearUsuario(Request $request){
+    public function registrar(Request $request){
         try {
             $request->validate([
                 'nombre' => 'required|string',
@@ -33,6 +33,63 @@ class UsuarioController extends Controller
                 'virtud' => rand(1, 5),
                 'maldad' => rand(1, 5),
                 'audacia' => rand(1, 5),
+            ]);
+    
+            $diosSeleccionado = $this -> asignarProteccion($usuario);
+    
+            $humano = Humano::where('user_id', $usuario->id)->first();
+    
+            if (!$humano || !$humano->dios_id) {
+                if ($diosSeleccionado && $diosSeleccionado->user){
+                    $afinidad = $this->calcularAfinidad(
+                        $usuario->sabiduria, $usuario->nobleza, $usuario->virtud, $usuario->maldad, $usuario->audacia,
+                        $diosSeleccionado->user->sabiduria, $diosSeleccionado->user->nobleza, $diosSeleccionado->user->virtud, $diosSeleccionado->user->maldad, $diosSeleccionado->user->audacia
+                    );
+
+                    $humano = Humano::create([
+                        'user_id' => $usuario->id,
+                        'dios_id' => $diosSeleccionado->id,
+                        'destino' => 0,
+                        'afinidad' => $afinidad,
+                    ]); 
+                }else{
+                    throw new Exception('No se encontró un dios seleccionado o falta la relación de usuario en el dios seleccionado', 404);
+                }           
+            }
+                 
+            $msg = ['message' => 'Humano creado exitosamente', 'usuario' => $usuario];
+            $cod = 200;
+        } catch (Exception $e) {
+            $msg = ['error' => $e->getMessage()];
+            $cod = 404;
+        }
+    
+        return response()->json(['mens' => $msg], $cod);
+    } 
+
+    public function crearUsuario(Request $request){
+        try {
+            $request->validate([
+                'nombre' => 'required|string',
+                'email' => 'required|email|unique:user,email',
+                'password' => 'required|string|min:8',
+                'sabiduria' => 'required|integer',
+                'nobleza' => 'required|integer',
+                'virtud' => 'required|integer',
+                'maldad' => 'required|integer',
+                'audacia' => 'required|integer',
+            ]);
+    
+            $usuario = User::create([
+                'nombre' => $request->input('nombre'),
+                'email' => $request->input('email'),
+                'password' => bcrypt($request->input('password')),
+                'tipo' => 'humano',
+                'sabiduria' => $request->input('sabiduria'),
+                'nobleza' => $request->input('nobleza'),
+                'virtud' => $request->input('virtud'),
+                'maldad' => $request->input('maldad'),
+                'audacia' => $request->input('audacia'),
             ]);
     
             $diosSeleccionado = $this -> asignarProteccion($usuario);

@@ -76,7 +76,7 @@ export function comprobarNombre(valorNombre){
     return rtnArray;
   }
 
-  export function comprobarValidaciones(nombre, email, password) {
+  export function comprobarValidaciones(nombre, email, password, ) {
     let nombreValido = comprobarNombre(nombre);
     let emailValido = comprobarEmail(email);
     let passwordValida = comprobarPassword(password);
