@@ -22,7 +22,7 @@ export async function crearHumano(datos, token) {
     });
 
     if (!response.ok) {
-        let errorMessage = `An error has occurred: ${response.status}`;
+        let errorMessage = `An error haÇ s occurred: ${response.status}`;
         throw new Error(errorMessage);
     }
 

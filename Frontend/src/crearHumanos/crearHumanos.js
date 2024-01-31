@@ -17,12 +17,12 @@ document.addEventListener("DOMContentLoaded", function () {
         var audacia = getRadioValueByName("audacia");
         var crear = document.getElementById("mensajeCrear");
 
-        console.log("Botón de clic presionado");
+        /* console.log("Botón de clic presionado");
 
         console.log('Valor de sabiduria:', sabiduria ? sabiduria.value : null);
         console.log('Nombre: ', nombreNuevo);
         console.log('correo: ', correoNuevo);
-        console.log('password: ', passwordNuevo);
+        console.log('password: ', passwordNuevo); */
 
         let sabiduriaValida = sabiduria ? sabiduria.value : null;
         let noblezaValida = nobleza ? nobleza.value : null;
@@ -30,21 +30,14 @@ document.addEventListener("DOMContentLoaded", function () {
         let maldadValida = maldad ? maldad.value : null;
         let audaciaValida = audacia ? audacia.value : null;
 
-
-        // Realizar validaciones específicas para sabiduria, nobleza, virtud, maldad, audacia
-        // (Agrega tus validaciones específicas aquí)
-
-        // Si las validaciones específicas pasan, proceder a la validación general
         if (comprobarValidaciones(nombreNuevo.value, correoNuevo.value, passwordNuevo.value)) {
             console.log("Validaciones pasadas");
 
-            // Obtener valores de los campos seleccionados
             let datos = cargarDatosHumano(nombreNuevo.value, correoNuevo.value, passwordNuevo.value, sabiduriaValida, noblezaValida, virtudValida, maldadValida, audaciaValida);
 
             console.log("Datos a enviar:", datos);
             console.log(token)
             try {
-                // Enviar solicitud para crear usuario usando la función del archivo http-crearUsuario
                 await crearHumano(datos, token);
                 crear.textContent = "Usuario Creado";
                 crear.style.color = "green";
