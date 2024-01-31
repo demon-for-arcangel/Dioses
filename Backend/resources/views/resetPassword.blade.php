@@ -16,17 +16,17 @@
         </style>
     </head>
     <body class="antialiased">
-        ¡Oh, intrépido explorador del ciberespacio!
+        <p>¡Oh, intrépido explorador del ciberespacio!</p>
 
-        Ante tu noble búsqueda de una nueva contraseña, los dioses digitales han forjado para ti una clave celestial. Contempla con reverencia estas palabras divinas:
+        <p>Ante tu noble búsqueda de una nueva contraseña, los dioses digitales han forjado para ti una clave celestial. Contempla con reverencia estas palabras divinas:</p>
+<br>
+        <p>"¡Valiente ser de la red, que en las aguas turbias del olvido ha perdido la senda de su contraseña! Los dioses de la seguridad te ofrecen una llave reinventada, una combinación de caracteres y números como las estrellas en la vastedad del cielo binario. Que esta nueva contraseña sea fuerte como el trueno de un servidor y resistente como el acero de la criptografía.</p>
 
-        "¡Valiente ser de la red, que en las aguas turbias del olvido ha perdido la senda de su contraseña! Los dioses de la seguridad te ofrecen una llave reinventada, una combinación de caracteres y números como las estrellas en la vastedad del cielo binario. Que esta nueva contraseña sea fuerte como el trueno de un servidor y resistente como el acero de la criptografía.
+        <p>Recuerda guardarla en el santuario de tu memoria digital y no compartirla con los mortales ni con los dioses traviesos. Que esta contraseña te guíe con seguridad a través de los portales digitales, y que tu travesía en la red esté llena de experiencias protegidas.</p>
 
-        Recuerda guardarla en el santuario de tu memoria digital y no compartirla con los mortales ni con los dioses traviesos. Que esta contraseña te guíe con seguridad a través de los portales digitales, y que tu travesía en la red esté llena de experiencias protegidas.
-
-        Que los bits y bytes te sean propicios, y que esta contraseña sea la llave maestra de tus futuras conquistas en el reino virtual. Que así sea."
-
-        ¡Que esta nueva contraseña sea tu escudo en la travesía digital!
+        <p>Que los bits y bytes te sean propicios, y que esta contraseña sea la llave maestra de tus futuras conquistas en el reino virtual. Que así sea."</p>
+<br>
+        <p>¡Que esta nueva contraseña sea tu escudo en la travesía digital!</p>
 
         <?php
             echo "Su nueva contraseña es: <strong>$password</strong><br><br>"
