@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Dios;
 use Illuminate\Http\Request;
-use App\Models\Humano;
+use App\Models\usuario;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Validator;
@@ -30,7 +30,7 @@ class UsuarioController extends Controller
                 'nombre' => $request->input('nombre'),
                 'email' => $request->input('email'),
                 'password' => bcrypt($request->input('password')),
-                'tipo' => 'humano',
+                'tipo' => 'usuario',
                 'sabiduria' => rand(1, 5),
                 'nobleza' => rand(1, 5),
                 'virtud' => rand(1, 5),
@@ -40,16 +40,16 @@ class UsuarioController extends Controller
     
             $diosSeleccionado = $this -> asignarProteccion($usuario);
     
-            $humano = Humano::where('user_id', $usuario->id)->first();
+            $usuario = usuario::where('user_id', $usuario->id)->first();
     
-            if (!$humano || !$humano->dios_id) {
+            if (!$usuario || !$usuario->dios_id) {
                 if ($diosSeleccionado && $diosSeleccionado->user){
                     $afinidad = $this->calcularAfinidad(
                         $usuario->sabiduria, $usuario->nobleza, $usuario->virtud, $usuario->maldad, $usuario->audacia,
                         $diosSeleccionado->user->sabiduria, $diosSeleccionado->user->nobleza, $diosSeleccionado->user->virtud, $diosSeleccionado->user->maldad, $diosSeleccionado->user->audacia
                     );
 
-                    $humano = Humano::create([
+                    $usuario = usuario::create([
                         'user_id' => $usuario->id,
                         'dios_id' => $diosSeleccionado->id,
                         'destino' => 0,
@@ -60,7 +60,7 @@ class UsuarioController extends Controller
                 }           
             }
                  
-            $msg = ['message' => 'Humano creado exitosamente', 'usuario' => $usuario];
+            $msg = ['message' => 'usuario creado exitosamente', 'usuario' => $usuario];
             $cod = 200;
         } catch (Exception $e) {
             $msg = ['error' => $e->getMessage()];
@@ -87,7 +87,7 @@ class UsuarioController extends Controller
                 'nombre' => $request->input('nombre'),
                 'email' => $request->input('email'),
                 'password' => bcrypt($request->input('password')),
-                'tipo' => 'humano',
+                'tipo' => 'usuario',
                 'sabiduria' => $request->input('sabiduria'),
                 'nobleza' => $request->input('nobleza'),
                 'virtud' => $request->input('virtud'),
@@ -97,16 +97,16 @@ class UsuarioController extends Controller
     
             $diosSeleccionado = $this -> asignarProteccion($usuario);
     
-            $humano = Humano::where('user_id', $usuario->id)->first();
+            $usuario = usuario::where('user_id', $usuario->id)->first();
     
-            if (!$humano || !$humano->dios_id) {
+            if (!$usuario || !$usuario->dios_id) {
                 if ($diosSeleccionado && $diosSeleccionado->user){
                     $afinidad = $this->calcularAfinidad(
                         $usuario->sabiduria, $usuario->nobleza, $usuario->virtud, $usuario->maldad, $usuario->audacia,
                         $diosSeleccionado->user->sabiduria, $diosSeleccionado->user->nobleza, $diosSeleccionado->user->virtud, $diosSeleccionado->user->maldad, $diosSeleccionado->user->audacia
                     );
 
-                    $humano = Humano::create([
+                    $usuario = usuario::create([
                         'user_id' => $usuario->id,
                         'dios_id' => $diosSeleccionado->id,
                         'destino' => 0,
@@ -117,7 +117,7 @@ class UsuarioController extends Controller
                 }           
             }
                  
-            $msg = ['message' => 'Humano creado exitosamente', 'usuario' => $usuario];
+            $msg = ['message' => 'usuario creado exitosamente', 'usuario' => $usuario];
             $cod = 200;
         } catch (Exception $e) {
             $msg = ['error' => $e->getMessage()];
@@ -153,9 +153,9 @@ class UsuarioController extends Controller
         }
 
         if ($diosSeleccionado) {
-            $humanoExistente = Humano::where('dios_id', $diosSeleccionado->id)->first();
+            $usuarioExistente = usuario::where('dios_id', $diosSeleccionado->id)->first();
 
-            if (!$humanoExistente) {
+            if (!$usuarioExistente) {
                 $usuario->update([
                     'sabiduria' => $diosSeleccionado->sabiduria,
                     'nobleza' => $diosSeleccionado->nobleza,
@@ -183,13 +183,13 @@ class UsuarioController extends Controller
         return $afinidad;
     }
 
-    public function listarHumanos(){
-        $humanos = DB::table('humano')
-            ->join('user', 'humano.user_id', '=', 'user.id')
+    public function listarusuarios(){
+        $usuarios = DB::table('usuario')
+            ->join('user', 'usuario.user_id', '=', 'user.id')
             ->select('user.nombre', 'user.email')
             ->get();
     
-        return response()->json(['humanos' => $humanos], 200);
+        return response()->json(['usuarios' => $usuarios], 200);
     }
 
     public function listarUsuariosPorEmail(Request $request)
@@ -257,4 +257,39 @@ class UsuarioController extends Controller
             return response()->json(["msg" => $exception->getMessage()], 500);
         }
     }
-  }
+
+    public function modificarHumano(Request $request, $id){
+        try {
+            $request->validate([
+                'nombre' => 'sometimes|string',
+                'email' => 'sometimes|email|unique:user,email,' . $id, // Asegura que el email sea único excluyendo el ID actual
+                'sabiduria' => 'sometimes|integer',
+                'nobleza' => 'sometimes|integer',
+                'virtud' => 'sometimes|integer',
+                'maldad' => 'sometimes|integer',
+                'audacia' => 'sometimes|integer',
+            ]);
+
+            $usuario = User::findOrFail($id);
+
+            $usuario->nombre = $request->input('nombre', $usuario->nombre);
+            $usuario->email = $request->input('email', $usuario->email);
+            $usuario->sabiduria = $request->input('sabiduria', $usuario->sabiduria);
+            $usuario->nobleza = $request->input('nobleza', $usuario->nobleza);
+            $usuario->virtud = $request->input('virtud', $usuario->virtud);
+            $usuario->maldad = $request->input('maldad', $usuario->maldad);
+            $usuario->audacia = $request->input('audacia', $usuario->audacia);
+
+            $usuario->save();
+
+            $msg = ['message' => 'Usuario modificado exitosamente'];
+            $cod = 200;
+        } catch (Exception $e) {
+            $msg = ['error' => $e->getMessage()];
+            $cod = 404;
+        }
+
+        return response()->json(['mens' => $msg], $cod);
+    }
+
+}

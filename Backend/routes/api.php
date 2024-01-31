@@ -41,6 +41,7 @@ Route::group(['middleware' => ['cors']], function () {
                 Route::get('listar-humanos', [UsuarioController::class, 'listarHumanos']);
                 Route::get('mostrar-pruebas', [OraculoController::class, 'mostrarOraculos']);
                 Route::post('crear-usuario', [UsuarioController::class, 'crearUsuario']);
+                Route::put('modificar-humano/{id}', [UsuarioController::class, 'modificarHumano']);
             });
         });
     });
