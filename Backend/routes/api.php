@@ -23,6 +23,8 @@ Route::group(['middleware' => ['cors']], function () {
     Route::post('cerrarSesion/{id}', [AuthController::class, 'cerrarSesion']);
 
     Route::post('restablecer-pass', [UsuarioController::class, 'restablecerPass']);
+    Route::post('email-existente', [UsuarioController::class, 'listarUsuariosPorEmail']);
+    
     Route::get('', function () {
         return response()->json("No logeado", 203);
     })->name('nologin');          

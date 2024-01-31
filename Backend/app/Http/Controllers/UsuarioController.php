@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\MailController;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class UsuarioController extends Controller
 {
@@ -189,11 +192,34 @@ class UsuarioController extends Controller
         return response()->json(['humanos' => $humanos], 200);
     }
 
-    public function restablecerPass(){
-        $email = $request->get('email');
-        $vecValidator = [
-            "email" => $email,
-        ];
+    public function listarUsuariosPorEmail(Request $request)
+    {
+        try {
+            $request->validate([
+                'email' => 'required|email|exists:user,email',
+            ]);
+
+            $email = $request->input('email');
+
+            $usuarios = DB::table('user')
+                ->where('email', $email)
+                ->get();
+
+            $msg = ['usuarios' => $usuarios];
+            $cod = 200;
+        } catch (Exception $e) {
+            $msg = ['error' => $e->getMessage()];
+            $cod = 404;
+        }
+
+        return response()->json(['mens' => $msg], $cod);
+    }
+
+    public function restablecerPass(Request $request){
+       $email = $request->input('email');
+        // /* $vecValidator = [
+           // "email" => $email,
+        //]; 
         $messages = [
             'email' => [
                 'required' => 'Es necesario el email del usuario',
@@ -201,25 +227,34 @@ class UsuarioController extends Controller
             ]
         ];
 
-        $validator = Validator::make($vecValidator, [
-            'email' => 'required|exists:users,email',
-        ], $messages);
+       // /* $validator = Validator::make($vecValidator, [
+       //     'email' => 'required|exists:users,email',
+       // ], $messages); 
 
-        if ($validator->fails()) {
-            return response()->json(["msg" => $validator->errors(), "status" => 400], 400);
-        }
-        $idUser = User::where('email', $email)->get();
-        $user = User::find($idUser[0]->id);
-        $randPass = Str::random(12);
-        $newPass['password'] = bcrypt($randPass);
-
+       // /* if ($validator->fails()) {
+       //     return response()->json(["msg" => $validator->errors(), "status" => 400], 400);
+      //  }
+        $user = User::where('email', $email)->get();
+        $randPass = 123456;
+        
+        $newPass = bcrypt($randPass);
         try {
-
-            $user->update($newPass);
-            MailController::sendmail('forget', $user['name'], $user['email'], ['username' => $user['name'], 'password' => $randPass], 'Recuperación de contraseña');
-            return response()->json(["msg" => $randPass, "status" => 200], 200);
+            
+            $user[0]->password=$newPass;
+            $user[0]->save();
+           
+            try {
+                Mail::send('resetPassword', ['username' => $user[0]['name'], 'password' => $randPass], function ($message) use ($user) {
+                    $message->to($user[0]['email'])->subject('Recuperación de contraseña ' . $user[0]['name']);
+                    $message->from('marinalaguna2004@gmail.com', 'Dioses');
+                });
+    
+                return response()->json(["msg" => $randPass, "status" => 200], 200);
+            } catch (\Exception $exception) {
+                return response()->json(["msg" => $exception->getMessage()], 500);
+            }
         } catch (\Exception $exception) {
             return response()->json(["msg" => $exception->getMessage()], 500);
         }
     }
-}
+  }

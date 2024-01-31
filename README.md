@@ -61,6 +61,27 @@ Para arrancar el Backend usaremos el comando `php artisan serve` y para el Front
 | `email` | `string` | **Requerido**.  |
 | `password` | `string` | **Requerido**. |
 
+#### Encontrar Usuario por Email
+
+```http
+  POST
+  /api/email-existente
+```
+
+| Parametro | Tipo     | Descripción                |
+| :-------- | :------- | :------------------------- |
+| `email` | `string` | **Requerido**.  |
+
+#### Recuperación de contraseña
+```http
+  POST
+  /api/restablecer-pass
+```
+
+| Parametro | Tipo     | Descripción                |
+| :-------- | :------- | :------------------------- |
+| `email` | `string` | **Requerido**.  |
+
 
 ### Manual para los Dioses
 #### Get item
