@@ -4,47 +4,47 @@ import { comprobarValidaciones } from "../utils/validaciones.js";
 let nombre = document.getElementById("nombre");
 let email = document.getElementById("email");
 let password = document.getElementById("password");
+let confpass = document.getElementById("confpass");
 
-let sabiduria = document.querySelector('input[name="sabiduria"]:checked');
-let nobleza = document.querySelector('input[name="nobleza"]:checked');
-let virtud = document.querySelector('input[name="virtud"]:checked');
-let maldad = document.querySelector('input[name="maldad"]:checked');
-let audacia = document.querySelector('input[name="audacia"]:checked');
+let formulario = document.getElementById("formularioRegistro");
+let btnRegistro = document.getElementById("btn-registrar");
 
-let formulario = document.getElementById("crearHumanoForm"); 
-let btnRegistro = document.querySelector("button[type='submit']")
-
-formulario.addEventListener("input", function() {
-    if (nombre.value && email.value && password.value) {
+formulario.addEventListener("input", function(){
+    if (nombre.value && email.value && password.value && confpass.value) {
         btnRegistro.removeAttribute("disabled");
     } else {
         btnRegistro.setAttribute("disabled", true);
     }
 });
 
-formulario.addEventListener("submit", async function(event) {
+btnRegistro.addEventListener("click", async function(){
     event.preventDefault();
-    console.log('Submit event triggered');
-    if (comprobarValidaciones(nombre.value, email.value, password.value)) {
-        let datos = cargarDatos();
-        try {
-            let response = await crearUsuario(datos);
-            console.log('Usuario creado exitosamente:', response);
-        } catch (error) {
-            console.error('Error al crear el usuario:', error);
-        }
-    }
-});
+    console.log('Click event triggered')
+    if (comprobarValidaciones(nombre.value, email.value, password.value, confpass.value)) {
+        var datos=cargarDatos();
+        await crearUsuario(datos).then(function(data){
+            var error=document.getElementById("errores");
+            error.innerHTML="";
+            error.style.color="green";
+            error.innerHTML="Usuario Creado";
+            setTimeout(function(){
+                window.location.href = "../index.html"
+            }, 5000)
+        }).catch(function(error){
+            var error=document.getElementById("errores");
+            error.innerHTML="";
+            error.style.color="red";
+            error.innerHTML="Usuario no creado. Intentelo de nuevo";
+        });
+    }}
+)
 
-function cargarDatos() {
-    return {
-        nombre: nombre.value,
-        email: email.value,
-        password: password.value,
-        sabiduria: sabiduria.value,
-        nobleza: nobleza.value,
-        virtud:  virtud.value,
-        maldad:  maldad.value,
-        audacia: audacia.value,
-    };
+function cargarDatos(){
+    var datos={
+      nombre:nombre.value,
+      email:email.value,
+      password:password.value,
+      confpass:confpass.value
+    }
+    return datos;
 }

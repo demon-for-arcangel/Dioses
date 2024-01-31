@@ -8,7 +8,7 @@ module.exports = {
       dashboard: './src/dashboard/dashboard.js',
       inicio: './src/inicio/inicio.js',
       crearHumanos: './src/crearHumanos/crearHumanos.js',
-      restablecerPass: './src/http/http-restablecerPass.js'
+      restablecerPass: './src/restablecerPass/restablecerPass.js'
   },
     output: {
       filename: '[name].main.js',
