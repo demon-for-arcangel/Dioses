@@ -33,15 +33,23 @@ Route::group(['middleware' => ['cors']], function () {
         Route::middleware('HumanoMid')->group(function () {
             Route::prefix('humano')->group(function () {
                 Route::get('/pruebas-asignadas/{userId}', [AsignacionController::class, 'mostrarAsignacionesUsuario']);
+
+                Route::get('/oraculos/asignados/{userId}', [OraculoController::class, 'mostrarOraculosAsignados']);
             });
         });
 
         Route::middleware('DiosMid')->group(function() {
             Route::prefix('dios')->group(function () {
+                //Humanos
                 Route::get('listar-humanos', [UsuarioController::class, 'listarHumanos']);
-                Route::get('mostrar-pruebas', [OraculoController::class, 'mostrarOraculos']);
                 Route::post('crear-usuario', [UsuarioController::class, 'crearUsuario']);
                 Route::put('modificar-humano/{id}', [UsuarioController::class, 'modificarHumano']);
+
+                //Pruebas
+                Route::get('mostrar-pruebas', [OraculoController::class, 'mostrarOraculos']);
+                Route::post('crear-prueba', [OraculoController::class, 'crearOraculo']);
+                Route::put('modificar-prueba/{id}', [OraculoController::class, 'actualizarOraculo']);
+                Route::delete('eliminar-prueba/{id}', [OraculoController::class, 'eliminarOraculo']);
             });
         });
     });
