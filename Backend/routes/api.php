@@ -18,10 +18,13 @@ use App\Http\Controllers\OraculoController;
 |
 */
 Route::group(['middleware' => ['cors']], function () {
-    Route::post('registro', [UsuarioController::class, 'crearUsuario']);
+    Route::post('registro', [UsuarioController::class, 'registrar']);
     Route::post('login', [AuthController::class, 'inicioSesion']);
     Route::post('cerrarSesion/{id}', [AuthController::class, 'cerrarSesion']);
 
+    Route::post('restablecer-pass', [UsuarioController::class, 'restablecerPass']);
+    Route::post('email-existente', [UsuarioController::class, 'listarUsuariosPorEmail']);
+    
     Route::get('', function () {
         return response()->json("No logeado", 203);
     })->name('nologin');          
@@ -37,6 +40,8 @@ Route::group(['middleware' => ['cors']], function () {
             Route::prefix('dios')->group(function () {
                 Route::get('listar-humanos', [UsuarioController::class, 'listarHumanos']);
                 Route::get('mostrar-pruebas', [OraculoController::class, 'mostrarOraculos']);
+                Route::post('crear-usuario', [UsuarioController::class, 'crearUsuario']);
+                Route::put('modificar-humano/{id}', [UsuarioController::class, 'modificarHumano']);
             });
         });
     });

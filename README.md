@@ -36,25 +36,61 @@ Para arrancar el Backend usaremos el comando `php artisan serve` y para el Front
 - [@demon-for-arcangel](https://github.com/demon-for-arcangel)
 ## Manual para la API
 
-### Manual para los Dioses
-
-#### Get all items
+#### Registro 
 
 ```http
-  GET /api/items
+  POST 
+  /api/registro
 ```
 
-| Parameter | Type     | Description                |
+| Parametro | Tipo     | Descripción                |
 | :-------- | :------- | :------------------------- |
-| `api_key` | `string` | **Required**. Your API key |
+| `nombre` | `string` | Nombre del usuario con el que queremos registrarnos. | 
+| `email` | `string` | Correo electronico para el usuario.  |
+| `password` | `string` | Contraseña para poder acceder. |
 
+#### Login 
+
+```http
+  POST 
+  /api/login
+```
+
+| Parametro | Tipo     | Descripción                |
+| :-------- | :------- | :------------------------- |
+| `email` | `string` | **Requerido**.  |
+| `password` | `string` | **Requerido**. |
+
+#### Encontrar Usuario por Email
+
+```http
+  POST
+  /api/email-existente
+```
+
+| Parametro | Tipo     | Descripción                |
+| :-------- | :------- | :------------------------- |
+| `email` | `string` | **Requerido**.  |
+
+#### Recuperación de contraseña
+```http
+  POST
+  /api/restablecer-pass
+```
+
+| Parametro | Tipo     | Descripción                |
+| :-------- | :------- | :------------------------- |
+| `email` | `string` | **Requerido**.  |
+
+
+### Manual para los Dioses
 #### Get item
 
 ```http
   GET /api/items/${id}
 ```
 
-| Parameter | Type     | Description                       |
+| Parametro | Tipo     | Descripción                       |
 | :-------- | :------- | :-------------------------------- |
 | `id`      | `string` | **Required**. Id of item to fetch |
 
@@ -71,7 +107,7 @@ Takes two numbers and returns the sum.
   GET /api/items
 ```
 
-| Parameter | Type     | Description                |
+| Parametro | Tipo     | Descripción                |
 | :-------- | :------- | :------------------------- |
 | `api_key` | `string` | **Required**. Your API key |
 
@@ -81,7 +117,7 @@ Takes two numbers and returns the sum.
   GET /api/items/${id}
 ```
 
-| Parameter | Type     | Description                       |
+| Parametro | Tipo     | Descripción                       |
 | :-------- | :------- | :-------------------------------- |
 | `id`      | `string` | **Required**. Id of item to fetch |
 

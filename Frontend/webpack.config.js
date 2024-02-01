@@ -6,7 +6,9 @@ module.exports = {
       registro: './src/registro/registro.js',
       login: './src/login/login.js',
       dashboard: './src/dashboard/dashboard.js',
-      inicio: './src/inicio/inicio.js'
+      inicio: './src/inicio/inicio.js',
+      crearHumanos: './src/crearHumanos/crearHumanos.js',
+      restablecerPass: './src/restablecerPass/restablecerPass.js'
   },
     output: {
       filename: '[name].main.js',
