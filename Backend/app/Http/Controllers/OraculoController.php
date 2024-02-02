@@ -76,18 +76,50 @@ class OraculoController extends Controller
         try {
             $validatedData = $request->validate([
                 'pregunta' => 'required|string',
-                'caracteristica' => 'required|string',
+                'tipo' => 'required|string',
                 'cantidad_destino' => 'required|integer',
+                'palabra_clave' => 'sometimes|string',
+                'opcion_1' => 'sometimes|string',
+                'opcion_2' => 'sometimes|string',
+                'valor_maximo' => 'sometimes|integer',
             ]);
+    
+            // Creación de la prueba libre
+            if (isset($validatedData['palabra_clave'])) {
+                $pruebaLibreId = DB::table('prueba_libre')->insertGetId(['palabra_clave' => $validatedData['palabra_clave']]);
+                $validatedData['prueba_libre_id'] = $pruebaLibreId;
+                unset($validatedData['palabra_clave']);
+            }
+    
+            // Creación de la prueba de elección
+            if (isset($validatedData['opcion_1']) || isset($validatedData['opcion_2'])) {
+                $pruebaEleccionId = DB::table('prueba_eleccion')->insertGetId([
+                    'opcion_1' => $validatedData['opcion_1'] ?? 'valor_por_defecto',
+                    'opcion_2' => $validatedData['opcion_2'] ?? 'valor_por_defecto'
+                ]);
+                $validatedData['prueba_eleccion_id'] = $pruebaEleccionId;
+                unset($validatedData['opcion_1']);
+                unset($validatedData['opcion_2']);
+            }
 
+            // Creación de la prueba de valoración
+            if (isset($validatedData['valor_maximo'])) {
+                $pruebaValoracionId = DB::table('prueba_valoracion')->insertGetId([
+                    'valor_maximo' => $validatedData['valor_maximo'],
+                ]);
+                $validatedData['prueba_valoracion_id'] = $pruebaValoracionId;
+                unset($validatedData['valor_maximo']);
+            }
+    
             $id = DB::table('oraculo')->insertGetId($validatedData);
             $oraculo = DB::table('oraculo')->where('id', $id)->first();
-
+    
             return response()->json(['message' => 'Prueba de oráculo creada exitosamente', 'oraculo' => $oraculo], 201);
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+    
 
     public function actualizarOraculo(Request $request, $id)
     {
