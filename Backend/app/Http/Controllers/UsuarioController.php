@@ -210,18 +210,18 @@ class UsuarioController extends Controller
 
     public function restablecerPass(Request $request){
         $email = $request->input('email');
-         // /* $vecValidator = [
+        // /* $vecValidator = [
             // "email" => $email,
-         //]; 
-         $messages = [
-             'email' => [
-                 'required' => 'Es necesario el email del usuario',
-                 'exists' => 'Este usuario no existe'
-             ]
-         ];
- 
+            //]; 
+            $messages = [
+                'email' => [
+                    'required' => 'Es necesario el email del usuario',
+                    'exists' => 'Este usuario no existe'
+                    ]
+                ];
+                
         // /* $validator = Validator::make($vecValidator, [
-        //     'email' => 'required|exists:users,email',
+        //     'email' => 'required|exists:user,email',
         // ], $messages); 
  
         // /* if ($validator->fails()) {
