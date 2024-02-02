@@ -178,11 +178,26 @@ class OraculoController extends Controller
             if (!$oraculo) {
                 throw new Exception('Prueba de oráculo no encontrada', 404);
             }
-
+    
+            // Eliminar prueba asociada según el tipo
+            switch ($oraculo->tipo) {
+                case 'libre':
+                    DB::table('prueba_libre')->where('id', $oraculo->prueba_libre_id)->delete();
+                    break;
+                case 'eleccion':
+                    DB::table('prueba_eleccion')->where('id', $oraculo->prueba_eleccion_id)->delete();
+                    break;
+                case 'valoracion':
+                    DB::table('prueba_valoracion')->where('id', $oraculo->prueba_valoracion_id)->delete();
+                    break;
+            }
+    
+            // Eliminar el oráculo
             DB::table('oraculo')->where('id', $id)->delete();
-            return response()->json(['message' => 'Prueba de oráculo eliminada exitosamente'], 200);
+    
+            return response()->json(['message' => 'Prueba de oráculo y prueba asociada eliminadas exitosamente'], 200);
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], $e->getCode());
         }
-    }
+    }        
 }
