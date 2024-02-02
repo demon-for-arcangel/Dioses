@@ -35,6 +35,8 @@ body {
 }
 
 .dashboard{
+    margin-bottom: 35px;
+    padding-bottom: 50px;
     background-color: #201f1f;
     margin-left: 25px;
     border-radius: 15px;
@@ -62,68 +64,9 @@ a:visited{
 .main-content {
     padding: 20px;
 }
-
-
-form {
-    display: flex;
-    flex-wrap: wrap; /* Permite que los elementos del formulario se ajusten según el ancho disponible */
-    justify-content: space-between;
-}
-
-.column {
-    flex: 1;
-    margin-right: 90px;
-    margin-left: 50px;
-}
-
-form .column:last-child {
-    margin-right: 0;
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-
-.radio-group label {
-    display: inline-block;
-    margin-right: 10px; /* Espacio entre cada botón de radio */
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-.form-group input[type="text"],
-.form-group input[type="email"],
-.form-group input[type="password"] {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.form-group button{
-    margin-right: 60px;
-}
-
-.radio-group {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.radio-group output {
-    margin: 0 10px;
-}
-
-.radio-group input[type="radio"] {
-    margin-right: 5px;
-}
-
-.btnCrearHumano {
+.main-content button{
+    margin-left: 35%;
+    margin-top: 40px;
     padding: 10px 20px;
     background-color: #e1ab08; /* Color verde */
     color: black;
@@ -131,9 +74,10 @@ form .column:last-child {
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-    margin-top: 20px; /* Asegura un poco de espacio entre los campos del formulario y el botón */
-    display: block; /* Hace que el botón ocupe su propia línea */
-    width: 100%; /* Hace que el botón se expanda para ocupar todo el ancho disponible */
+    width: 30%; /* Hace que el botón se expanda para ocupar todo el ancho disponible */
+}
+
+.btnCrearHumano {
 }
 
 .btnCancelar {
