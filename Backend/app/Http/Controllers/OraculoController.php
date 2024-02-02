@@ -199,5 +199,44 @@ class OraculoController extends Controller
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], $e->getCode());
         }
-    }        
+    } 
+    
+    public function asignarOraculo(Request $request)
+    {
+        try {
+            $validatedData = $request->validate([
+                'oraculo_id' => 'required|integer',
+                'humano_id' => 'required|integer',
+            ]);
+    
+            $oraculo = DB::table('oraculo')->where('id', $validatedData['oraculo_id'])->first();
+            if (!$oraculo) {
+                throw new Exception('Prueba de oráculo no encontrada', 404);
+            }
+    
+            // Verificar si ya está asignado
+            $asignacionExistente = DB::table('asignacion_oraculo')
+                ->where('oraculo_id', $validatedData['oraculo_id'])
+                ->where('humano_id', $validatedData['humano_id'])
+                ->first();
+    
+            if ($asignacionExistente) {
+                throw new Exception('El oráculo ya está asignado a este usuario', 400);
+            }
+    
+            // Crear la asignación
+            DB::table('asignacion_oraculo')->insert([
+                'oraculo_id' => $validatedData['oraculo_id'],
+                'humano_id' => $validatedData['humano_id'],
+            ]);
+    
+            return response()->json(['message' => 'Oráculo asignado exitosamente'], 200);
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], $e->getCode());
+        }
+    }    
+
+    public function asignarOraculoMultiple(){
+
+    }
 }

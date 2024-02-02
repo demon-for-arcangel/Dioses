@@ -48,6 +48,7 @@ Route::group(['middleware' => ['cors']], function () {
                 Route::post('crear-prueba', [OraculoController::class, 'crearOraculo']);
                 Route::put('modificar-prueba/{id}', [OraculoController::class, 'actualizarOraculo']);
                 Route::delete('eliminar-prueba/{id}', [OraculoController::class, 'eliminarOraculo']);
+                Route::post('/asignar-oraculo', [OraculoController::class, 'asignarOraculo']);
             });
         });
     });
