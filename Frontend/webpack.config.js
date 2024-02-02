@@ -5,10 +5,11 @@ module.exports = {
   entry: {
       registro: './src/registro/registro.js',
       login: './src/login/login.js',
+      restablecerPass: './src/restablecerPass/restablecerPass.js',
       dashboard: './src/dashboard/dashboard.js',
       inicio: './src/inicio/inicio.js',
       crearHumanos: './src/crearHumanos/crearHumanos.js',
-      restablecerPass: './src/restablecerPass/restablecerPass.js'
+      crearPruebas: './src/crearPruebas/crearPruebas.js'
   },
     output: {
       filename: '[name].main.js',

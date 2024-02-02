@@ -1,0 +1,150 @@
+:root{
+    color-scheme: light dark;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.content {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0; 
+}
+
+.logo h2 {
+    padding-left: 75px;
+}
+
+.dashboard-container{
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+}
+
+.dashboard{
+    background-color: #201f1f;
+    margin-left: 25px;
+    border-radius: 15px;
+}
+
+.sidebar {
+    width: 200px;
+    background-color: #e1ab08;
+    min-height: 100vh;
+    padding: 20px;
+    margin: 0px;
+    color: black;
+    flex-shrink: 0;
+}
+a{
+    text-decoration: none;
+    color: red;
+}
+a:hover {
+    color: rgb(38, 142, 72);
+}
+a:visited{
+    color: black;
+}
+.main-content {
+    padding: 20px;
+}
+
+
+form {
+    display: flex;
+    flex-wrap: wrap; /* Permite que los elementos del formulario se ajusten según el ancho disponible */
+    justify-content: space-between;
+}
+
+.column {
+    flex: 1;
+    margin-right: 90px;
+    margin-left: 50px;
+}
+
+form .column:last-child {
+    margin-right: 0;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.radio-group label {
+    display: inline-block;
+    margin-right: 10px; /* Espacio entre cada botón de radio */
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-group button{
+    margin-right: 60px;
+}
+
+.radio-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.radio-group output {
+    margin: 0 10px;
+}
+
+.radio-group input[type="radio"] {
+    margin-right: 5px;
+}
+
+.btnCrearHumano {
+    padding: 10px 20px;
+    background-color: #e1ab08; /* Color verde */
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px; /* Asegura un poco de espacio entre los campos del formulario y el botón */
+    display: block; /* Hace que el botón ocupe su propia línea */
+    width: 100%; /* Hace que el botón se expanda para ocupar todo el ancho disponible */
+}
+
+.btnCancelar {
+    padding: 10px 20px;
+    background-color: #e1ab08; /* Color verde */
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px; /* Asegura un poco de espacio entre los campos del formulario y el botón */
+    display: block; /* Hace que el botón ocupe su propia línea */
+    width: 100%; /* Hace que el botón se expanda para ocupar todo el ancho disponible */
+}

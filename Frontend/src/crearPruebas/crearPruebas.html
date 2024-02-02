@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="./crearHumanos.css">
+   <link rel="icon" href="../assets/logo1.png">
+   <title>Crear Humano</title>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <ul>
+                <li><a href="../dashboard/dashboard.html">Dashboard</a></li>
+                <li><a href="../crearHumanos/crearHumanos.html">Crear Humanos</a></li>
+                <li><a href="../modificarHumanos/modificarHumanos.html">Modificar Humano</a></li>
+                <li><a href="../matarHumanos/matarHumanos.html">Matar Humano</a></li>
+                <li><a href="../modificarPruebas/modificarPruebas.html">Modificar Pruebas</a></li>
+                <li><a href="../eliminarPruebas/eliminarPruebas.html">Eliminar Pruebas</a></li>
+                <li><a href="../asignarPruebas/asignarPruebas.html">Asignar Pruebas</a></li>
+                <li><a href="../miPerfil/miPerfil.html">Mi perfil</a></li>
+            </ul>
+        </div>
+
+        <div class="content">
+            <div class="logo">
+                <img src="../assets/logo1.png" alt="logo" width="350px"/>
+                <h2>Fabrica de Pruebas</h2>
+            </div>
+            <br>
+            <div class="dashboard">
+                <div class="main-content">
+                    <button onclick="mostrarModal('Crear Prueba Libre')">Crear Prueba Libre</button>
+                    <button onclick="mostrarModal('Crear Prueba Valoración')">Crear Prueba Valoración</button>
+                    <button onclick="mostrarModal('Crear Prueba Elección')">Crear Prueba Elección</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="cerrarModal()">&times;</span>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <script src="../../dist/crearPruebas.main.js"></script>
+</body>
+
+</html>
