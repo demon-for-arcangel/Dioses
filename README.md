@@ -50,7 +50,16 @@ Este documento proporciona una breve descripción general y una guía de uso par
 - [Verificar Existencia de Correo Electrónico](#verificar-existencia-de-correo-electrónico)
 - [Acceso No Autenticado](#acceso-no-autenticado)
 - [Rutas para Usuarios Humanos](#rutas-para-usuarios-humanos)
+    - [Pruebas Asignadas]()
+    - [Guardar Respuesta de Prueba]()
 - [Rutas para Usuarios "Dios"](#rutas-para-usuarios-dios)
+    - [Mostrar Pruebas Creadas]()
+    - [Crear Usuario]()
+    - [Crear Pruebas]()
+    - [Modificar Prueba]()
+    - [Eliminar Prueba]()
+    - [Asignar Prueba]()
+
 
 ## Registro
 ### `POST api/registro`
