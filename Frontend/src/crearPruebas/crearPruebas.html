@@ -4,7 +4,7 @@
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <link rel="stylesheet" href="./crearHumanos.css">
+   <link rel="stylesheet" href="./crearPruebas.css">
    <link rel="icon" href="../assets/logo1.png">
    <title>Crear Humano</title>
 </head>
@@ -32,21 +32,31 @@
             <br>
             <div class="dashboard">
                 <div class="main-content">
-                    <button onclick="mostrarModal('Crear Prueba Libre')">Crear Prueba Libre</button>
-                    <button onclick="mostrarModal('Crear Prueba Valoración')">Crear Prueba Valoración</button>
-                    <button onclick="mostrarModal('Crear Prueba Elección')">Crear Prueba Elección</button>
+                    <button class="prueba-button" data-options="crearPruebaLibre" onclick="mostrarModal(this)">Crear Prueba Libre</button>
+                </div>
+            </div>
+            <div class="dashboard">
+                <div class="main-content">
+                    <button class="prueba-button" data-options="crearPruebaValoracion" onclick="mostrarModal(this)">Crear Prueba Valoración</button>
+                </div>
+            </div>
+            <div class="dashboard">
+                <div class="main-content">
+                    <button class="prueba-button" data-options="crearPruebaEleccion" onclick="mostrarModal(this)">Crear Prueba Elección</button>
                 </div>
             </div>
         </div>
-    </div>
-
-    <div id="myModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="cerrarModal()">&times;</span>
-            <div id="modalContent"></div>
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <div id="modalContent"></div>
+            </div>
         </div>
     </div>
-
-    <script src="../../dist/crearPruebas.main.js"></script>
 </body>
+<<<<<<< HEAD
 </html>
+=======
+<script src="./crearPruebas.js"></script>
+<!-- <script src="../../dist/crearPruebas.main.js"></script>
+ --></html>
+>>>>>>> 156dc07c27c5d0b26079be0c22661d90f87fde76
