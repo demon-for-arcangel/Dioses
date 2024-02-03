@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", function () {
         button.addEventListener('click', async function () {
             var tipoPrueba = button.getAttribute('data-options');
 
-            // Limpia el contenido existente del modal
             modalContent.innerHTML = '';
 
             var preguntaInput = document.createElement('input');
@@ -21,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             var tipoInput = document.createElement('input');
             tipoInput.setAttribute('type', 'hidden');
-            tipoInput.setAttribute('value', tipoPrueba.toLowerCase()); // Tipo en minúsculas
+            tipoInput.setAttribute('value', tipoPrueba.toLowerCase()); 
 
             var cantidadDestinoInput = document.createElement('input');
             cantidadDestinoInput.setAttribute('type', 'text');
@@ -77,19 +76,18 @@ document.addEventListener("DOMContentLoaded", function () {
                 try {
                     if (tipoPrueba === 'crearPruebaLibre') {
                         const response = await crearPruebaLibre(datos, token);
-                        console.log(response); // Verifica la respuesta del servidor
+                        console.log(response); 
                     } else if (tipoPrueba === 'crearPruebaValoracion') {
                         const response = await crearPruebaValoracion(datos, token);
-                        console.log(response); // Verifica la respuesta del servidor
+                        console.log(response); 
                     } else if (tipoPrueba === 'crearPruebaEleccion') {
                         const response = await crearPruebaEleccion(datos, token);
-                        console.log(response); // Verifica la respuesta del servidor
+                        console.log(response); 
                     }
 
                     cerrarModal();
                 } catch (error) {
                     console.error('Error al crear la prueba:', error);
-                    // Maneja el error según sea necesario
                 }
             });
             modalContent.appendChild(crear);
