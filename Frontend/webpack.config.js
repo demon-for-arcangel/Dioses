@@ -8,6 +8,8 @@ module.exports = {
       restablecerPass: './src/restablecerPass/restablecerPass.js',
       dashboard: './src/dashboard/dashboard.js',
       inicio: './src/inicio/inicio.js',
+      /* humanos: './src/humanos/humanos.js', */
+      pruebas: './src/pruebas/pruebas.js',
       crearHumanos: './src/crearHumanos/crearHumanos.js',
       crearPruebas: './src/crearPruebas/crearPruebas.js'
   },
