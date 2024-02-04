@@ -178,28 +178,44 @@ class OraculoController extends Controller
             if (!$oraculo) {
                 throw new Exception('Prueba de oráculo no encontrada', 404);
             }
+            
+            // Eliminar primero la referencia en la tabla oraculo
+            DB::table('oraculo')->where('id', $id)->delete();
     
-            // Eliminar prueba asociada según el tipo
+            // Luego, eliminar la fila correspondiente en la tabla específica
             switch ($oraculo->tipo) {
                 case 'libre':
-                    DB::table('prueba_libre')->where('id', $oraculo->prueba_libre_id)->delete();
+                    $this->eliminarPruebaLibre($oraculo->prueba_libre_id);
                     break;
                 case 'eleccion':
-                    DB::table('prueba_eleccion')->where('id', $oraculo->prueba_eleccion_id)->delete();
+                    $this->eliminarPruebaEleccion($oraculo->prueba_eleccion_id);
                     break;
                 case 'valoracion':
-                    DB::table('prueba_valoracion')->where('id', $oraculo->prueba_valoracion_id)->delete();
+                    $this->eliminarPruebaValoracion($oraculo->prueba_valoracion_id);
                     break;
             }
     
-            // Eliminar el oráculo
-            DB::table('oraculo')->where('id', $id)->delete();
-    
             return response()->json(['message' => 'Prueba de oráculo y prueba asociada eliminadas exitosamente'], 200);
         } catch (Exception $e) {
-            return response()->json(['error' => $e->getMessage()], $e->getCode());
+            // Asegúrate de usar \Exception si no estás importando la clase Exception con use en la parte superior
+            return response()->json(['error' => $e->getMessage()], 500);
         }
-    } 
+    }
+    
+    private function eliminarPruebaLibre($id)
+    {
+        DB::table('prueba_libre')->where('id', $id)->delete();
+    }
+    
+    private function eliminarPruebaEleccion($id)
+    {
+        DB::table('prueba_eleccion')->where('id', $id)->delete();
+    }
+    
+    private function eliminarPruebaValoracion($id)
+    {
+        DB::table('prueba_valoracion')->where('id', $id)->delete();
+    }
     
     public function asignarOraculo(Request $request)
     {

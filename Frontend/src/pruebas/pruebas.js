@@ -10,6 +10,7 @@ let tablaOraculos = document.getElementById('tabla-oraculos');
 async function init() {
     try {
         let respuesta = await obtenerOraculos(token);
+        console.log(respuesta);
         let oraculos = respuesta.oraculos;
         ObtencionOraculos(oraculos);
     } catch (error) {
@@ -17,7 +18,7 @@ async function init() {
     }
 }
 
-init(); // Llamada a la función para iniciar el proceso
+init(); 
 
 async function ObtencionOraculos(oraculos) {
     try {
@@ -42,21 +43,18 @@ async function ObtencionOraculos(oraculos) {
                 enlaceImgEditar.appendChild(imgEditar);
 
                 let buttonBorrar = document.createElement('button');
+                buttonBorrar.setAttribute('data-id', oraculo.id);
                 buttonBorrar.addEventListener('click', async function() {
                     try {
+                        const id = this.getAttribute('data-id');
                         console.log('Intentando eliminar el oráculo con ID:', id);
-                        if (!oraculos || !Array.isArray(oraculos)) {
-                            console.error('El array de oráculos no está definido o no es un array');
-                            return;
-                        }
-                        const index = oraculos.findIndex(oraculo => oraculo.id === id);
-                        console.log('Índice encontrado:', index);
-                
-                        if (index !== -1) {
-                            const respuesta = await eliminarOraculo(oraculos[index].id, token);
-                            console.log('Respuesta de eliminación:', respuesta);
+                        console.log(token)
+                        const respuesta = await eliminarOraculo(id, token);
+
+                        if (respuesta.error) {
+                            console.error('Error al eliminar el oráculo:', respuesta.error);
                         } else {
-                            console.error('Oráculo no encontrado por el id: ', id);
+                            console.log('Respuesta de eliminación:', respuesta);
                         }
                     } catch (error) {
                         console.error('Error al eliminar el oráculo: ', error);
@@ -88,5 +86,3 @@ async function ObtencionOraculos(oraculos) {
         console.error('Error al manejar la obtención de oráculos: ', error);
     }
 }
-
-ObtencionOraculos();
