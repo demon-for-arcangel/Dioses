@@ -29,7 +29,7 @@ export async function eliminarOraculo(id, token){
             "Authorization": `Bearer ${token}`
         };
 
-        const response = await fetch('http://127.0.0.1:8000/api/dios/eliminar-prueba/{id}', {
+        const response = await fetch(`http://127.0.0.1:8000/api/dios/eliminar-prueba/${id}`, {
             method: "DELETE",
             headers: headersList
         });
