@@ -137,40 +137,53 @@ class OraculoController extends Controller
                 'valor_maximo' => 'sometimes|required|integer',
             ]);
     
+            // Obtener el oráculo existente
             $oraculo = DB::table('oraculo')->where('id', $id)->first();
-    
             if (!$oraculo) {
                 throw new Exception('Prueba de oráculo no encontrada', 404);
             }
     
+            // Actualizar palabra clave de prueba libre si está presente
             if (isset($validatedData['prueba_libre_id']) && isset($validatedData['palabra_clave'])) {
-                DB::table('prueba_libre')->where('id', $validatedData['prueba_libre_id'])->update(['palabra_clave' => $validatedData['palabra_clave']]);
-                unset($validatedData['palabra_clave']);
+                DB::table('prueba_libre')->where('id', $validatedData['prueba_libre_id'])
+                    ->update(['palabra_clave' => $validatedData['palabra_clave']]);
             }
     
+            // Actualizar opciones de prueba de elección si están presentes
             if (isset($validatedData['prueba_eleccion_id']) && (isset($validatedData['opcion_1']) || isset($validatedData['opcion_2']))) {
-                DB::table('prueba_eleccion')->where('id', $validatedData['prueba_eleccion_id'])->update([
-                    'opcion_1' => $validatedData['opcion_1'] ?? $oraculo->opcion_1,
-                    'opcion_2' => $validatedData['opcion_2'] ?? $oraculo->opcion_2
-                ]);
-                unset($validatedData['opcion_1']);
-                unset($validatedData['opcion_2']);
+                DB::table('prueba_eleccion')->where('id', $validatedData['prueba_eleccion_id'])
+                    ->update([
+                        'opcion_1' => $validatedData['opcion_1'] ?? $oraculo->opcion_1,
+                        'opcion_2' => $validatedData['opcion_2'] ?? $oraculo->opcion_2
+                    ]);
             }
     
+            // Actualizar valor máximo de prueba de valoración si está presente
             if (isset($validatedData['prueba_valoracion_id']) && isset($validatedData['valor_maximo'])) {
-                DB::table('prueba_valoracion')->where('id', $validatedData['prueba_valoracion_id'])->update(['valor_maximo' => $validatedData['valor_maximo']]);
-                unset($validatedData['valor_maximo']);
+                DB::table('prueba_valoracion')->where('id', $validatedData['prueba_valoracion_id'])
+                    ->update(['valor_maximo' => $validatedData['valor_maximo']]);
             }
     
+            // Eliminar datos específicos de la actualización
+            unset($validatedData['prueba_libre_id']);
+            unset($validatedData['prueba_eleccion_id']);
+            unset($validatedData['prueba_valoracion_id']);
+            unset($validatedData['palabra_clave']);
+            unset($validatedData['opcion_1']);
+            unset($validatedData['opcion_2']);
+            unset($validatedData['valor_maximo']);
+    
+            // Actualizar el oráculo
             DB::table('oraculo')->where('id', $id)->update($validatedData);
+    
+            // Obtener el oráculo actualizado
             $updatedOraculo = DB::table('oraculo')->where('id', $id)->first();
     
             return response()->json(['message' => 'Prueba de oráculo actualizada exitosamente', 'oraculo' => $updatedOraculo], 200);
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], $e->getCode());
         }
-    }
-        
+    }        
     public function eliminarOraculo($id)
     {
         try {

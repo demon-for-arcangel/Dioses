@@ -79,3 +79,52 @@ a:visited{
     padding-bottom: 12px;
     text-align: left;
 }
+
+/* -------------- Modal --------------*/
+/* Estilos generales del modal */
+.modal {
+    position: fixed;
+    background-color: #201f1f;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2; /* Asegura que el modal esté en la parte superior */
+}
+
+/* Estilos del contenido del modal */
+.modal-content {
+    padding: 20px;
+    border: 1px solid #888;
+    border-radius: 5px;
+    max-width: 400px;
+    width: 100%;
+}
+
+/* Estilos para los input del formulario */
+input {
+    margin-bottom: 10px;
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Estilos específicos para el botón del formulario */
+button {
+    padding: 10px;
+    background-color: #4caf50; /* Verde */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Estilos para el botón de cerrar del formulario */
+.cancelar-button {
+    margin-left: 20px;
+    background-color: #f44336; /* Rojo */
+}

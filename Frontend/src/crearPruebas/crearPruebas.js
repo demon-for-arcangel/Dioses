@@ -86,6 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
 
                     cerrarModal();
+                    window.location.href = '../pruebas/pruebas.html';
                 } catch (error) {
                     console.error('Error al crear la prueba:', error);
                 }
@@ -111,4 +112,3 @@ function cerrarModal() {
     var modal = document.getElementById('myModal');
     modal.style.display = 'none';
 }
-
