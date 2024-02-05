@@ -48,19 +48,26 @@ export async function eliminarOraculo(id, token){
 
 export async function modificarPrueba(datos, id, token) {
     try {
-        // Asegurar que los campos nulos se envíen correctamente en la solicitud JSON
         const requestBody = {
             tipo: datos.tipo,
             pregunta: datos.pregunta,
             cantidad_destino: datos.cantidad_destino,
-            palabra_clave: datos.palabra_clave || null,  // Convertir a null si es undefined
-            valor_maximo: datos.valor_maximo || null,    // Convertir a null si es undefined
-            opcion_1: datos.opcion_1 || null,            // Convertir a null si es undefined
-            opcion_2: datos.opcion_2 || null             // Convertir a null si es undefined
         };
 
+        if (datos.palabra_clave) {
+            requestBody.palabra_clave = datos.palabra_clave;
+        }
+        if (datos.valor_maximo) {
+            requestBody.valor_maximo = datos.valor_maximo;
+        }
+        if (datos.opcion_1) {
+            requestBody.opcion_1 = datos.opcion_1;
+        }
+        if (datos.opcion_2) {
+            requestBody.opcion_2 = datos.opcion_2;
+        }
+
         const bodyContent = JSON.stringify(requestBody);
-        console.log(bodyContent);
 
         const headersList = {
             "Content-Type": "application/json",
@@ -72,7 +79,6 @@ export async function modificarPrueba(datos, id, token) {
             headers: headersList,
             body: bodyContent
         });
-        console.log(response);
 
         if (!response.ok) {
             console.error('Error en la respuesta:', response.status, response.statusText);

@@ -7,7 +7,6 @@ let token = sessionStorage.getItem('token');
 
 let tablaOraculos = document.getElementById('tabla-oraculos');
 
-// Agregar un contenedor para el modal en el body
 let modalContainer = document.createElement('div');
 modalContainer.id = 'modal-container';
 document.body.appendChild(modalContainer);
@@ -39,12 +38,10 @@ async function ObtencionOraculos(oraculos) {
                 preguntaCell.textContent = oraculo.pregunta;
                 row.appendChild(preguntaCell);
 
-                // Nueva columna para "Cantidad Destino"
                 let cantidadDestinoCell = document.createElement('td');
                 cantidadDestinoCell.textContent = oraculo.cantidad_destino;
                 row.appendChild(cantidadDestinoCell);
 
-                // Crear una nueva celda para las acciones (editar y borrar)
                 let accionesCell = document.createElement('td');
 
                 let buttonEditar = document.createElement('button');
@@ -73,15 +70,13 @@ async function ObtencionOraculos(oraculos) {
                 imgEditar.style.width = '35px'; 
 
                 buttonEditar.appendChild(imgEditar);
-                accionesCell.appendChild(buttonEditar); // Añadir el botón de editar a la celda de acciones
+                accionesCell.appendChild(buttonEditar); 
 
                 let buttonBorrar = document.createElement('button');
                 buttonBorrar.setAttribute('data-id', oraculo.id);
                 buttonBorrar.addEventListener('click', async function() {
                     try {
                         const id = this.getAttribute('data-id');
-                        console.log('Intentando eliminar el oráculo con ID:', id);
-                        console.log(token);
                         const respuesta = await eliminarOraculo(id, token);
 
                         if (respuesta.error) {
@@ -101,9 +96,9 @@ async function ObtencionOraculos(oraculos) {
                 imgBorrar.style.width = '35px';
 
                 buttonBorrar.appendChild(imgBorrar);
-                accionesCell.appendChild(buttonBorrar); // Añadir el botón de borrar a la celda de acciones
+                accionesCell.appendChild(buttonBorrar);
 
-                row.appendChild(accionesCell); // Añadir la celda de acciones a la fila
+                row.appendChild(accionesCell); 
 
                 tablaOraculos.appendChild(row);
             });
@@ -116,7 +111,6 @@ async function ObtencionOraculos(oraculos) {
 }
 
 function abrirModalLibre(id, tipoActual, preguntaActual, cantidadDestinoActual, palabraClaveActual) {
-    // HTML del modal
     const modalHTML = `
         <div id="miModal" class="modal">
             <div class="modal-content">
@@ -135,19 +129,15 @@ function abrirModalLibre(id, tipoActual, preguntaActual, cantidadDestinoActual, 
         </div>
     `;
 
-    // Añadir el HTML del modal al contenedor
     modalContainer.innerHTML = modalHTML;
 
-    // Mostrar el modal
     document.getElementById('miModal').style.display = 'block';
 
-    // Agregar los event listeners
     document.getElementById('btnModificarOraculo').addEventListener('click', () => modificarOraculo(id));
     document.getElementById('btnCancelarModificacion').addEventListener('click', cerrarModal);
 }
 
 function abrirModalValoracion(id, tipoActual, preguntaActual, cantidadDestinoActual, valorMaximoActual) {
-    // HTML del modal
     const modalHTML = `
         <div id="miModal" class="modal">
             <div class="modal-content">
@@ -166,19 +156,15 @@ function abrirModalValoracion(id, tipoActual, preguntaActual, cantidadDestinoAct
         </div>
     `;
 
-    // Añadir el HTML del modal al contenedor
     modalContainer.innerHTML = modalHTML;
 
-    // Mostrar el modal
     document.getElementById('miModal').style.display = 'block';
 
-    // Agregar los event listeners
     document.getElementById('btnModificarOraculo').addEventListener('click', () => modificarOraculo(id));
     document.getElementById('btnCancelarModificacion').addEventListener('click', cerrarModal);
 }
 
 function abrirModalEleccion(id, tipoActual, preguntaActual, cantidadDestinoActual, opcion1Actual, opcion2Actual) {
-    // HTML del modal
     const modalHTML = `
         <div id="miModal" class="modal">
             <div class="modal-content">
@@ -199,13 +185,10 @@ function abrirModalEleccion(id, tipoActual, preguntaActual, cantidadDestinoActua
         </div>
     `;
 
-    // Añadir el HTML del modal al contenedor
     modalContainer.innerHTML = modalHTML;
 
-    // Mostrar el modal
     document.getElementById('miModal').style.display = 'block';
 
-    // Agregar los event listeners
     document.getElementById('btnModificarOraculo').addEventListener('click', () => modificarOraculo(id));
     document.getElementById('btnCancelarModificacion').addEventListener('click', cerrarModal);
 }
@@ -225,13 +208,6 @@ async function modificarOraculo(id) {
         opcion_2: document.getElementById('opcion2') ? document.getElementById('opcion2').value : null,
     };
 
-    console.log(nuevoTipo)
-    console.log(nuevaPregunta)
-    console.log(nuevaCantidadDestino)
-    console.log(datos)
-    console.log(id)
-    console.log(token)
-
     try {
         const respuesta = await modificarPrueba(datos, id, token);
     console.log(respuesta)
@@ -240,11 +216,11 @@ async function modificarOraculo(id) {
         } else {
             console.log('Respuesta de modificación:', respuesta);
             cerrarModal();
+            window.location.reload();
         }
     } catch (error) {
         console.error('Error al modificar la prueba: ', error);
     
-        // Verificar si 'error.response' está definido antes de acceder a 'data'
         if (error.response && error.response.data) {
             console.log('Contenido del error:', error.response.data);
         } else {

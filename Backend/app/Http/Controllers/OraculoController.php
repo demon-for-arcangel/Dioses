@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Exception;
+use League\Config\Exception\ValidationException;
 
 class OraculoController extends Controller
 {
@@ -180,10 +181,13 @@ class OraculoController extends Controller
             $updatedOraculo = DB::table('oraculo')->where('id', $id)->first();
     
             return response()->json(['message' => 'Prueba de oráculo actualizada exitosamente', 'oraculo' => $updatedOraculo], 200);
+        } catch (ValidationException $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
         } catch (Exception $e) {
-            return response()->json(['error' => $e->getMessage()], $e->getCode());
+            return response()->json(['error' => $e->getMessage()], 400);
         }
     }        
+
     public function eliminarOraculo($id)
     {
         try {
