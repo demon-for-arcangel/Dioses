@@ -231,6 +231,5 @@ async function modificarOraculo(id) {
 }
 
 function cerrarModal() {
-    // Ocultar el modal
     document.getElementById('miModal').style.display = 'none';
 }

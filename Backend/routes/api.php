@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OraculoController;
+use App\Models\AsignacionOraculo;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,7 +49,8 @@ Route::group(['middleware' => ['cors']], function () {
                 Route::post('crear-prueba', [OraculoController::class, 'crearOraculo']);
                 Route::put('modificar-prueba/{id}', [OraculoController::class, 'actualizarOraculo']);
                 Route::delete('eliminar-prueba/{id}', [OraculoController::class, 'eliminarOraculo']);
-                Route::post('/asignar-oraculo', [OraculoController::class, 'asignarOraculo']);
+                Route::post('/asignar-oraculo', [AsignacionController::class, 'asignarPrueba']);
+                Route::post('/asignar-varios-oraculos', [AsignacionOraculo::class, 'asignarPruebaMultiple']);
             });
         });
     });

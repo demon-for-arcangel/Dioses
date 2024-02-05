@@ -49,6 +49,7 @@ body {
     color: black;
     flex-shrink: 0;
 }
+
 a {
     text-decoration: none;
     color: black;
@@ -57,6 +58,7 @@ a {
 a:visited{
     color:bisque;
 }
+
 .main-content {
     padding: 20px;
 }
