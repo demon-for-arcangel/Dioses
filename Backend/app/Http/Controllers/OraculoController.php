@@ -32,23 +32,27 @@ class OraculoController extends Controller
 
     public function listarOraculoId($id)
     {
-        try {
+        try {    
             $oraculo = DB::table('oraculo')
                 ->leftJoin('prueba_libre', 'oraculo.prueba_libre_id', '=', 'prueba_libre.id')
                 ->leftJoin('prueba_eleccion', 'oraculo.prueba_eleccion_id', '=', 'prueba_eleccion.id')
                 ->leftJoin('prueba_valoracion', 'oraculo.prueba_valoracion_id', '=', 'prueba_valoracion.id')
-                ->select('oraculo.*', 'prueba_libre.palabra_clave', 'prueba_eleccion.opciones', 'prueba_valoracion.valor_maximo')
+                ->select('oraculo.*', 'prueba_libre.palabra_clave', 'prueba_eleccion.opcion_1', 'prueba_eleccion.opcion_2', 'prueba_valoracion.valor_maximo')
                 ->where('oraculo.id', $id)
                 ->first();
-
+    
             if (!$oraculo) {
-                throw new Exception('Prueba de oráculo no encontrada', 404);
+                throw new Exception('Prueba de oráculo no encontrada',  404);
             }
-
-            return response()->json(['oraculo' => $oraculo], 200);
+    
+            return response()->json(['oraculo' => $oraculo],  200);
         } catch (Exception $e) {
-            return response()->json(['error' => $e->getMessage()], $e->getCode());
-        }
+            $statusCode = $e->getCode();
+            if (!is_int($statusCode)) {
+                $statusCode =   500; // Código de estado predeterminado si no es un entero
+            }
+            return response()->json(['error' => $e->getMessage()], $statusCode);
+        }    
     }
 
     public function mostrarOraculosAsignados($userId){

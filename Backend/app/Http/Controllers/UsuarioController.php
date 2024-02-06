@@ -285,4 +285,7 @@ class UsuarioController extends Controller
         return response()->json(['mens' => $msg], $cod);
     }
 
+    public function listarHumanosProtegidos(){
+        
+    }
 }

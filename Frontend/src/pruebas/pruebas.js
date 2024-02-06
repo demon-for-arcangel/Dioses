@@ -72,6 +72,19 @@ async function ObtencionOraculos(oraculos) {
                 buttonEditar.appendChild(imgEditar);
                 accionesCell.appendChild(buttonEditar); 
 
+                let buttonAsignar = document.createElement('button');
+                buttonAsignar.addEventListener('click', async function() {
+                    abrirModalConTabla();
+                })
+
+                let imgAsignar = document.createElement('img');
+                imgAsignar.src = '../assets/pruebas.png';
+                imgAsignar.alt = 'Asignar Pruebas';
+                imgAsignar.style.width = '35px';
+
+                buttonAsignar.appendChild(imgAsignar);
+                accionesCell.appendChild(buttonAsignar);
+
                 let buttonBorrar = document.createElement('button');
                 buttonBorrar.setAttribute('data-id', oraculo.id);
                 buttonBorrar.addEventListener('click', async function() {
@@ -232,4 +245,38 @@ async function modificarOraculo(id) {
 
 function cerrarModal() {
     document.getElementById('miModal').style.display = 'none';
+}
+
+function abrirModalConTabla() {
+    const modalHTML = `
+        <div id="miModal" class="modal">
+            <div class="modal-content">
+                <h2>Tabla de Ejemplo</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Columna 1</th>
+                            <th>Columna 2</th>
+                            <!-- Agrega más columnas según tus necesidades -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Dato 1</td>
+                            <td>Dato 2</td>
+                            <!-- Agrega más datos según tus necesidades -->
+                        </tr>
+                        <!-- Agrega más filas según tus necesidades -->
+                    </tbody>
+                </table>
+                <button id="btnModificarOraculoTabla">Modificar Prueba</button>
+                <button id="btnCancelarAsignacion">Cancelar</button>
+            </div>
+        </div>
+    `;
+
+    modalContainer.innerHTML = modalHTML;
+
+    document.getElementById('miModal').style.display = 'block';
+    document.getElementById('btnCancelarAsignacion').addEventListener('click', cerrarModal);
 }

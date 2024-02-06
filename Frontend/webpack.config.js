@@ -11,7 +11,8 @@ module.exports = {
       /* humanos: './src/humanos/humanos.js', */
       pruebas: './src/pruebas/pruebas.js',
       crearHumanos: './src/crearHumanos/crearHumanos.js',
-      crearPruebas: './src/crearPruebas/crearPruebas.js'
+      crearPruebas: './src/crearPruebas/crearPruebas.js',
+      asignarPruebas: './src/asignarPruebas/asignarPruebas.js'
   },
     output: {
       filename: '[name].main.js',
