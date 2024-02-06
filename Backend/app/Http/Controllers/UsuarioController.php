@@ -285,7 +285,29 @@ class UsuarioController extends Controller
         return response()->json(['mens' => $msg], $cod);
     }
 
-    public function listarHumanosProtegidos(){
-        
+    public function listarHumanosProtegidos(Request $request, $id){
+        try{
+            $dios = Dios::findOrFail($id);
+    
+            $humanosProtegidos = Humano::where('dios_id', $dios->id)->get();
+    
+            return response()->json(['humanosProtegidos' => $humanosProtegidos], 200);
+        } catch(Exception $e){
+            // Manejar la excepción
+            return response()->json(['error' => 'Error al listar humanos protegidos'], 500);
+        }
+    }
+
+    public function obtenerIdDelDios($usuarioId)
+    {
+        // Buscar el Dios asociado al usuario
+        $dios = Dios::where('user_id', $usuarioId)->first();
+
+        if ($dios) {
+            $id_dios = $dios->id;
+            return response()->json(['id_dios' => $id_dios]);
+        } else {
+            return response()->json(['error' => 'No se encontro el id del dios'], 500);
+        }
     }
 }

@@ -41,9 +41,13 @@ Route::group(['middleware' => ['cors']], function () {
             Route::prefix('dios')->group(function () {
                 //Humanos
                 Route::get('listar-humanos', [UsuarioController::class, 'listarHumanos']);
+                Route::get('listar-humanos-protegidos/{id}', [UsuarioController::class, 'listarHumanosProtegidos']);
                 Route::post('crear-usuario', [UsuarioController::class, 'crearUsuario']);
                 Route::put('modificar-humano/{id}', [UsuarioController::class, 'modificarHumano']);
 
+                //Dios
+                Route::get('obtener-id-dios/{usuarioId}', [UsuarioController::class, 'obtenerIdDelDios']);
+                
                 //Pruebas
                 Route::get('mostrar-pruebas', [OraculoController::class, 'mostrarOraculos']);
                 Route::get('listar-oraculo/{id}', [OraculoController::class, 'listarOraculoId']);

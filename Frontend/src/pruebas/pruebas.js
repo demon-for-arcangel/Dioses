@@ -1,4 +1,4 @@
-import { obtenerOraculos, eliminarOraculo, modificarPrueba } from "../http/http-verPruebas.js";
+import { obtenerOraculos, eliminarOraculo, modificarPrueba, obtenerHumanosProtegidos, obtenerIdDios } from "../http/http-verPruebas.js";
 
 let nombreUsuario = sessionStorage.getItem('nombre');
 document.getElementById('mensaje-bienvenida').textContent = `Bienvenido/a ${nombreUsuario}`;
@@ -247,29 +247,21 @@ function cerrarModal() {
     document.getElementById('miModal').style.display = 'none';
 }
 
-function abrirModalConTabla() {
+async function abrirModalConTabla() {
     const modalHTML = `
         <div id="miModal" class="modal">
             <div class="modal-content">
                 <h2>Tabla de Ejemplo</h2>
-                <table>
+                <table id="tabla-ejemplo">
                     <thead>
                         <tr>
-                            <th>Columna 1</th>
-                            <th>Columna 2</th>
-                            <!-- Agrega más columnas según tus necesidades -->
+                            <th>Nombre</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Dato 1</td>
-                            <td>Dato 2</td>
-                            <!-- Agrega más datos según tus necesidades -->
-                        </tr>
-                        <!-- Agrega más filas según tus necesidades -->
+                        <!-- Los datos se llenarán aquí -->
                     </tbody>
                 </table>
-                <button id="btnModificarOraculoTabla">Modificar Prueba</button>
                 <button id="btnCancelarAsignacion">Cancelar</button>
             </div>
         </div>
@@ -279,4 +271,40 @@ function abrirModalConTabla() {
 
     document.getElementById('miModal').style.display = 'block';
     document.getElementById('btnCancelarAsignacion').addEventListener('click', cerrarModal);
+
+    try {
+        const respuestaIdDios = await obtenerIdDios(nombreUsuario, token);
+        const idDios = respuestaIdDios.id_dios;
+        if (idDios) {
+            await obtenerYllenarNombresEnTabla(idDios);
+        } else {
+            console.error('No se pudo obtener el ID del dios');
+        }
+    } catch (error) {
+        console.error('Error al obtener el ID del dios y llenar los nombres en la tabla: ', error);
+    }
+}
+
+async function obtenerYllenarNombresEnTabla(idDios) {
+    try {
+        const respuesta = await obtenerHumanosProtegidos(token, idDios);
+
+        if (respuesta.humanosProtegidos && Array.isArray(respuesta.humanosProtegidos)) {
+            const tablaEjemploBody = document.getElementById('tabla-ejemplo').getElementsByTagName('tbody')[0];
+
+            // Construir el contenido HTML de la tabla
+            const contenidoHTML = respuesta.humanosProtegidos.map(humano => `
+                <tr>
+                    <td>${humano.nombre}</td>
+                </tr>
+            `).join('');
+
+            // Insertar el contenido HTML en el cuerpo de la tabla
+            tablaEjemploBody.innerHTML = contenidoHTML;
+        } else {
+            console.error('La respuesta de la API no contiene la lista de humanos protegidos');
+        }
+    } catch (error) {
+        console.error('Error al obtener y llenar los nombres en la tabla: ', error);
+    }
 }
