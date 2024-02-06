@@ -50,7 +50,7 @@ Route::group(['middleware' => ['cors']], function () {
                 Route::put('modificar-prueba/{id}', [OraculoController::class, 'actualizarOraculo']);
                 Route::delete('eliminar-prueba/{id}', [OraculoController::class, 'eliminarOraculo']);
                 Route::post('/asignar-oraculo', [AsignacionController::class, 'asignarPrueba']);
-                Route::post('/asignar-varios-oraculos', [AsignacionOraculo::class, 'asignarPruebaMultiple']);
+                Route::post('/asignar-oraculos/{dios_id}/{oraculo_id}', [AsignacionController::class, 'asignarPruebaMultiple']);
             });
         });
     });
