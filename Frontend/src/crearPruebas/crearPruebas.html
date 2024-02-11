@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="./crearPruebas.css">
+   <link rel="icon" href="../assets/logo1.png">
+   <title>Crear Humano</title>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <ul>
+                <li><a href="../dashboard/dashboard.html">Dashboard</a></li>
+                <li><a href="../humanos/humanos.html">Ver Humanos</a></li>
+                <li><a href="../pruebas/pruebas.html">Ver Pruebas</a></li>
+                <li><a href="../asignarPruebas/asignarPruebas.html">Asignar Pruebas</a></li>
+                <li><a href="../miPerfil/miPerfil.html">Mi perfil</a></li>
+            </ul>
+        </div>
+
+        <div class="content">
+            <div class="logo">
+                <img src="../assets/logo1.png" alt="logo" width="350px"/>
+                <h2>Fabrica de Pruebas</h2>
+            </div>
+            <br>
+            <div class="dashboard">
+                <div class="main-content">
+                    <button class="prueba-button" data-options="crearPruebaLibre">Crear Prueba Libre</button>
+                </div>
+            </div>
+            <div class="dashboard">
+                <div class="main-content">
+                    <button class="prueba-button" data-options="crearPruebaValoracion">Crear Prueba Valoración</button>
+                </div>
+            </div>
+            <div class="dashboard">
+                <div class="main-content">
+                    <button class="prueba-button" data-options="crearPruebaEleccion">Crear Prueba Elección</button>
+                </div>
+            </div>
+        </div>
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <div id="modalContent"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script src="../../dist/crearPruebas.main.js"></script>
+</html>

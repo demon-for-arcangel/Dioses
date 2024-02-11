@@ -4,7 +4,7 @@
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <link rel="stylesheet" href="./dashboard.css">
+   <link rel="stylesheet" href="./pruebas.css">
    <link rel="icon" href="../assets/logo1.png">
    <title>Dashboard</title>
 </head>
@@ -13,8 +13,8 @@
     <div class = "dashboard-container">
         <div class="sidebar">
             <ul>
+                <li><a href="../dashboard/dashboard.html">Dashboard</a></li>
                 <li><a href="../humanos/humanos.html">Ver Humanos</a></li>
-                <li><a href="../pruebas/pruebas.html">Ver Pruebas</a></li>
                 <li><a href="../miPerfil/miPerfil.html">Mi perfil</a></li>
             </ul>
         </div>
@@ -26,28 +26,14 @@
             </div>
             <div class="dashboard">
                 <div class="main-content">
-                    <h2>Humanos</h2>
-                    <table class="table" id="tabla-humanos">
-                        <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Correo</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <br>
-            <div class="dashboard">
-                <div class="main-content">
-                    <h2>Pruebas</h2>
+                    <h2>Almacen de todas las Pruebas disponibles</h2>
+                    <a href="../crearPruebas/crearPruebas.html"><img src="../assets/crear.png" alt="Crear Prueba" width="50px"/></a>
                     <table class="table" id="tabla-oraculos">
                         <thead>
                             <tr>
                                 <th>Tipo</th>
                                 <th>Pregunta</th>
+                                <th>Cantidad Destino</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -58,5 +44,6 @@
         </div>
     </div>
 </body>
-<script src="../../dist/dashboard.main.js"></script>
-</html>
+<script type="module" src="./pruebas.js"></script>
+<!-- <script src="../../dist/pruebas.main.js"></script>
+ --></html>

@@ -49,15 +49,13 @@ body {
     color: black;
     flex-shrink: 0;
 }
-a{
+a {
     text-decoration: none;
-    color: red;
-}
-a:hover {
-    color: rgb(38, 142, 72);
-}
-a:visited{
     color: black;
+}
+
+a:visited{
+    color:bisque;
 }
 .main-content {
     padding: 20px;
