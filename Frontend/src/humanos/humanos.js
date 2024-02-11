@@ -1,5 +1,4 @@
-import { obtenerHumanosProtegidos } from "../http/http-verPruebas.js";
-import { eliminarHumano, modificarHumano } from "../http/http-verHumanosAsignados.js";
+import { eliminarHumano, modificarHumano, obtenerHumanosProtegidos, obtenerIdDios } from "../http/http-verHumanosAsignados.js";
 
 let nombreUsuario = sessionStorage.getItem('nombre');
 document.getElementById('mensaje-bienvenida').textContent = `Bienvenido/a ${nombreUsuario}`;
@@ -19,24 +18,30 @@ async function init() {
         const idDios = respuestaIdDios.id_dios;
 
         let respuesta = await obtenerHumanosProtegidos(token, idDios);
-        console.log(respuesta);
-        let humanos = respuesta.humanos;
-        ObtencionHumanos(humanos);
+
+        if (respuesta && respuesta.humanosProtegidos) {
+            let humanos = respuesta.humanosProtegidos;
+            ObtencionHumanos(humanos);
+        } else {
+            console.error('La respuesta de la API no contiene la lista de humanos bajo tu protección');
+        }
     } catch (error) {
         console.error('Error al obtener los humanos bajo tu protección: ', error);
     }
 }
-
 init(); 
-
-async function ObtencionHumanos(humanos) {
+async function ObtencionHumanos(respuesta) {
     try {
-        if (humanos && Array.isArray(humanos)) {
+        console.log(respuesta);
+
+        if (respuesta) {
+            const humanos = respuesta;
+
             humanos.forEach(humano => {
                 let row = document.createElement('tr');
 
                 let nombreCell = document.createElement('td');
-                nombreCell.textContent = humano.nombre;
+                nombreCell.textContent = humano.nombre_usuario; // Corrige a la propiedad correcta
                 row.appendChild(nombreCell);
 
                 let accionesCell = document.createElement('td');
@@ -46,16 +51,16 @@ async function ObtencionHumanos(humanos) {
                     abrirModalEditar(humano.id, humano.nombre, humano.sabiduria, humano.nobleza, humano.virtud, humano.maldad, humano.audacia);
                 });
                 let imgEditar = document.createElement('img');
-                imgEditar.src = '../assets/editar.png'; 
+                imgEditar.src = '../assets/editar.png';
                 imgEditar.alt = 'Editar Prueba';
-                imgEditar.style.width = '35px'; 
+                imgEditar.style.width = '35px';
 
                 buttonEditar.appendChild(imgEditar);
-                accionesCell.appendChild(buttonEditar); 
+                accionesCell.appendChild(buttonEditar);
 
                 let buttonBorrar = document.createElement('button');
-                buttonBorrar.setAttribute('data-id', oraculo.id);
-                buttonBorrar.addEventListener('click', async function() {
+                buttonBorrar.setAttribute('data-id', humano.id);
+                buttonBorrar.addEventListener('click', async function () {
                     try {
                         const id = this.getAttribute('data-id');
                         const respuesta = await eliminarHumano(id, token);
@@ -72,25 +77,87 @@ async function ObtencionHumanos(humanos) {
                 });
 
                 let imgBorrar = document.createElement('img');
-                imgBorrar.src = '../assets/papelera.png';  
+                imgBorrar.src = '../assets/papelera.png';
                 imgBorrar.alt = 'Eliminar Humano';
                 imgBorrar.style.width = '35px';
 
                 buttonBorrar.appendChild(imgBorrar);
                 accionesCell.appendChild(buttonBorrar);
 
-                row.appendChild(accionesCell); 
+                row.appendChild(accionesCell);
 
                 tablaHumanos.appendChild(row);
             });
         } else {
-            console.error('La respuesta de la API no contiene la lista de oráculos');
+            console.error('La respuesta de la API no contiene la lista de humanos bajo tu proteccion');
         }
     } catch (error) {
-        console.error('Error al manejar la obtención de oraculos: ', error);
+        console.error('Error al manejar la obtención de humanos: ', error);
     }
 }
+/* async function ObtencionHumanos(respuesta) {
+    try {
+        if (respuesta && respuesta.humanosProtegidos && Array.isArray(respuesta.humanosProtegidos)) {
+            const humanos = respuesta.humanosProtegidos;
 
+            humanos.forEach(humano => {
+                let row = document.createElement('tr');
+
+                let nombreCell = document.createElement('td');
+                nombreCell.textContent = humano.nombre;
+                row.appendChild(nombreCell);
+
+                let accionesCell = document.createElement('td');
+
+                let buttonEditar = document.createElement('button');
+                buttonEditar.addEventListener('click', () => {
+                    abrirModalEditar(humano.id, humano.nombre, humano.sabiduria, humano.nobleza, humano.virtud, humano.maldad, humano.audacia);
+                });
+                let imgEditar = document.createElement('img');
+                imgEditar.src = '../assets/editar.png';
+                imgEditar.alt = 'Editar Prueba';
+                imgEditar.style.width = '35px';
+
+                buttonEditar.appendChild(imgEditar);
+                accionesCell.appendChild(buttonEditar);
+
+                let buttonBorrar = document.createElement('button');
+                buttonBorrar.setAttribute('data-id', humano.id);
+                buttonBorrar.addEventListener('click', async function () {
+                    try {
+                        const id = this.getAttribute('data-id');
+                        const respuesta = await eliminarHumano(id, token);
+
+                        if (respuesta.error) {
+                            console.error('Error al eliminar el humano:', respuesta.error);
+                        } else {
+                            console.log('Respuesta de eliminación:', respuesta);
+                            window.location.reload();
+                        }
+                    } catch (error) {
+                        console.error('Error al eliminar el humano: ', error);
+                    }
+                });
+
+                let imgBorrar = document.createElement('img');
+                imgBorrar.src = '../assets/papelera.png';
+                imgBorrar.alt = 'Eliminar Humano';
+                imgBorrar.style.width = '35px';
+
+                buttonBorrar.appendChild(imgBorrar);
+                accionesCell.appendChild(buttonBorrar);
+
+                row.appendChild(accionesCell);
+
+                tablaHumanos.appendChild(row);
+            });
+        } else {
+            console.error('La respuesta de la API no contiene la lista de humanos bajo tu proteccion');
+        }
+    } catch (error) {
+        console.error('Error al manejar la obtención de humanos: ', error);
+    }
+}*/
 function abrirModalEditar(id, nombreActual, sabiduriaActual, noblezaActual, virtudActual, maldadActual, audaciaActual) {
     const modalHTML = `
         <div id="miModal" class="modal">
@@ -117,11 +184,11 @@ function abrirModalEditar(id, nombreActual, sabiduriaActual, noblezaActual, virt
 
     document.getElementById('miModal').style.display = 'block';
 
-    document.getElementById('btnModificarHumano').addEventListener('click', () => modificarHumano(id));
+    document.getElementById('btnModificarHumano').addEventListener('click', () => editarHumano(id));
     document.getElementById('btnCancelarModificacion').addEventListener('click', cerrarModal);
 }
 
-async function modificarHumano(id) {
+async function editarHumano(id) {
     const nuevoNombre = document.getElementById('nuevoNombre').value;
     const nuevaSabiduria = document.getElementById('nuevaSabiduria').value;
     const nuevaNobleza = document.getElementById('nuevaNobleza').value;

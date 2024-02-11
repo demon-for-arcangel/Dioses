@@ -17,30 +17,37 @@ export async function eliminarHumano(id, token){
         const data = await response.json();
         return data;
     } catch (error) {
-        console.error('Error al obtener los oráculos con pruebas: ', error);
+        console.error('Error al eliminar el humano ', error);
         throw error;
     }
 }
 
 export async function modificarHumano(datos, id, token) {
     try {
-        const requestBody = {
-            tipo: datos.tipo,
-            pregunta: datos.pregunta,
-            cantidad_destino: datos.cantidad_destino,
-        };
+        const requestBody = {};
 
-        if (datos.palabra_clave) {
-            requestBody.palabra_clave = datos.palabra_clave;
+        if (datos.nombre) {
+            requestBody.nombre = datos.nombre;
         }
-        if (datos.valor_maximo) {
-            requestBody.valor_maximo = datos.valor_maximo;
+
+        if (datos.email) {
+            requestBody.email = datos.email;
         }
-        if (datos.opcion_1) {
-            requestBody.opcion_1 = datos.opcion_1;
+
+        if (datos.sabiduria) {
+            requestBody.sabiduria = datos.sabiduria;
         }
-        if (datos.opcion_2) {
-            requestBody.opcion_2 = datos.opcion_2;
+        if (datos.nobleza) {
+            requestBody.nobleza = datos.nobleza;
+        }
+        if (datos.virtud) {
+            requestBody.virtud = datos.virtud;
+        }
+        if (datos.maldad) {
+            requestBody.maldad = datos.maldad;
+        }
+        if (datos.audacia) {
+            requestBody.audacia = datos.audacia;
         }
 
         const bodyContent = JSON.stringify(requestBody);
@@ -50,7 +57,7 @@ export async function modificarHumano(datos, id, token) {
             "Authorization": `Bearer ${token}`
         };
 
-        const response = await fetch(`http://127.0.0.1:8000/api/dios/modificar-prueba/${id}`, {
+        const response = await fetch(`http://127.0.0.1:8000/api/dios/modificar-humano/${id}`, {
             method: "PUT",
             headers: headersList,
             body: bodyContent
@@ -66,7 +73,62 @@ export async function modificarHumano(datos, id, token) {
         const data = await response.json();
         return data;
     } catch (error) {
-        console.error('Error al modificar la prueba: ', error);
+        console.error('Error al modificar el humano: ', error);
+        throw error;
+    }
+}
+
+export async function obtenerHumanosProtegidos(token, id){
+    try {
+        const headersList = {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        };
+
+        const response = await fetch(`http://127.0.0.1:8000/api/dios/listar-humanos-protegidos/${id}`, {
+            method: "GET",
+            headers: headersList
+        });
+
+        console.log(response); // Imprime la respuesta completa en la consola
+
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud: ${response.status} - ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error al obtener los humanos bajo tu protección: ', error);
+        throw error;
+    }
+}
+
+export async function obtenerIdDios(id, token){
+    try {
+        const headersList = {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        };
+        console.log(id)
+
+        const response = await fetch(`http://127.0.0.1:8000/api/dios/obtener-id-dios/${id}`, {
+            method: "GET",
+            headers: headersList
+        });
+
+        console.log(response)
+
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud: ${response.status} - ${response.statusText}`);
+        }
+
+        const data = await response.json();
+
+        console.log(data)
+        return data;
+    } catch (error) {
+        console.error('Error al obtener el id del Dios: ', error);
         throw error;
     }
 }
