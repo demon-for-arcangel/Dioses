@@ -270,7 +270,6 @@ class UsuarioController extends Controller
             $msg = ['error' => $e->getMessage()];
             $cod = 404;
         }
-
         return response()->json(['mens' => $msg], $cod);
     }
 
