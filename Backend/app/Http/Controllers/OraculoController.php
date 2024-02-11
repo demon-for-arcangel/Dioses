@@ -195,6 +195,9 @@ class OraculoController extends Controller
     public function eliminarOraculo($id)
     {
         try {
+            // Eliminar asignaciones en la tabla asignacion_oraculo
+            DB::table('asignacion_oraculo')->where('oraculo_id', $id)->delete();
+    
             $oraculo = DB::table('oraculo')->where('id', $id)->first();
             if (!$oraculo) {
                 throw new Exception('Prueba de oráculo no encontrada', 404);
@@ -218,22 +221,21 @@ class OraculoController extends Controller
     
             return response()->json(['message' => 'Prueba de oráculo y prueba asociada eliminadas exitosamente'], 200);
         } catch (Exception $e) {
-            // Asegúrate de usar \Exception si no estás importando la clase Exception con use en la parte superior
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-    
-    private function eliminarPruebaLibre($id)
+
+    function eliminarPruebaLibre($id)
     {
         DB::table('prueba_libre')->where('id', $id)->delete();
     }
     
-    private function eliminarPruebaEleccion($id)
+    function eliminarPruebaEleccion($id)
     {
         DB::table('prueba_eleccion')->where('id', $id)->delete();
     }
     
-    private function eliminarPruebaValoracion($id)
+    function eliminarPruebaValoracion($id)
     {
         DB::table('prueba_valoracion')->where('id', $id)->delete();
     }
