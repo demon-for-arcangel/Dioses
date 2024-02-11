@@ -14,7 +14,6 @@ btnIniciarSesion.addEventListener('click', function(event){
         var token = response.data.token;
         var id = response.data.id;
         var tipoUsuario = response.data.tipoUsuario;
-        //sessionStorage.setItem('foto-url',data.foto)
         sessionStorage.setItem('nombre',response.data.nombre)
         enviarSessionStorage(id, token)
 
