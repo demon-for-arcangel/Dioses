@@ -158,12 +158,16 @@ async function ObtencionHumanos(respuesta) {
         console.error('Error al manejar la obtención de humanos: ', error);
     }
 }*/
-function abrirModalEditar(id, nombreActual, sabiduriaActual, noblezaActual, virtudActual, maldadActual, audaciaActual) {
+function abrirModalEditar(id, nombreActual, emailActual, passwordActual, sabiduriaActual, noblezaActual, virtudActual, maldadActual, audaciaActual) {
     const modalHTML = `
         <div id="miModal" class="modal">
             <div class="modal-content">
                 <label for="nuevoNombre">Nombre:</label>
-                <input type="text" id="nuevoNombre" value="${nombreActual}" readonly>
+                <input type="text" id="nuevoNombre" value="${nombreActual}">
+                <label for="nuevoEmail">Email:</label>
+                <input type="email" id="nuevoEmail" value="${emailActual}">
+                <label for="nuevaPassword">Password:</label>
+                <input type="password" id="nuevaPassword" value="${passwordActual}">
                 <label for="nuevaSabiduria">Sabiduria:</label>
                 <input type="text" id="nuevaSabiduria" value="${sabiduriaActual}">
                 <label for="nuevaNobleza">Nobleza:</label>

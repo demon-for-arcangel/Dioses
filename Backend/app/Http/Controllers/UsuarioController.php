@@ -331,4 +331,36 @@ class UsuarioController extends Controller
             return response()->json(['error' => 'No se encontro el id del dios'], 500);
         }
     }
+
+    public function consultarHumano($id)
+{
+    try {
+        $humano = Humano::with('user')->find($id);
+
+        if (!$humano) {
+            throw new Exception('Humano no encontrado', 404);
+        }
+
+        $usuario = $humano->user;
+
+        $datosUsuario = [
+            'nombre' => $usuario->nombre,
+            'email' => $usuario->email,
+            'password' => $usuario->password,
+            'sabiduria' => $usuario->sabiduria,
+            'nobleza' => $usuario->nobleza,
+            'virtud' => $usuario->virtud,
+            'maldad' => $usuario->maldad,
+            'audacia' => $usuario->audacia,
+        ];
+
+        $msg = ['datosUsuario' => $datosUsuario];
+        $cod = 200;
+    } catch (Exception $e) {
+        $msg = ['error' => $e->getMessage()];
+        $cod = 404;
+    }
+
+    return response()->json(['mens' => $msg], $cod);
+}
 }

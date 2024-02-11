@@ -24,14 +24,19 @@ export async function eliminarHumano(id, token){
 
 export async function modificarHumano(datos, id, token) {
     try {
+        console.log(datos)
         const requestBody = {};
 
         if (datos.nombre) {
-            requestBody.nombre = datos.nombre;
+            requestBody.nombre_usuario = datos.nombre_usuario;
         }
 
         if (datos.email) {
             requestBody.email = datos.email;
+        }
+
+        if (datos.password){ 
+            requestBody.password = datos.password;
         }
 
         if (datos.sabiduria) {

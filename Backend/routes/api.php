@@ -42,6 +42,7 @@ Route::group(['middleware' => ['cors']], function () {
                 //Humanos
                 Route::get('listar-humanos', [UsuarioController::class, 'listarHumanos']);
                 Route::get('listar-humanos-protegidos/{id}', [UsuarioController::class, 'listarHumanosProtegidos']);
+                Route::get('listar-humano/{id}', [UsuarioController::class, 'consultarHumano']);
                 Route::post('crear-usuario/{id}', [UsuarioController::class, 'nuevoHumano']);
                 Route::put('modificar-humano/{id}', [UsuarioController::class, 'modificarHumano']);
                 Route::delete('eliminar-humano/{id}', [UsuarioController::class, 'eliminarHumano']);
