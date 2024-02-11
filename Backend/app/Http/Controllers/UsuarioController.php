@@ -273,6 +273,37 @@ class UsuarioController extends Controller
         return response()->json(['mens' => $msg], $cod);
     }
 
+    public function eliminarHumano($id)
+    {
+        try {
+            // Buscar el humano por ID con la relación de usuario cargada
+            $humano = Humano::with('user')->find($id);
+    
+            // Verificar si el humano existe
+            if (!$humano) {
+                throw new Exception('Humano no encontrado', 404);
+            }
+    
+            // Eliminar el humano
+            $humano->delete();
+    
+            // Si hay un usuario relacionado, eliminarlo también
+            if ($humano->user) {
+                $humano->user->delete();
+            }
+    
+            // Mensaje de éxito
+            $msg = ['message' => 'Humano y usuario eliminados exitosamente'];
+            $cod = 200;
+        } catch (Exception $e) {
+            // Mensaje de error
+            $msg = ['error' => $e->getMessage()];
+            $cod = $e->getCode() ?: 500; // Utiliza el código de error personalizado si está disponible, de lo contrario, utiliza 500
+        }
+    
+        return response()->json(['mens' => $msg], $cod);
+    }
+
     public function listarHumanosProtegidos(Request $request, $id){
         try {
             $dios = Dios::findOrFail($id);
