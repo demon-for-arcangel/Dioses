@@ -255,7 +255,7 @@ class UsuarioController extends Controller
         try {
             $request->validate([
                 'nombre' => 'sometimes|string',
-                'email' => 'sometimes|email|unique:user,email,' . $id, // Asegura que el email sea único excluyendo el ID actual
+                'email' => 'sometimes|email|unique:user,email,' . $id, 
                 'sabiduria' => 'sometimes|integer',
                 'nobleza' => 'sometimes|integer',
                 'virtud' => 'sometimes|integer',
@@ -286,21 +286,30 @@ class UsuarioController extends Controller
     }
 
     public function listarHumanosProtegidos(Request $request, $id){
-        try{
+        try {
             $dios = Dios::findOrFail($id);
     
             $humanosProtegidos = Humano::where('dios_id', $dios->id)->get();
     
-            return response()->json(['humanosProtegidos' => $humanosProtegidos], 200);
-        } catch(Exception $e){
-            // Manejar la excepción
+            $userIds = $humanosProtegidos->pluck('user_id')->toArray();
+    
+            $usuarios = User::whereIn('id', $userIds)->get(['id', 'nombre']);
+    
+            $humanosConNombres = $humanosProtegidos->map(function ($humano) use ($usuarios) {
+                $usuario = $usuarios->where('id', $humano->user_id)->first();
+                $humano->nombre_usuario = $usuario ? $usuario->nombre : null;
+                return $humano;
+            });
+    
+            return response()->json(['humanosProtegidos' => $humanosConNombres], 200);
+        } catch(Exception $e) {
             return response()->json(['error' => 'Error al listar humanos protegidos'], 500);
         }
     }
+    
 
     public function obtenerIdDelDios($usuarioId)
     {
-        // Buscar el Dios asociado al usuario
         $dios = Dios::where('user_id', $usuarioId)->first();
 
         if ($dios) {

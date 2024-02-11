@@ -1,10 +1,11 @@
-import { obtenerOraculos, eliminarOraculo, modificarPrueba, obtenerHumanosProtegidos, obtenerIdDios } from "../http/http-verPruebas.js";
+import { obtenerOraculos, eliminarOraculo, modificarPrueba, obtenerHumanosProtegidos, obtenerIdDios, asignarPrueba } from "../http/http-verPruebas.js";
 
 let nombreUsuario = sessionStorage.getItem('nombre');
 document.getElementById('mensaje-bienvenida').textContent = `Bienvenido/a ${nombreUsuario}`;
 
 let token = sessionStorage.getItem('token');
-
+let id_usuario = sessionStorage.getItem('id-usuario');
+console.log(id_usuario)
 let tablaOraculos = document.getElementById('tabla-oraculos');
 
 let modalContainer = document.createElement('div');
@@ -74,8 +75,8 @@ async function ObtencionOraculos(oraculos) {
 
                 let buttonAsignar = document.createElement('button');
                 buttonAsignar.addEventListener('click', async function() {
-                    abrirModalConTabla();
-                })
+                    abrirModalConTabla(oraculo.id);
+                });
 
                 let imgAsignar = document.createElement('img');
                 imgAsignar.src = '../assets/pruebas.png';
@@ -247,21 +248,23 @@ function cerrarModal() {
     document.getElementById('miModal').style.display = 'none';
 }
 
-async function abrirModalConTabla() {
+async function abrirModalConTabla(oraculo_id) {
     const modalHTML = `
         <div id="miModal" class="modal">
             <div class="modal-content">
-                <h2>Tabla de Ejemplo</h2>
-                <table id="tabla-ejemplo">
+                <table id="tabla-humanos">
                     <thead>
                         <tr>
                             <th>Nombre</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <!-- Los datos se llenarán aquí -->
+                    <tbody id="tabla-body-humanos">
+                        <input type="checkbox" id="checkboxSeleccionarTodos">
+                        <label for="checkboxSeleccionarTodos">Seleccionar Todos</label>
+                        <!-- Filas de humanos se llenarán aquí -->
                     </tbody>
                 </table>
+                <button id="btnAsignar">Asignar</button>
                 <button id="btnCancelarAsignacion">Cancelar</button>
             </div>
         </div>
@@ -272,17 +275,36 @@ async function abrirModalConTabla() {
     document.getElementById('miModal').style.display = 'block';
     document.getElementById('btnCancelarAsignacion').addEventListener('click', cerrarModal);
 
+    const checkboxSeleccionarTodos = document.getElementById('checkboxSeleccionarTodos');
+    checkboxSeleccionarTodos.addEventListener('change', seleccionarTodos);
+
     try {
-        const respuestaIdDios = await obtenerIdDios(nombreUsuario, token);
+        const respuestaIdDios = await obtenerIdDios(id_usuario, token);
         const idDios = respuestaIdDios.id_dios;
-        if (idDios) {
-            await obtenerYllenarNombresEnTabla(idDios);
-        } else {
-            console.error('No se pudo obtener el ID del dios');
-        }
+        await obtenerYllenarNombresEnTabla(idDios);
     } catch (error) {
         console.error('Error al obtener el ID del dios y llenar los nombres en la tabla: ', error);
     }
+
+    const btnAsignar = document.getElementById('btnAsignar');
+    btnAsignar.addEventListener('click', async function () {
+        try {
+            const respuestaIdDios = await obtenerIdDios(id_usuario, token);
+            const idDios = respuestaIdDios.id_dios;
+
+            const checkboxesSeleccionados = document.querySelectorAll('input[name="seleccionarHumano"]:checked');
+            const idsHumanosSeleccionados = Array.from(checkboxesSeleccionados).map(checkbox => {
+                return Number(checkbox.value);
+            });
+
+            console.log(oraculo_id)
+            console.log(idsHumanosSeleccionados);
+            const respuestaAsignacion = await asignarPrueba(token, idDios, oraculo_id,  { humanos_ids: idsHumanosSeleccionados });
+            console.log('Respuesta de asignación:', respuestaAsignacion);
+        } catch (error) {
+            console.error('Error al asignar pruebas: ', error);
+        }
+    });
 }
 
 async function obtenerYllenarNombresEnTabla(idDios) {
@@ -290,21 +312,55 @@ async function obtenerYllenarNombresEnTabla(idDios) {
         const respuesta = await obtenerHumanosProtegidos(token, idDios);
 
         if (respuesta.humanosProtegidos && Array.isArray(respuesta.humanosProtegidos)) {
-            const tablaEjemploBody = document.getElementById('tabla-ejemplo').getElementsByTagName('tbody')[0];
+            const tablaBody = document.getElementById('tabla-body-humanos');
 
-            // Construir el contenido HTML de la tabla
-            const contenidoHTML = respuesta.humanosProtegidos.map(humano => `
-                <tr>
-                    <td>${humano.nombre}</td>
-                </tr>
-            `).join('');
+            respuesta.humanosProtegidos.forEach(humano => {
+                const fila = document.createElement('tr');
 
-            // Insertar el contenido HTML en el cuerpo de la tabla
-            tablaEjemploBody.innerHTML = contenidoHTML;
+                const checkboxCell = document.createElement('td');
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.name = 'seleccionarHumano';
+                checkbox.value = humano.id;
+                checkboxCell.appendChild(checkbox);
+                fila.appendChild(checkboxCell);
+
+                const nombreCell = document.createElement('td');
+                nombreCell.textContent = humano.nombre_usuario;
+                fila.appendChild(nombreCell);
+
+                checkbox.addEventListener('change', () => {
+                    humano.seleccionado = checkbox.checked;
+                });
+
+                tablaBody.appendChild(fila);
+
+                agregarEventosCheckboxes();
+            });
         } else {
             console.error('La respuesta de la API no contiene la lista de humanos protegidos');
         }
     } catch (error) {
         console.error('Error al obtener y llenar los nombres en la tabla: ', error);
     }
+}
+
+function seleccionarTodos() {
+    const checkboxes = document.querySelectorAll('input[name="seleccionarHumano"]');
+    const checkboxSeleccionarTodos = document.getElementById('checkboxSeleccionarTodos');
+
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = checkboxSeleccionarTodos.checked;
+    });
+}
+
+function agregarEventosCheckboxes() {
+    const checkboxesIndividuales = document.querySelectorAll('input[name="seleccionarHumano"]');
+
+    checkboxesIndividuales.forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+            const todosSeleccionados = Array.from(checkboxesIndividuales).every(checkbox => checkbox.checked);
+            checkboxSeleccionarTodos.checked = todosSeleccionados;
+        });
+    });
 }

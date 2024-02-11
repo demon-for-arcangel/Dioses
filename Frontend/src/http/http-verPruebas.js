@@ -119,15 +119,53 @@ export async function obtenerHumanosProtegidos(token, id){
     }
 }
 
-export async function obtenerIdDios(token, id){
+export async function obtenerIdDios(id, token){
     try {
         const headersList = {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`
         };
+        console.log(id)
 
         const response = await fetch(`http://127.0.0.1:8000/api/dios/obtener-id-dios/${id}`, {
             method: "GET",
+            headers: headersList
+        });
+
+        console.log(response)
+
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud: ${response.status} - ${response.statusText}`);
+        }
+
+        const data = await response.json();
+
+        console.log(data)
+        return data;
+    } catch (error) {
+        console.error('Error al obtener el id del Dios: ', error);
+        throw error;
+    }
+}
+
+export async function asignarPrueba(token, dios_id, oraculo_id, datos) {
+    if (!datos || !Array.isArray(datos.humanos_ids) || datos.humanos_ids.length === 0) {
+        throw new Error('Los datos de humanos_ids son inválidos o no se proporcionaron.');
+    }
+
+    try {
+        const bodyContent = JSON.stringify({
+            "humano_ids": datos.humanos_ids,
+        });
+
+        const headersList = {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        };
+
+        const response = await fetch(`http://127.0.0.1:8000/api/dios/asignar-oraculos/${dios_id}/${oraculo_id}`, {
+            method: "POST",
+            body: bodyContent,
             headers: headersList
         });
 
@@ -138,7 +176,7 @@ export async function obtenerIdDios(token, id){
         const data = await response.json();
         return data;
     } catch (error) {
-        console.error('Error al obtener el id del Dios: ', error);
+        console.error('Error al asignar pruebas: ', error);
         throw error;
     }
 }

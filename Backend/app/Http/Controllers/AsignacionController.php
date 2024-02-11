@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 class AsignacionController extends Controller
 {
     public function mostrarAsignacionesUsuario($userId){
@@ -54,38 +55,44 @@ class AsignacionController extends Controller
 
     public function asignarPruebaMultiple(Request $request, $dios_id, $oraculo_id)
     {
-        try {
-            $validatedData = $request->validate([
-                'humano_ids' => 'required|array',
-                'humano_ids.*' => 'required|integer',
-            ]);
+        // Validar los datos de entrada
+        $validator = Validator::make($request->all(), [
+            'humano_ids' => 'required|array',
+            'humano_ids.*' => 'required|integer',
+        ]);
     
-            // Verificar existencia de asignaciones para el oráculo específico
-            $existentes = DB::table('asignacion_oraculo')
-                ->where('oraculo_id', $oraculo_id)
-                ->whereIn('humano_id', $validatedData['humano_ids'])
-                ->get();
-    
-            if (!$existentes->isEmpty()) {
-                throw new Exception('Al menos una asignación ya existe para el oráculo ' . $oraculo_id,   400);
-            }
-    
-            // Crear nuevas asignaciones para todos los humanos
-            $nuevasAsignaciones = [];
-            foreach ($validatedData['humano_ids'] as $humanoId) {
-                $nuevasAsignaciones[] = [
-                    'dios_id' => $dios_id,
-                    'oraculo_id' => $oraculo_id,
-                    'humano_id' => $humanoId,
-                ];
-            }
-    
-            // Insertar las nuevas asignaciones
-            DB::table('asignacion_oraculo')->insert($nuevasAsignaciones);
-    
-            return response()->json(['message' => 'Pruebas asignadas exitosamente'],   200);
-        } catch (\Throwable $e) {
-            return response()->json(['error' => 'Error interno en el servidor', 'message' => $e->getMessage()],   500);
+        // Si la validación falla, retornar un error
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()],  400);
         }
+    
+        // Obtener los IDs de humano validados
+        $humanoIds = $request->input('humano_ids');
+    
+        // Verificar si ya existen asignaciones para el oráculo específico
+        $existentes = DB::table('asignacion_oraculo')
+            ->where('oraculo_id', $oraculo_id)
+            ->whereIn('humano_id', $humanoIds)
+            ->get();
+    
+        // Si alguna asignación ya existe, retornar un error
+        if (!$existentes->isEmpty()) {
+            return response()->json(['error' => 'Al menos una asignación ya existe para el oráculo ' . $oraculo_id],  400);
+        }
+    
+        // Preparar las nuevas asignaciones
+        $nuevasAsignaciones = array_map(function ($humanoId) use ($dios_id, $oraculo_id) {
+            return [
+                'dios_id' => $dios_id,
+                'oraculo_id' => $oraculo_id,
+                'humano_id' => $humanoId,
+            ];
+        }, $humanoIds);
+    
+        // Insertar las nuevas asignaciones en la base de datos
+        DB::table('asignacion_oraculo')->insert($nuevasAsignaciones);
+    
+        // Retornar una respuesta de éxito
+        return response()->json(['message' => 'Pruebas asignadas exitosamente'],  200);
     }
 }
