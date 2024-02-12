@@ -127,7 +127,7 @@ class UsuarioController extends Controller
     public function listarHumanos(){
         $humanos = DB::table('humano')
             ->join('user', 'humano.user_id', '=', 'user.id')
-            ->select('humano.id as id', 'user.nombre', 'user.email')
+            ->select('humano.id as id', 'user.nombre', 'user.email', 'humano.fecha_muerte')
             ->get();
     
         return response()->json(['humanos' => $humanos], 200);
@@ -290,13 +290,15 @@ class UsuarioController extends Controller
                 throw new Exception('Humano no encontrado', 404);
             }
     
-            $humano->delete();
+            // Obtén la fecha actual en formato de cadena
+            $fechaActual = now()->toDateString(); // Puedes ajustar el formato según tus necesidades
     
-            if ($humano->user) {
-                $humano->user->delete();
-            }
+            // Asigna la fecha actual al campo fecha_muerte
+            $humano->fecha_muerte = $fechaActual;
     
-            $msg = ['message' => 'Humano y usuario eliminados exitosamente'];
+            $humano->save();
+    
+            $msg = ['message' => 'Fecha de muerte actualizada exitosamente'];
             $cod = 200;
         } catch (Exception $e) {
             $msg = ['error' => $e->getMessage()];
