@@ -1,4 +1,4 @@
-import { eliminarHumano, obtenerHumanosProtegidos, obtenerIdDios } from "../http/http-verHumanosAsignados.js";
+import { obtenerHumanosProtegidos, obtenerIdDios } from "../http/http-verHumanosAsignados.js";
 
 let nombreUsuario = sessionStorage.getItem('nombre');
 document.getElementById('mensaje-bienvenida').textContent = `Bienvenido/a ${nombreUsuario}`;
@@ -40,36 +40,6 @@ async function ObtencionHumanos(respuesta) {
                 let nombreCell = document.createElement('td');
                 nombreCell.textContent = humano.nombre_usuario;
                 row.appendChild(nombreCell);
-
-                let accionesCell = document.createElement('td');
-
-                let buttonBorrar = document.createElement('button');
-                buttonBorrar.setAttribute('data-id', humano.id);
-                buttonBorrar.addEventListener('click', async function () {
-                    try {
-                        const id = this.getAttribute('data-id');
-                        const respuesta = await eliminarHumano(id, token);
-
-                        if (respuesta.error) {
-                            console.error('Error al eliminar el humano:', respuesta.error);
-                        } else {
-                            console.log('Respuesta de eliminación:', respuesta);
-                            window.location.reload();
-                        }
-                    } catch (error) {
-                        console.error('Error al eliminar el humano: ', error);
-                    }
-                });
-
-                let imgBorrar = document.createElement('img');
-                imgBorrar.src = '../assets/papelera.png';
-                imgBorrar.alt = 'Eliminar Humano';
-                imgBorrar.style.width = '35px';
-
-                buttonBorrar.appendChild(imgBorrar);
-                accionesCell.appendChild(buttonBorrar);
-
-                row.appendChild(accionesCell);
 
                 tablaHumanos.appendChild(row);
             });
