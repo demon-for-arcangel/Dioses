@@ -4,16 +4,16 @@
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <link rel="stylesheet" href="./dashboard.css">
+   <link rel="stylesheet" href="./humanos.css">
    <link rel="icon" href="../assets/logo1.png">
-   <title>Dashboard</title>
+   <title>Humanos</title>
 </head>
 
 <body>
     <div class = "dashboard-container">
         <div class="sidebar">
             <ul>
-                <li><a href="../humanos/humanos.html">Ver Humanos Asignados</a></li>
+                <li><a href="../dashboard/dashboard.html">Dashboard</a></li>
                 <li><a href="../pruebas/pruebas.html">Ver Pruebas</a></li>
                 <li><a href="../miPerfil/miPerfil.html">Mi perfil</a></li>
             </ul>
@@ -26,28 +26,12 @@
             </div>
             <div class="dashboard">
                 <div class="main-content">
-                    <h2>Humanos</h2>
+                    <h2>Almacen de todos los Humanos bajo tu Protección</h2>
+                    <a href="../crearHumanos/crearHumanos.html"><img src="../assets/crear.png" alt="Crear Humanos" width="50px"/></a>
                     <table class="table" id="tabla-humanos">
                         <thead>
                             <tr>
                                 <th>Nombre</th>
-                                <th>Correo</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <br>
-            <div class="dashboard">
-                <div class="main-content">
-                    <h2>Pruebas</h2>
-                    <table class="table" id="tabla-oraculos">
-                        <thead>
-                            <tr>
-                                <th>Tipo</th>
-                                <th>Pregunta</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -58,5 +42,5 @@
         </div>
     </div>
 </body>
-<script src="../../dist/dashboard.main.js"></script>
+<script src="../../dist/humanos.main.js"></script>
 </html>
