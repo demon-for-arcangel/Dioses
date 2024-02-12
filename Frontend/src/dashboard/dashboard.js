@@ -8,6 +8,8 @@ let token = sessionStorage.getItem('token');
 let tablaHumanos = document.getElementById('tabla-humanos');
 let tablaOraculos = document.getElementById('tabla-oraculos');
 
+let correoUsuario = sessionStorage.getItem('email');
+
 async function ObtencionDeHumanos() {
     let respuesta = await obtenerHumanos(token);
     let humanos = respuesta.humanos;
@@ -23,40 +25,46 @@ async function ObtencionDeHumanos() {
         correoCell.textContent = humano.email;
         row.appendChild(correoCell);
 
-        let accionesCell = document.createElement('td');
 
-        let buttonBorrar = document.createElement('button');
-        buttonBorrar.setAttribute('data-id', humano.id);
-        buttonBorrar.addEventListener('click', async function () {
-            try {
-                const id = this.getAttribute('data-id');
-                console.log(id)
-                const respuesta = await eliminarHumano(id, token);
+        if (correoUsuario === 'hades@gmail.com') {
+            let accionesCell = document.createElement('td');
 
-                if (respuesta.error) {
-                    console.error('Error al eliminar el humano:', respuesta.error);
-                } else {
-                    console.log('Respuesta de eliminación:', respuesta);
-                    window.location.reload();
+            let buttonMatar = document.createElement('button');
+            buttonMatar.setAttribute('data-id', humano.id);
+            buttonMatar.addEventListener('click', async function () {
+                try {
+                    const id = this.getAttribute('data-id');
+                    console.log(id)
+                    const respuesta = await eliminarHumano(id, token);
+
+                    if (respuesta.error) {
+                        console.error('Error al eliminar el humano:', respuesta.error);
+                    } else {
+                        console.log('Respuesta de eliminación:', respuesta);
+                        window.location.reload();
+                    }
+                } catch (error) {
+                    console.error('Error al eliminar el humano: ', error);
                 }
-            } catch (error) {
-                console.error('Error al eliminar el humano: ', error);
-            }
-        });
+            });
 
-        let imgBorrar = document.createElement('img');
-        imgBorrar.src = '../assets/papelera.png';
-        imgBorrar.alt = 'Eliminar Humano';
-        imgBorrar.style.width = '35px';
+            let imgMatar = document.createElement('img');
+            imgMatar.src = '../assets/icono matar humano.png';
+            imgMatar.alt = 'Eliminar Humano';
+            imgMatar.style.width = '35px';
 
-        buttonBorrar.appendChild(imgBorrar);
-        accionesCell.appendChild(buttonBorrar);
+            buttonMatar.appendChild(imgMatar);
+            accionesCell.appendChild(buttonMatar);
 
-        row.appendChild(accionesCell);
+            row.appendChild(accionesCell);
+
+        }
+
 
         tablaHumanos.appendChild(row);
     });
 }
+
 
 async function ObtencionOraculos() {
     try {
