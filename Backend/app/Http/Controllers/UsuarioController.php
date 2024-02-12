@@ -68,58 +68,6 @@ class UsuarioController extends Controller
         return response()->json(['mens' => $msg], $cod);
     } 
 
-    public function crearUsuario(Request $request){
-        try {
-            $request->validate([
-                'nombre' => 'required|string',
-                'email' => 'required|email|unique:user,email',
-                'password' => 'required|string|min:8',
-            ]);
-    
-            $usuario = User::create([
-                'nombre' => $request->input('nombre'),
-                'email' => $request->input('email'),
-                'password' => bcrypt($request->input('password')),
-                'tipo' => 'humano',
-                'sabiduria' => $request->input('sabiduria'),
-                'nobleza' => $request->input('nobleza'),
-                'virtud' => $request->input('virtud'),
-                'maldad' => $request->input('maldad'),
-                'audacia' => $request->input('audacia'),
-            ]);
-    
-            $diosSeleccionado = $this -> asignarProteccion($usuario);
-    
-            $humano = Humano::where('user_id', $usuario->id)->first();
-    
-            if (!$humano || !$humano->dios_id) {
-                if ($diosSeleccionado && $diosSeleccionado->user){
-                    $afinidad = $this->calcularAfinidad(
-                        $usuario->sabiduria, $usuario->nobleza, $usuario->virtud, $usuario->maldad, $usuario->audacia,
-                        $diosSeleccionado->user->sabiduria, $diosSeleccionado->user->nobleza, $diosSeleccionado->user->virtud, $diosSeleccionado->user->maldad, $diosSeleccionado->user->audacia
-                    );
-
-                    $humano = Humano::create([
-                        'user_id' => $usuario->id,
-                        'dios_id' => $diosSeleccionado->id,
-                        'destino' => 0,
-                        'afinidad' => $afinidad,
-                    ]); 
-                }else{
-                    throw new Exception('No se encontró un dios seleccionado o falta la relación de usuario en el dios seleccionado', 404);
-                }           
-            }
-                 
-            $msg = ['message' => 'Humano creado exitosamente', 'usuario' => $usuario];
-            $cod = 200;
-        } catch (Exception $e) {
-            $msg = ['error' => $e->getMessage()];
-            $cod = 404;
-        }
-    
-        return response()->json(['mens' => $msg], $cod);
-    } 
-
     public function asignarProteccion(User $usuario){
         $sabiduriaUsuario = $usuario->sabiduria;
         $noblezaUsuario = $usuario->nobleza;
@@ -249,8 +197,49 @@ class UsuarioController extends Controller
          } catch (\Exception $exception) {
              return response()->json(["msg" => $exception->getMessage()], 500);
          }
-     }
+    }
 
+    public function nuevoHumano(Request $request, $diosId){
+        try {
+            $request->validate([
+                'nombre' => 'required|string',
+                'email' => 'required|email|unique:user,email',
+                'password' => 'required|string|min:8',
+            ]);
+    
+            $usuario = User::create([
+                'nombre' => $request->input('nombre'),
+                'email' => $request->input('email'),
+                'password' => bcrypt($request->input('password')),
+                'tipo' => 'humano',
+                'sabiduria' => rand(1, 5),
+                'nobleza' => rand(1, 5),
+                'virtud' => rand(1, 5),
+                'maldad' => rand(1, 5),
+                'audacia' => rand(1, 5),
+            ]);
+    
+            // Asignar el dios seleccionado al humano
+            $diosSeleccionado = Dios::findOrFail($diosId);
+    
+            $humano = Humano::create([
+                'user_id' => $usuario->id,
+                'dios_id' => $diosSeleccionado->id,
+                'destino' => 0,
+                // Puedes calcular la afinidad aquí o en la función asignarProteccion
+                'afinidad' => 0, // Por ahora, deja la afinidad como 0 y cálcularla después si es necesario
+            ]);
+    
+            $msg = ['message' => 'Humano creado exitosamente', 'usuario' => $usuario];
+            $cod = 200;
+        } catch (Exception $e) {
+            $msg = ['error' => $e->getMessage()];
+            $cod = 404;
+        }
+    
+        return response()->json(['mens' => $msg], $cod);
+    }
+    
     public function modificarHumano(Request $request, $id){
         try {
             $request->validate([
@@ -279,9 +268,33 @@ class UsuarioController extends Controller
             $cod = 200;
         } catch (Exception $e) {
             $msg = ['error' => $e->getMessage()];
-            $cod = 404;
+            $cod = 500;
         }
+        return response()->json(['mens' => $msg], $cod);
+    }
 
+    public function eliminarHumano($id)
+    {
+        try {
+            $humano = Humano::with('user')->find($id);
+    
+            if (!$humano) {
+                throw new Exception('Humano no encontrado', 404);
+            }
+    
+            $humano->delete();
+    
+            if ($humano->user) {
+                $humano->user->delete();
+            }
+    
+            $msg = ['message' => 'Humano y usuario eliminados exitosamente'];
+            $cod = 200;
+        } catch (Exception $e) {
+            $msg = ['error' => $e->getMessage()];
+            $cod = 500;
+        }
+    
         return response()->json(['mens' => $msg], $cod);
     }
 
@@ -306,7 +319,6 @@ class UsuarioController extends Controller
             return response()->json(['error' => 'Error al listar humanos protegidos'], 500);
         }
     }
-    
 
     public function obtenerIdDelDios($usuarioId)
     {
@@ -319,4 +331,36 @@ class UsuarioController extends Controller
             return response()->json(['error' => 'No se encontro el id del dios'], 500);
         }
     }
+
+    public function consultarHumano($id)
+{
+    try {
+        $humano = Humano::with('user')->find($id);
+
+        if (!$humano) {
+            throw new Exception('Humano no encontrado', 404);
+        }
+
+        $usuario = $humano->user;
+
+        $datosUsuario = [
+            'nombre' => $usuario->nombre,
+            'email' => $usuario->email,
+            'password' => $usuario->password,
+            'sabiduria' => $usuario->sabiduria,
+            'nobleza' => $usuario->nobleza,
+            'virtud' => $usuario->virtud,
+            'maldad' => $usuario->maldad,
+            'audacia' => $usuario->audacia,
+        ];
+
+        $msg = ['datosUsuario' => $datosUsuario];
+        $cod = 200;
+    } catch (Exception $e) {
+        $msg = ['error' => $e->getMessage()];
+        $cod = 404;
+    }
+
+    return response()->json(['mens' => $msg], $cod);
+}
 }
