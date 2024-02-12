@@ -35,8 +35,8 @@ document.addEventListener("DOMContentLoaded", async function () {
                             correoNuevo.value = "";
                             passwordNuevo.value = "";
                             crear.textContent = "";
-                            window.location.reload();
-                        }, 5000);
+                            window.location.href="../humanos/humanos.html";
+                        }, 3000);
                     } catch (error) {
                         console.error('Error al crear el usuario:', error);
                     }
