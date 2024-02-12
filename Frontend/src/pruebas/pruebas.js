@@ -266,6 +266,7 @@ async function abrirModalConTabla(oraculo_id) {
                 </table>
                 <button id="btnAsignar">Asignar</button>
                 <button id="btnCancelarAsignacion">Cancelar</button>
+                <p id="mensaje"></p>
             </div>
         </div>
     `;
@@ -297,12 +298,16 @@ async function abrirModalConTabla(oraculo_id) {
                 return Number(checkbox.value);
             });
 
-            console.log(oraculo_id)
-            console.log(idsHumanosSeleccionados);
-            const respuestaAsignacion = await asignarPrueba(token, idDios, oraculo_id,  { humanos_ids: idsHumanosSeleccionados });
+            const respuestaAsignacion = await asignarPrueba(token, idDios, oraculo_id, { humanos_ids: idsHumanosSeleccionados });
             console.log('Respuesta de asignación:', respuestaAsignacion);
+
+            const mensajeElement = document.getElementById('mensaje');
+            mensajeElement.textContent = 'Prueba asignada correctamente';
         } catch (error) {
             console.error('Error al asignar pruebas: ', error);
+
+            const mensajeElement = document.getElementById('mensaje');
+            mensajeElement.textContent = 'Error al asignar la prueba. Posiblemente algún humano ya tenga esta prueba asignada.';
         }
     });
 }
