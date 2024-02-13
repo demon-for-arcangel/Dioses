@@ -371,4 +371,33 @@ class UsuarioController extends Controller
 
         return response()->json(['mens' => $msg], $cod);
     }
+
+    public function consultarUser($id){
+        try {
+            $user = User::find($id);
+    
+            if (!$user) {
+                throw new Exception('Usuario no encontrado', 404);
+            }
+    
+            $datosUsuario = [
+                'nombre' => $user->nombre,
+                'email' => $user->email,
+                'password' => $user->password,
+                'sabiduria' => $user->sabiduria,
+                'nobleza' => $user->nobleza,
+                'virtud' => $user->virtud,
+                'maldad' => $user->maldad,
+                'audacia' => $user->audacia,
+            ];
+    
+            $msg = ['datosUsuario' => $datosUsuario];
+            $cod = 200;
+        } catch (Exception $e) {
+            $msg = ['error' => $e->getMessage()];
+            $cod = 404;
+        }
+    
+        return response()->json(['mens' => $msg], $cod);
+    }    
 }

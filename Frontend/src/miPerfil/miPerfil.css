@@ -1,4 +1,4 @@
-:root{
+:root {
     color-scheme: light dark;
 }
 
@@ -21,20 +21,21 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin: 0; 
+    margin: 0;
 }
 
 .logo h2 {
     padding-left: 75px;
 }
 
-.dashboard-container{
+.dashboard-container {
     display: flex;
     flex-direction: row;
     min-height: 100vh;
 }
 
-.dashboard{
+.dashboard {
+    display: flex;
     background-color: #201f1f;
     margin-left: 25px;
     border-radius: 15px;
@@ -49,14 +50,50 @@ body {
     color: black;
     flex-shrink: 0;
 }
+
 a {
     text-decoration: none;
     color: black;
 }
 
-a:visited{
-    color:bisque;
+a:visited {
+    color: bisque;
 }
-.main-content {
+
+.main-content-container {
+    display: flex;
+    gap: 20px; 
     padding: 20px;
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 25px;
+    margin-left: 140px;
+}
+
+.main-content:not(:first-child) {
+    margin-left: 20px;
+}
+
+input {
+    width: 60%;
+    height: 23px;
+}
+
+button{
+    padding: 10px 20px;
+    background-color: #e1ab08; 
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 120px;
+    margin-right: 20px; 
+    display: block; 
+    width: 30%; 
+    height: 20%;
 }

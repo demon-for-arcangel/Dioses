@@ -51,6 +51,9 @@ Route::group(['middleware' => ['cors']], function () {
                 
                 //Dios
                 Route::get('obtener-id-dios/{usuarioId}', [UsuarioController::class, 'obtenerIdDelDios']);
+
+                //user
+                Route::get('consultar-user/{id}', [UsuarioController::class, 'consultarUser']);
                 
                 //Pruebas
                 Route::get('mostrar-pruebas', [OraculoController::class, 'mostrarOraculos']);
