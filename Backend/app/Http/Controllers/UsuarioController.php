@@ -398,5 +398,51 @@ class UsuarioController extends Controller
         }
     
         return response()->json(['mens' => $msg], $cod);
-    }    
+    } 
+    
+    public function subirImagen(Request $request){
+        
+        $msg=['max'=>'El campo se excede del tamaño máximo'];
+    
+        $validator=Validator::make($request->all(),[
+        'image'=>'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ],$msg);
+
+    if ($validator->fails()) {
+        return response()->json($validator->errors(),202);
+    }
+
+    if ($request->hasFile('image')) {
+        $file=$request->file('image');
+        $path=$file->store('perfiles','s3');
+        // $path=$file->storeAs('perfiles',$file->getClientOriginalName(),'s3');
+        
+        $url=Storage::disk('s3')->url($path);
+        return response()->json(['path'=>$path,'url'=>$url],202);
+    }
+    return response()->json(['error'=>'No se recibió ningún archivo.'],400);
+    }
+
+    public function actualizarImagenUsuario(Request $request){
+        try {
+
+            $id=$request->get('id');
+
+            $usuario=User::find($id);
+
+            $usuario->img=$request->get('img');
+            
+            $usuario->save();
+            
+            $msg=$usuario;
+            $cod=200;
+
+        } catch (Exception $e) {
+            $msg=$e;
+            $cod=404;
+        }
+
+        return response()->json($msg,$cod);
+    }
 }
+

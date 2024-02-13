@@ -9,6 +9,7 @@ const noblezaInput = document.getElementById('nobleza');
 const virtudInput = document.getElementById('virtud');
 const maldadInput = document.getElementById('maldad');
 const audaciaInput = document.getElementById('audacia');
+const img = document.getElementById("imgSubida")
 
 const guardarCambiosButton = document.querySelector('button');
 
@@ -34,3 +35,29 @@ consultarUser(token, userId)
 guardarCambiosButton.addEventListener('click', function () {
     console.log('Guardando cambios...');
 });
+
+function subirImagen(){
+    var inputImagen=document.getElementById("inputImage")
+
+    var bodyImage=new FormData()
+
+    bodyImage.append("image",inputImagen.files[0])
+
+    subirImagenS3(bodyImage).then(function(image){
+        let bodyContent=JSON.stringify({
+            "id":idUsuario,
+            "img":image.url
+        })
+
+        console.log(bodyContent)
+        actualizarImg(bodyContent).then(function(){
+            setTimeout(function(){
+                window.location.reload()
+            },5000)
+        })
+    }) 
+}
+
+btnSubir.addEventListener("click",function(){
+    subirImagen()
+})
