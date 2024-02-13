@@ -383,7 +383,6 @@ class UsuarioController extends Controller
             $datosUsuario = [
                 'nombre' => $user->nombre,
                 'email' => $user->email,
-                'password' => $user->password,
                 'sabiduria' => $user->sabiduria,
                 'nobleza' => $user->nobleza,
                 'virtud' => $user->virtud,
