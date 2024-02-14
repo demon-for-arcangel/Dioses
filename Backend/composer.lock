@@ -1273,6 +1273,7 @@
         },
         {
             "name": "laravel/framework",
+
             "version": "v10.44.0",
             "source": {
                 "type": "git",
@@ -6344,7 +6345,7 @@
             "support": {
                 "issues": "https://github.com/laravel/sail/issues",
                 "source": "https://github.com/laravel/sail"
-            },
+            
             "time": "2024-02-08T15:24:21+00:00"
         },
         {

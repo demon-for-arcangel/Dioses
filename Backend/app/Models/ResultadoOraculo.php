@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ResultadoOraculo extends Model
 {
+    protected $table = 'resultado_oraculo';
+    
     protected $fillable = [
         'humano_id',
         'prueba_id',
