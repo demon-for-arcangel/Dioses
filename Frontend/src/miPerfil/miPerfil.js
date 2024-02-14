@@ -11,7 +11,7 @@ const maldadInput = document.getElementById('maldad');
 const audaciaInput = document.getElementById('audacia');
 const img = document.getElementById("imgSubida")
 
-const guardarCambiosButton = document.querySelector('button');
+const guardarCambiosButton = document.getElementById('guardar');
 
 const userId = sessionStorage.getItem('id-usuario');
 const token = sessionStorage.getItem('token')
@@ -38,27 +38,27 @@ guardarCambiosButton.addEventListener('click', function () {
 });
 
 function subirImagen(){
-    var inputImagen=document.getElementById("inputImage")
+    var inputImagen=document.getElementById("inputImage");
 
-    var bodyImage=new FormData()
+    var bodyImage=new FormData();
 
-    bodyImage.append("image",inputImagen.files[0])
+    bodyImage.append("image",inputImagen.files[0]);
 
     subirImagenS3(bodyImage).then(function(image){
         let bodyContent=JSON.stringify({
-            "id":idUsuario,
+            "id":userId,
             "img":image.url
-        })
+        });
 
-        console.log(bodyContent)
         actualizarImg(bodyContent).then(function(){
             setTimeout(function(){
                 window.location.reload()
-            },5000)
-        })
-    }) 
+            },5000);
+        });
+    });
 }
 
 btnSubir.addEventListener("click",function(){
-    subirImagen()
-})
+    subirImagen();
+    window.location.reload();
+});

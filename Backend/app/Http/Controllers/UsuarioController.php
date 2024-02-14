@@ -28,6 +28,7 @@ class UsuarioController extends Controller
                 'nombre' => $request->input('nombre'),
                 'email' => $request->input('email'),
                 'password' => bcrypt($request->input('password')),
+                'img' => ('https://dioses-griegos-daw2.s3.eu-north-1.amazonaws.com/humano.jpg'),
                 'tipo' => 'humano',
                 'sabiduria' => rand(1, 5),
                 'nobleza' => rand(1, 5),
@@ -211,6 +212,7 @@ class UsuarioController extends Controller
                 'nombre' => $request->input('nombre'),
                 'email' => $request->input('email'),
                 'password' => bcrypt($request->input('password')),
+                'img' => ('https://dioses-griegos-daw2.s3.eu-north-1.amazonaws.com/humano.jpg'),
                 'tipo' => 'humano',
                 'sabiduria' => rand(1, 5),
                 'nobleza' => rand(1, 5),
@@ -290,10 +292,8 @@ class UsuarioController extends Controller
                 throw new Exception('Humano no encontrado', 404);
             }
     
-            // Obtén la fecha actual en formato de cadena
-            $fechaActual = now()->toDateString(); // Puedes ajustar el formato según tus necesidades
+            $fechaActual = now()->toDateString(); 
     
-            // Asigna la fecha actual al campo fecha_muerte
             $humano->fecha_muerte = $fechaActual;
     
             $humano->save();
@@ -406,7 +406,7 @@ class UsuarioController extends Controller
         $msg=['max'=>'El campo se excede del tamaño máximo'];
     
         $validator=Validator::make($request->all(),[
-            'image'=>'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image'=>'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ],$msg);
 
         if ($validator->fails()) {
@@ -416,7 +416,6 @@ class UsuarioController extends Controller
         if ($request->hasFile('image')) {
             $file=$request->file('image');
             $path=$file->store('perfiles','s3');
-            // $path=$file->storeAs('perfiles',$file->getClientOriginalName(),'s3');
             
             $url=Storage::disk('s3')->url($path);
             return response()->json(['path'=>$path,'url'=>$url],202);
