@@ -22,7 +22,7 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin: 0; /* Elimina cualquier margen para alinear con el sidebar */
+    margin: 0; 
 }
 .logo h2 {
     padding-left: 75px;
@@ -34,7 +34,7 @@ body {
 
 .dashboard{
     background-color: #201f1f;
-    margin-top: 20px;    
+    margin-left: 150px;
     border-radius: 15px;
 }
 
@@ -46,15 +46,13 @@ body {
     margin: 0px;
     color: black;
 }
-a{
+a {
     text-decoration: none;
-    color: red;
-}
-a:hover {
-    color: rgb(38, 142, 72);
-}
-a:visited{
     color: black;
+}
+
+a:visited{
+    color:bisque;
 }
 
 .main-content {

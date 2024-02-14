@@ -34,58 +34,112 @@ Para arrancar el Backend usaremos el comando `php artisan serve` y para el Front
 ## Autor/es
 
 - [@demon-for-arcangel](https://github.com/demon-for-arcangel)
-## Manual para la API
 
-### Manual para los Dioses
+---
+---
 
-#### Get all items
+# Documentación de la API
 
-```http
-  GET /api/items
-```
+Este documento proporciona una breve descripción general y una guía de uso para la API. La API está diseñada para el registro de usuarios, autenticación y gestión de usuarios y pruebas. Está implementada en el framework Laravel PHP.
 
-| Parameter | Type     | Description                |
+## Tabla de Contenidos
+- [Registro](#registro)
+- [Inicio de Sesión](#inicio-de-sesión)
+- [Cierre de Sesión](#cierre-de-sesión)
+- [Restablecer Contraseña](#restablecer-contraseña)
+- [Verificar Existencia de Correo Electrónico](#verificar-existencia-de-correo-electrónico)
+- [Acceso No Autenticado](#acceso-no-autenticado)
+- [Rutas para Usuarios Humanos](#rutas-para-usuarios-humanos)
+    - [Pruebas Asignadas]()
+    - [Guardar Respuesta de Prueba]()
+- [Rutas para Usuarios "Dios"](#rutas-para-usuarios-dios)
+    - [Mostrar Pruebas Creadas]()
+    - [Crear Usuario]()
+    - [Crear Pruebas]()
+    - [Modificar Prueba]()
+    - [Eliminar Prueba]()
+    - [Asignar Prueba]()
+
+
+## Registro
+### `POST api/registro`
+Registra un nuevo usuario.
+
+| Parametro | Tipo     | Descripción                |
 | :-------- | :------- | :------------------------- |
-| `api_key` | `string` | **Required**. Your API key |
+| `nombre` | `string` | Nombre del usuario con el que queremos registrarnos. | 
+| `email` | `string` | Correo electronico para el usuario.  |
+| `password` | `string` | Contraseña para poder acceder. |
 
-#### Get item
+## Inicio de Sesión
+### `POST api/login`
+Inicia sesión para un usuario.
 
-```http
-  GET /api/items/${id}
-```
-
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `id`      | `string` | **Required**. Id of item to fetch |
-
-#### add(num1, num2)
-
-Takes two numbers and returns the sum.
-
-
-### Manual para los Humanos
-
-#### Get all items
-
-```http
-  GET /api/items
-```
-
-| Parameter | Type     | Description                |
+| Parametro | Tipo     | Descripción                |
 | :-------- | :------- | :------------------------- |
-| `api_key` | `string` | **Required**. Your API key |
+| `email` | `string` | **Requerido**.  |
+| `password` | `string` | **Requerido**. |
 
-#### Get item
+## Cierre de Sesión **HACER**
+### `POST api/cerrarSesion/{id}`
+Cierra la sesión de un usuario.
 
-```http
-  GET /api/items/${id}
-```
+Parámetros:
+- `id` (entero): ID del usuario.
 
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `id`      | `string` | **Required**. Id of item to fetch |
+## Restablecer Contraseña
+### `POST /restablecer-pass`
+Restablece la contraseña del usuario.
 
-#### add(num1, num2)
+| Parametro | Tipo     | Descripción                |
+| :-------- | :------- | :------------------------- |
+| `email` | `string` | **Requerido**.  |
 
-Takes two numbers and returns the sum.
+## Verificar Existencia de Correo Electrónico
+### `POST /email-existente`
+Verifica si un correo electrónico ya está registrado.
 
+| Parametro | Tipo     | Descripción                |
+| :-------- | :------- | :------------------------- |
+| `email` | `string` | **Requerido**.  |
+
+## Acceso No Autenticado
+### `GET /`
+Devuelve una respuesta indicando que el usuario no ha iniciado sesión.
+
+## Rutas para Usuarios Humanos
+### `GET /humano/pruebas-asignadas/{userId}`
+Recupera las pruebas asignadas para un usuario específico.
+
+## Rutas para Usuarios "Dios"
+### `GET /dios/listar-humanos`
+Recupera una lista de todos los usuarios.
+
+### `POST /dios/crear-usuario`
+Crea un nuevo usuario.
+
+### `PUT /dios/modificar-humano/{id}`
+Modifica un usuario existente.
+
+### `GET /dios/mostrar-pruebas`
+Recupera una lista de todas las pruebas.
+
+### `POST /dios/crear-prueba`
+Crea una nueva prueba.
+
+### `PUT /dios/modificar-prueba/{id}`
+Actualiza una prueba existente.
+
+### `DELETE /dios/eliminar-prueba/{id}`
+Elimina una prueba.
+
+### `POST /dios/asignar-oraculo`
+Asigna una prueba a un usuario.
+
+## Middlewares
+- `cors`: Maneja el intercambio de recursos entre dominios (CORS).
+- `auth:sanctum`: Asegura la autenticación del usuario.
+- `HumanoMid`: Middleware para rutas accesibles solo para usuarios humanos.
+- `DiosMid`: Middleware para rutas accesibles solo para usuarios "dios".
+
+Siéntete libre de explorar y utilizar estas rutas de la API según las funcionalidades descritas. Asegúrate de utilizar una autenticación y autorización adecuadas para un uso seguro de la API.

@@ -12,53 +12,54 @@ body {
     font-family: Arial, sans-serif;
 }
 
+.content {
+    flex-grow: 1;
+    padding: 20px;
+}
+
 .logo {
+    display: flex;
     align-items: center;
+    gap: 10px;
+    margin: 0; 
 }
 
-.logo h1 {
-    padding-left: 70px;
-    font-size: 35px;
-}
-
-h2{
-    margin-top: 100px;
+.logo h2 {
+    padding-left: 75px;
 }
 
 .dashboard-container{
     display: flex;
+    flex-direction: row;
+    min-height: 100vh;
 }
 
 .dashboard{
     background-color: #201f1f;
-    margin-left: 150px;
+    margin-left: 25px;
     border-radius: 15px;
 }
 
 .sidebar {
     width: 200px;
-    background-color: #ddb665;
-    height: 100vh;
+    background-color: #e1ab08;
+    min-height: 100vh;
     padding: 20px;
     margin: 0px;
     color: black;
+    flex-shrink: 0;
 }
-a{
+a {
     text-decoration: none;
-    color: red;
-}
-a:hover {
-    color: rgb(38, 142, 72);
-}
-a:visited{
     color: black;
 }
 
+a:visited{
+    color:bisque;
+}
 .main-content {
-    margin-left: 220px;
     padding: 20px;
 }
-
 .table {
     width: 100%;
     border-collapse: collapse;
@@ -70,9 +71,6 @@ a:visited{
     padding: 8px;
 }
 
-.table tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
 
 .table th {
     padding-top: 12px;

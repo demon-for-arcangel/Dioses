@@ -66,6 +66,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'DiosMid' => \App\Http\Middleware\DiosMid::class,
         'HumanoMid' => \App\Http\Middleware\HumanoMid::class,
-        'cors' => \App\Http\Middleware\Cors::class
+        'cors' => \App\Http\Middleware\Cors::class,
+        'comprobarHades' => \App\Http\Middleware\ComprobarHades::class,
     ];
 }

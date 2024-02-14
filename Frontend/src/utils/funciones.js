@@ -25,3 +25,21 @@ export function includes(arr,dato) {
         return false
     }
 }
+
+export let patternMail = /^[\w-\.]+@([\w-]+\.)+[a-z]{3,4}$/;
+
+export function sendNotification(message, type) {
+    let notification = document.getElementById("notification");
+    let getNoti = document.getElementById("noti");
+    let newP = null;
+  
+    if (!getNoti) {
+      newP = document.createElement("p");
+      newP.setAttribute("id", "noti");
+    } else {
+      newP = getNoti;
+    }
+    notification.setAttribute("class", type);
+    newP.innerHTML = `<i class="bi bi-info-circle-fill"></i> ` + message;
+    notification.appendChild(newP);
+  }
