@@ -58,9 +58,6 @@ export async function actualizarImg(datos){
 
 export async function modificarContra(newPassword, id, oldPassword) {
     try {
-        console.log(id)
-        console.log(oldPassword)
-        console.log(newPassword)
         let headersList = {
             "Content-Type": "application/json",
         };

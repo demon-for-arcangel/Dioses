@@ -41,7 +41,6 @@ guardarCambiosButton.addEventListener('click', function () {
         .then(response => {
             mensajeResultado.textContent = 'Contraseña modificada exitosamente';
             mensajeResultado.style.color = 'green';
-            console.log('Contraseña modificada exitosamente:', response);
             window.location.reload();
         })
         .catch(error => {
