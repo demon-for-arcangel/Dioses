@@ -444,5 +444,35 @@ class UsuarioController extends Controller
 
         return response()->json($msg,$cod);
     }
+
+    public function modificarPassword(Request $request, $id){
+        try {
+            $request->validate([
+                'old_password' => 'required|string',
+                'new_password' => 'required|string|min:8',
+            ]);
+    
+            $oldPassword = $request->input('old_password');
+            $newPassword = $request->input('new_password');
+    
+            $usuario = User::findOrFail($id);
+    
+            if (!Hash::check($oldPassword, $usuario->password)) {
+                throw new Exception('La contraseña antigua no coincide', 400);
+            }
+    
+            $usuario->password = bcrypt($newPassword);
+            $usuario->save();
+    
+            $msg = ['message' => 'Contraseña modificada exitosamente'];
+            $cod = 200;
+    
+        } catch (Exception $e) {
+            $msg = ['error' => $e->getMessage()];
+            $cod = 404;
+        }
+    
+        return response()->json($msg, $cod);
+    }
 }
 

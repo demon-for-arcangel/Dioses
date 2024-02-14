@@ -32,6 +32,7 @@ Route::group(['middleware' => ['cors']], function () {
     
     Route::post('subirImagen',[UsuarioController::class,'subirImagen']);
     Route::put('actualizarImagen',[UsuarioController::class,'actualizarImagenUsuario']);
+    Route::put('modificar-password/{id}', [UsuarioController::class, 'modificarPassword']);
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::middleware('HumanoMid')->group(function () {
