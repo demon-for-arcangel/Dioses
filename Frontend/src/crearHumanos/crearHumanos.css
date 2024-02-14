@@ -124,26 +124,26 @@ form .column:last-child {
 
 .btnCrearHumano {
     padding: 10px 20px;
-    background-color: #e1ab08; /* Color verde */
+    background-color: #e1ab08; 
     color: black;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-    margin-top: 20px; /* Asegura un poco de espacio entre los campos del formulario y el botón */
-    display: block; /* Hace que el botón ocupe su propia línea */
-    width: 100%; /* Hace que el botón se expanda para ocupar todo el ancho disponible */
+    margin-top: 20px; 
+    display: block; 
+    width: 100%; 
 }
 
 .btnCancelar {
     padding: 10px 20px;
-    background-color: #e1ab08; /* Color verde */
+    background-color: #e1ab08; 
     color: black;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-    margin-top: 20px; /* Asegura un poco de espacio entre los campos del formulario y el botón */
-    display: block; /* Hace que el botón ocupe su propia línea */
-    width: 100%; /* Hace que el botón se expanda para ocupar todo el ancho disponible */
+    margin-top: 20px;
+    display: block; 
+    width: 100%; 
 }

@@ -28,7 +28,11 @@ Route::group(['middleware' => ['cors']], function () {
     
     Route::get('', function () {
         return response()->json("No logeado", 203);
-    })->name('nologin');          
+    })->name('nologin');   
+    
+    Route::post('subirImagen',[UsuarioController::class,'subirImagen']);
+    Route::put('actualizarImagen',[UsuarioController::class,'actualizarImagenUsuario']);
+    Route::put('modificar-password/{id}', [UsuarioController::class, 'modificarPassword']);
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::middleware('HumanoMid')->group(function () {
@@ -51,6 +55,9 @@ Route::group(['middleware' => ['cors']], function () {
                 
                 //Dios
                 Route::get('obtener-id-dios/{usuarioId}', [UsuarioController::class, 'obtenerIdDelDios']);
+
+                //user
+                Route::get('consultar-user/{id}', [UsuarioController::class, 'consultarUser']);
                 
                 //Pruebas
                 Route::get('mostrar-pruebas', [OraculoController::class, 'mostrarOraculos']);

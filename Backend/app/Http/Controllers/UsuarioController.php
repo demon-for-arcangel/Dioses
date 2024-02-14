@@ -28,6 +28,7 @@ class UsuarioController extends Controller
                 'nombre' => $request->input('nombre'),
                 'email' => $request->input('email'),
                 'password' => bcrypt($request->input('password')),
+                'img' => ('https://dioses-griegos-daw2.s3.eu-north-1.amazonaws.com/humano.jpg'),
                 'tipo' => 'humano',
                 'sabiduria' => rand(1, 5),
                 'nobleza' => rand(1, 5),
@@ -211,6 +212,7 @@ class UsuarioController extends Controller
                 'nombre' => $request->input('nombre'),
                 'email' => $request->input('email'),
                 'password' => bcrypt($request->input('password')),
+                'img' => ('https://dioses-griegos-daw2.s3.eu-north-1.amazonaws.com/humano.jpg'),
                 'tipo' => 'humano',
                 'sabiduria' => rand(1, 5),
                 'nobleza' => rand(1, 5),
@@ -290,10 +292,8 @@ class UsuarioController extends Controller
                 throw new Exception('Humano no encontrado', 404);
             }
     
-            // Obtén la fecha actual en formato de cadena
-            $fechaActual = now()->toDateString(); // Puedes ajustar el formato según tus necesidades
+            $fechaActual = now()->toDateString(); 
     
-            // Asigna la fecha actual al campo fecha_muerte
             $humano->fecha_muerte = $fechaActual;
     
             $humano->save();
@@ -371,4 +371,108 @@ class UsuarioController extends Controller
 
         return response()->json(['mens' => $msg], $cod);
     }
+
+    public function consultarUser($id){
+        try {
+            $user = User::find($id);
+    
+            if (!$user) {
+                throw new Exception('Usuario no encontrado', 404);
+            }
+    
+            $datosUsuario = [
+                'nombre' => $user->nombre,
+                'email' => $user->email,
+                'img' => $user->img,
+                'sabiduria' => $user->sabiduria,
+                'nobleza' => $user->nobleza,
+                'virtud' => $user->virtud,
+                'maldad' => $user->maldad,
+                'audacia' => $user->audacia,
+            ];
+    
+            $msg = ['datosUsuario' => $datosUsuario];
+            $cod = 200;
+        } catch (Exception $e) {
+            $msg = ['error' => $e->getMessage()];
+            $cod = 404;
+        }
+    
+        return response()->json(['mens' => $msg], $cod);
+    } 
+    
+    public function subirImagen(Request $request){
+        
+        $msg=['max'=>'El campo se excede del tamaño máximo'];
+    
+        $validator=Validator::make($request->all(),[
+            'image'=>'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        ],$msg);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(),202);
+        }
+
+        if ($request->hasFile('image')) {
+            $file=$request->file('image');
+            $path=$file->store('perfiles','s3');
+            
+            $url=Storage::disk('s3')->url($path);
+            return response()->json(['path'=>$path,'url'=>$url],202);
+        }
+        return response()->json(['error'=>'No se recibió ningún archivo.'],400);
+    }
+
+    public function actualizarImagenUsuario(Request $request){
+        try {
+
+            $id=$request->get('id');
+
+            $usuario=User::find($id);
+
+            $usuario->img=$request->get('img');
+            
+            $usuario->save();
+            
+            $msg=$usuario;
+            $cod=200;
+
+        } catch (Exception $e) {
+            $msg=$e;
+            $cod=404;
+        }
+
+        return response()->json($msg,$cod);
+    }
+
+    public function modificarPassword(Request $request, $id){
+        try {
+            $request->validate([
+                'old_password' => 'required|string',
+                'new_password' => 'required|string|min:8',
+            ]);
+    
+            $oldPassword = $request->input('old_password');
+            $newPassword = $request->input('new_password');
+    
+            $usuario = User::findOrFail($id);
+    
+            if (!Hash::check($oldPassword, $usuario->password)) {
+                throw new Exception('La contraseña antigua no coincide', 400);
+            }
+    
+            $usuario->password = bcrypt($newPassword);
+            $usuario->save();
+    
+            $msg = ['message' => 'Contraseña modificada exitosamente'];
+            $cod = 200;
+    
+        } catch (Exception $e) {
+            $msg = ['error' => $e->getMessage()];
+            $cod = 404;
+        }
+    
+        return response()->json($msg, $cod);
+    }
 }
+

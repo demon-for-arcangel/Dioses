@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nombre');
             $table->string('email')->unique();
             $table->string('password');
+            $table->string('img');
             $table->enum('tipo', ['dios', 'humano']);
             $table->integer('sabiduria')->nullable();
             $table->integer('nobleza')->nullable();

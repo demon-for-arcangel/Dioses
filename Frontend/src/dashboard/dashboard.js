@@ -8,11 +8,8 @@ let token = sessionStorage.getItem('token');
 let tablaHumanos = document.getElementById('tabla-humanos');
 let tablaOraculos = document.getElementById('tabla-oraculos');
 let tablaHumanosMuertos = document.getElementById('tabla-humanos-muertos');
-let dashboardHumanosMuertos = document.getElementById('humanos-muertos');
 
 let correoUsuario = sessionStorage.getItem('email');
-
-dashboardHumanosMuertos.style.display = 'none';
 
 async function ObtencionDeHumanos() {
     let respuesta = await obtenerHumanos(token);
@@ -65,22 +62,22 @@ async function ObtencionDeHumanos() {
 
             tablaHumanos.appendChild(row);
         } else {
-            if (correoUsuario === 'hades@gmail.com') {
-                dashboardHumanosMuertos.style.display = 'block';
+            if (humano.fecha_muerte) { 
+                let row = document.createElement('tr');
 
-                if (humano.fecha_muerte) { 
-                    let row = document.createElement('tr');
+                let nombreCell = document.createElement('td');
+                nombreCell.textContent = humano.nombre;
+                row.appendChild(nombreCell);
 
-                    let nombreCell = document.createElement('td');
-                    nombreCell.textContent = humano.nombre;
-                    row.appendChild(nombreCell);
+                let correoCell = document.createElement('td');
+                correoCell.textContent = humano.email;
+                row.appendChild(correoCell);
 
-                    let correoCell = document.createElement('td');
-                    correoCell.textContent = humano.email;
-                    row.appendChild(correoCell);
+                let fechaMuerteCell = document.createElement('td');
+                fechaMuerteCell.textContent = humano.fecha_muerte;
+                row.appendChild(fechaMuerteCell);
 
-                    tablaHumanosMuertos.appendChild(row);
-                }
+                tablaHumanosMuertos.appendChild(row);
             }
         }
     });
