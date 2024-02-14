@@ -1,4 +1,4 @@
-import { consultarUser, subirImagenS3, actualizarImg } from "../http/http-miPerfil.js";
+import { consultarUser, subirImagenS3, actualizarImg, modificarContra  } from "../http/http-miPerfil.js";
 
 // Obtener referencia a los elementos de los inputs
 const nombreInput = document.getElementById('nombre');
@@ -34,7 +34,21 @@ consultarUser(token, userId)
     });
 
 guardarCambiosButton.addEventListener('click', function () {
-    console.log('Guardando cambios...');
+    const oldPassword = document.getElementById('password').value;
+    const newPassword = document.getElementById('newPassword').value;
+
+    modificarContra(token, userId, oldPassword, newPassword)
+        .then(response => {
+            mensajeResultado.textContent = 'Contraseña modificada exitosamente';
+            mensajeResultado.style.color = 'green';
+            console.log('Contraseña modificada exitosamente:', response);
+            window.location.reload();
+        })
+        .catch(error => {
+            mensajeResultado.textContent = 'No se ha podido modificar la contraseña';
+            mensajeResultado.style.color = 'red';
+            console.error('Error al modificar la contraseña:', error);
+        });
 });
 
 function subirImagen(){

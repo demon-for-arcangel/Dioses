@@ -36,9 +36,9 @@ export async function subirImagenS3(ruta){
      
      return data;          
    }
- }
+}
 
- export async function actualizarImg(datos){
+export async function actualizarImg(datos){
    let headersList = {
      "Content-Type": "application/json"
     }
@@ -54,4 +54,37 @@ export async function subirImagenS3(ruta){
     
     let data = await response.text();
     console.log(data);
- }
+}
+
+export async function modificarContra(newPassword, id, oldPassword) {
+    try {
+        console.log(id)
+        console.log(oldPassword)
+        console.log(newPassword)
+        let headersList = {
+            "Content-Type": "application/json",
+        };
+
+        let bodyContent = JSON.stringify({
+            old_password: oldPassword,
+            new_password: newPassword
+        });
+
+        let response = await fetch(`http://127.0.0.1:8000/api/modificar-password/${id}`, {
+            method: "PUT",
+            headers: headersList,
+            body: bodyContent
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud: ${response.status} - ${response.statusText}`);
+        }
+
+        let data = await response.json();
+
+        return data;
+    } catch (error) {
+        console.error('Error al modificar la contraseña: ', error);
+        throw error;
+    }
+}
