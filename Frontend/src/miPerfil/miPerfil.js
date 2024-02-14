@@ -1,4 +1,4 @@
-import { consultarUser } from "../http/http-miPerfil.js";
+import { consultarUser, subirImagenS3, actualizarImg } from "../http/http-miPerfil.js";
 
 // Obtener referencia a los elementos de los inputs
 const nombreInput = document.getElementById('nombre');
@@ -20,6 +20,7 @@ consultarUser(token, userId)
     .then(response => {
         const datosUsuario = response.mens.datosUsuario;
 
+        img.src = datosUsuario.img
         nombreInput.value = datosUsuario.nombre;
         emailInput.value = datosUsuario.email;
         sabiduriaInput.value = datosUsuario.sabiduria;

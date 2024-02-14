@@ -383,6 +383,7 @@ class UsuarioController extends Controller
             $datosUsuario = [
                 'nombre' => $user->nombre,
                 'email' => $user->email,
+                'img' => $user->img,
                 'sabiduria' => $user->sabiduria,
                 'nobleza' => $user->nobleza,
                 'virtud' => $user->virtud,
@@ -405,22 +406,22 @@ class UsuarioController extends Controller
         $msg=['max'=>'El campo se excede del tamaño máximo'];
     
         $validator=Validator::make($request->all(),[
-        'image'=>'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-    ],$msg);
+            'image'=>'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ],$msg);
 
-    if ($validator->fails()) {
-        return response()->json($validator->errors(),202);
-    }
+        if ($validator->fails()) {
+            return response()->json($validator->errors(),202);
+        }
 
-    if ($request->hasFile('image')) {
-        $file=$request->file('image');
-        $path=$file->store('perfiles','s3');
-        // $path=$file->storeAs('perfiles',$file->getClientOriginalName(),'s3');
-        
-        $url=Storage::disk('s3')->url($path);
-        return response()->json(['path'=>$path,'url'=>$url],202);
-    }
-    return response()->json(['error'=>'No se recibió ningún archivo.'],400);
+        if ($request->hasFile('image')) {
+            $file=$request->file('image');
+            $path=$file->store('perfiles','s3');
+            // $path=$file->storeAs('perfiles',$file->getClientOriginalName(),'s3');
+            
+            $url=Storage::disk('s3')->url($path);
+            return response()->json(['path'=>$path,'url'=>$url],202);
+        }
+        return response()->json(['error'=>'No se recibió ningún archivo.'],400);
     }
 
     public function actualizarImagenUsuario(Request $request){

@@ -28,7 +28,10 @@ Route::group(['middleware' => ['cors']], function () {
     
     Route::get('', function () {
         return response()->json("No logeado", 203);
-    })->name('nologin');          
+    })->name('nologin');   
+    
+    Route::post('subirImagen',[UsuarioController::class,'subirImagen']);
+    Route::put('actualizarImagen',[UsuarioController::class,'actualizarImagenUsuario']);
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::middleware('HumanoMid')->group(function () {
