@@ -54,8 +54,21 @@ class UserSeeder extends Seeder
         ]);
         DB::table('user')->insert([
             'id' => 4,
-            'nombre' => 'Usuario1',
-            'email' => 'usuario1@gmail.com',
+            'nombre' => 'Marina',
+            'email' => 'marinalaguna2004@gmail.com',
+            'img'=>'https://dioses-griegos-daw2.s3.eu-north-1.amazonaws.com/humano.jpg',
+            'password' => bcrypt('admin123'),
+            'tipo' => 'humano',
+            'sabiduria' => 3,
+            'nobleza' =>2,
+            'virtud' => 2,
+            'maldad' => 5,
+            'audacia' => 1,
+        ]);
+        DB::table('user')->insert([
+            'id' => 5,
+            'nombre' => 'Muerto',
+            'email' => 'muerto@gmail.com',
             'img'=>'https://dioses-griegos-daw2.s3.eu-north-1.amazonaws.com/humano.jpg',
             'password' => bcrypt('admin123'),
             'tipo' => 'humano',

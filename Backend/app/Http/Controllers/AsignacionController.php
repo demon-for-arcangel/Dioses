@@ -56,32 +56,26 @@ class AsignacionController extends Controller
 
     public function asignarPruebaMultiple(Request $request, $dios_id, $oraculo_id)
     {
-        // Validar los datos de entrada
         $validator = Validator::make($request->all(), [
             'humano_ids' => 'required|array',
             'humano_ids.*' => 'required|integer',
         ]);
     
-        // Si la validación falla, retornar un error
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()],  400);
         }
     
-        // Obtener los IDs de humano validados
         $humanoIds = $request->input('humano_ids');
     
-        // Verificar si ya existen asignaciones para el oráculo específico
         $existentes = DB::table('asignacion_oraculo')
             ->where('oraculo_id', $oraculo_id)
             ->whereIn('humano_id', $humanoIds)
             ->get();
     
-        // Si alguna asignación ya existe, retornar un error
         if (!$existentes->isEmpty()) {
             return response()->json(['error' => 'Al menos una asignación ya existe para el oráculo ' . $oraculo_id],  400);
         }
     
-        // Preparar las nuevas asignaciones
         $nuevasAsignaciones = array_map(function ($humanoId) use ($dios_id, $oraculo_id) {
             return [
                 'dios_id' => $dios_id,
@@ -90,10 +84,8 @@ class AsignacionController extends Controller
             ];
         }, $humanoIds);
     
-        // Insertar las nuevas asignaciones en la base de datos
         DB::table('asignacion_oraculo')->insert($nuevasAsignaciones);
     
-        // Retornar una respuesta de éxito
         return response()->json(['message' => 'Pruebas asignadas exitosamente'],  200);
     }
 
