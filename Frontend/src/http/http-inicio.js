@@ -75,26 +75,34 @@ export async function obtenerIdHumano(id, token){
 
 export async function guardarRespuesta(humano_id, prueba_id, respuesta, token) {
     try {
+        console.log(respuesta)
         let headersList = {
             "Content-Type": "application/json",
             "Authorization": "Bearer " + token
         }
 
+        let body = {
+            "humano_id": parseInt(humano_id, 10),
+            "prueba_id": parseInt(prueba_id, 10),
+            "resultado": respuesta
+        };
+
+        console.log(body)
+
         let response = await fetch(`http://127.0.0.1:8000/api/humano/guardar-respuesta`, {
             method: "POST",
             headers: headersList,
-            body: JSON.stringify({
-                humano_id: humano_id,
-                prueba_id: prueba_id,
-                resultado: respuesta
-            })
+            body: JSON.stringify(body)
         });
+
+        console.log(response)
 
         if (response.ok) {
             let data = await response.json();
             console.log(data);
             return data;
         } else {
+            console.error('Error en la solicitud: ', response);
             throw new Error(`Error en la solicitud: ${response.status} - ${response.statusText}`);
         }
     } catch (error) {

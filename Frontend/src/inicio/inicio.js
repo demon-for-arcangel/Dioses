@@ -127,62 +127,41 @@ consultarHumano(token, idHumano)
                                     });
                                     modal.appendChild(cancelarEleccion);
                                     break;
-                                case 'valoracion':
-                                    let preguntaValoracion = document.createElement('p');
-                                    preguntaValoracion.textContent = prueba.pregunta;
-                                    modal.appendChild(preguntaValoracion);
+                                    case 'valoracion':
+                                        let preguntaValoracion = document.createElement('p');
+                                        preguntaValoracion.textContent = prueba.pregunta;
+                                        modal.appendChild(preguntaValoracion);
+                                    
+                                        let numberInput = document.createElement('input');
+                                        numberInput.type = 'number';
+                                        numberInput.min = 1;
+                                        numberInput.max = 5;
+                                        numberInput.step = 1;
+                                        modal.appendChild(numberInput);
+                                    
+                                        let enviarValoracion = document.createElement('button');
+                                        enviarValoracion.textContent = 'Enviar';
+                                        enviarValoracion.addEventListener('click', () => {
+                                            const respuesta = parseInt(numberInput.value, 10);
 
-                                    let rangeInput = document.createElement('input');
-                                    rangeInput.type = 'range';
-                                    rangeInput.min = 1;
-                                    rangeInput.max = 5;
-                                    rangeInput.step = 1;
-                                    modal.appendChild(rangeInput);
-
-                                    let numberSpanContainer = document.createElement('div');
-                                    modal.appendChild(numberSpanContainer);
-
-                                    let numberSpans = [];
-                                    for (let i = 1; i <= 5; i++) {
-                                        let span = document.createElement('span');
-                                        span.textContent = i;
-                                        span.className = 'number-span';
-                                        numberSpanContainer.appendChild(span);
-                                        numberSpans.push(span);
-                                    }
-
-                                    rangeInput.addEventListener('input', (event) => {
-                                        let value = parseInt(event.target.value);
-                                        for (let i = 0; i < numberSpans.length; i++) {
-                                            if (i < value) {
-                                                numberSpans[i].style.color = 'blue';
-                                            } else {
-                                                numberSpans[i].style.color = '';
-                                            }
-                                        }
-                                    });
-
-                                    let enviarValoracion = document.createElement('button');
-                                    enviarValoracion.textContent = 'Enviar';
-                                    enviarValoracion.addEventListener('click', () => {
-                                        const respuesta = rangeInput.value;
-                                        guardarRespuesta(userId, prueba.id, respuesta, token)
-                                            .then(data => {
-                                                modal.close();
-                                            })
-                                            .catch(error => {
-                                                console.error('Error al guardar la respuesta: ', error);
-                                            });
-                                    });
-                                    modal.appendChild(enviarValoracion);
-
-                                    let cancelarValoracion = document.createElement('button');
-                                    cancelarValoracion.textContent = 'Cancelar';
-                                    cancelarValoracion.addEventListener('click', () => {
-                                        modal.close();
-                                    });
-                                    modal.appendChild(cancelarValoracion);
-                                    break;
+                                            console.log(respuesta)
+                                            guardarRespuesta(userId, prueba.id, respuesta, token)
+                                                .then(data => {
+                                                    modal.close();
+                                                })
+                                                .catch(error => {
+                                                    console.error('Error al guardar la respuesta: ', error);
+                                                });
+                                        });
+                                        modal.appendChild(enviarValoracion);
+                                    
+                                        let cancelarValoracion = document.createElement('button');
+                                        cancelarValoracion.textContent = 'Cancelar';
+                                        cancelarValoracion.addEventListener('click', () => {
+                                            modal.close();
+                                        });
+                                        modal.appendChild(cancelarValoracion);
+                                        break;
                             }
 
                             modal.showModal();
