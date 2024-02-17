@@ -341,6 +341,17 @@ class UsuarioController extends Controller
         }
     }
 
+    public function obtenerIdHumano($usuarioId){
+        $humano = Humano::where('user_id', $usuarioId)->first();
+
+        if ($humano) {
+            $id_humano = $humano->id;
+            return response()->json(['id_humano' => $id_humano]);
+        } else {
+            return response()->json(['error' => 'No se encontro el id del humano'], 500);
+        }
+    }
+
     public function consultarHumano($id){
         try {
             $humano = Humano::with('user')->find($id);
@@ -354,7 +365,7 @@ class UsuarioController extends Controller
             $datosUsuario = [
                 'nombre' => $usuario->nombre,
                 'email' => $usuario->email,
-                'password' => $usuario->password,
+                'img' => $usuario->img,
                 'sabiduria' => $usuario->sabiduria,
                 'nobleza' => $usuario->nobleza,
                 'virtud' => $usuario->virtud,
@@ -362,7 +373,15 @@ class UsuarioController extends Controller
                 'audacia' => $usuario->audacia,
             ];
 
-            $msg = ['datosUsuario' => $datosUsuario];
+            $humanoData = [
+                'id' => $humano->id,
+                'dios_id' => $humano->dios_id,
+                'destino' => $humano->destino,
+                'afinidad' => $humano->afinidad,
+                'fecha_muerte' => $humano->fecha_muerte,
+            ];
+
+            $msg = ['datosUsuario' => $datosUsuario, 'humano' => $humanoData];
             $cod = 200;
         } catch (Exception $e) {
             $msg = ['error' => $e->getMessage()];

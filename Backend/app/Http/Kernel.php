@@ -68,5 +68,6 @@ class Kernel extends HttpKernel
         'HumanoMid' => \App\Http\Middleware\HumanoMid::class,
         'cors' => \App\Http\Middleware\Cors::class,
         'comprobarHades' => \App\Http\Middleware\ComprobarHades::class,
+        'MuertoONo' => \App\Http\Middleware\MuertoONoMid::class,
     ];
 }
