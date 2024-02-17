@@ -16,6 +16,8 @@ btnIniciarSesion.addEventListener('click', function(event){
         var tipoUsuario = response.data.tipoUsuario;
         var nombre = response.data.nombre;
         var email = correo.value;
+        var humanoMuerto = response.data.fecha_muerte;
+        console.log(humanoMuerto)
         sessionStorage.setItem('nombre', nombre);
         sessionStorage.setItem('id', id);
         sessionStorage.setItem('token', token);
@@ -26,7 +28,11 @@ btnIniciarSesion.addEventListener('click', function(event){
         if (tipoUsuario === 'dios'){
             window.location.href='./dashboard/dashboard.html';
         } else if (tipoUsuario === 'humano'){
-            window.location.href='./inicio/inicio.html';
+            if (humanoMuerto !== null) {
+                window.location.href='./pruebasResueltas/pruebasResueltas.html';
+            } else {
+                window.location.href='./inicio/inicio.html';
+            }
         } else {
             mostrarError('Tipo de usuario desconocido. Por favor, inténtelo de nuevo');
         }

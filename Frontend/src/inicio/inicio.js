@@ -13,12 +13,13 @@ const idHumano = respuestaIdHumano.id_humano;
 consultarHumano(token, idHumano)
     .then(response => {
         const usuario = response.mens;
-        if (usuario.humano.fecha_muerte === null) {
+        //if (usuario.humano.fecha_muerte === null) {
             obtenerPruebasAsignadas(userId, token)
                 .then(pruebas => {
+                    const pruebasPendientes = pruebas.filter(prueba => prueba.resultado === null);
                     let cardContainer = document.querySelector('.card-container');
 
-                    pruebas.forEach(prueba => {
+                    pruebasPendientes.forEach(prueba => {
                         let card = document.createElement('div');
                         card.className = 'card individual-card';
 
@@ -70,6 +71,7 @@ consultarHumano(token, idHumano)
                                     cancelarLibre.textContent = 'Cancelar';
                                     cancelarLibre.addEventListener('click', () => {
                                         modal.close();
+                                        window.location.reload();
                                     });
                                     buttonContainer.appendChild(enviarLibre);
                                     buttonContainer.appendChild(cancelarLibre);
@@ -113,6 +115,7 @@ consultarHumano(token, idHumano)
                                         guardarRespuesta(idHumano, prueba.id, respuesta, token)
                                             .then(data => {
                                                 modal.close();
+                                                window.location.reload();
                                             })
                                             .catch(error => {
                                                 console.error('Error al guardar la respuesta: ', error);
@@ -148,6 +151,7 @@ consultarHumano(token, idHumano)
                                             guardarRespuesta(idHumano, prueba.id, respuesta, token)
                                                 .then(data => {
                                                     modal.close();
+                                                    window.location.reload();
                                                 })
                                                 .catch(error => {
                                                     console.error('Error al guardar la respuesta: ', error);
@@ -174,9 +178,9 @@ consultarHumano(token, idHumano)
                 .catch(error => {
                     console.error('Error al mostrar las pruebas asignadas: ', error);
                 });
-        } else {
+        /* } else {
             window.location.href = '../miPerfilHumano/miPerfilHumano.html';
-        }
+        } */
     })
     .catch(error => {
         console.error('Error al obtener información del usuario:', error);

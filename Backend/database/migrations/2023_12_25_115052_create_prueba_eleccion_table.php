@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('opcion_1');
             $table->string('opcion_2');
+            $table->string('opcion_correcta');
             $table->timestamps();
         });
     }

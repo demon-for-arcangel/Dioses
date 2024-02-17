@@ -13,6 +13,8 @@ export async function obtenerDatos(email, password) {
             body: JSON.stringify(data),
         });
 
+        console.log(response)
+
         if (!response.ok) {
             throw new Error(`Error en la solicitud: ${response.status}`);
         } else {

@@ -8,6 +8,7 @@ use Exception;
 use App\Models\User;
 use App\Models\Dios;
 use Illuminate\Support\Facades\DB;
+use App\Models\Humano;
 
 class AuthController extends Controller
 {
@@ -21,13 +22,17 @@ class AuthController extends Controller
             if (Auth::attempt(['email' => $request->input('email'), 'password' => $request->input('password')])) {
                 $usuario = Auth::user();
 
+                // Obtén el modelo Humano asociado al usuario
+                $humano = Humano::where('user_id', $usuario->id)->first();
+
                 $success['token'] = $usuario->createToken('LaravelSanctumAuth')->plainTextToken;
                 $success['id'] = $usuario->id;
                 $success['tipoUsuario'] = $usuario->tipo;
                 $success['nombre'] = $usuario->nombre;
                 $success['email'] = $usuario->email;
                 $success['password'] = $usuario->password;
-    
+                $success['fecha_muerte'] = $humano ? $humano->fecha_muerte : null;
+                
                 return response()->json(["success" => true, "data" => $success, "message" => "User logged-in!"]);
             } else {
                 return response()->json(['message' => 'Correo o contraseña incorrectos'], 401);

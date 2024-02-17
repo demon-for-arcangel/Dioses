@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Oraculo;
 use App\Models\ResultadoOraculo;
+use App\Models\PruebaLibre;
+use App\Models\PruebaEleccion;
+use App\Models\PruebaValoracion;
 use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -17,18 +20,22 @@ class AsignacionController extends Controller
                 ->join('humano', 'asignacion_oraculo.humano_id', '=', 'humano.id')
                 ->join('user', 'humano.user_id', '=', 'user.id')
                 ->join('oraculo', 'oraculo.id', '=', 'asignacion_oraculo.oraculo_id')
-                ->leftJoin('prueba_eleccion', 'oraculo.prueba_eleccion_id', '=', 'prueba_eleccion.id')
-                ->select('asignacion_oraculo.*', 'oraculo.pregunta', 'oraculo.tipo', 'prueba_eleccion.opcion_1', 'prueba_eleccion.opcion_2')
-                ->where('user.id', $userId)
-                ->whereNotExists(function ($query) {
-                    $query->select(DB::raw(1))
-                          ->from('resultado_oraculo')
-                          ->whereRaw('resultado_oraculo.humano_id = asignacion_oraculo.humano_id')
-                          ->whereRaw('resultado_oraculo.prueba_id = asignacion_oraculo.oraculo_id');
+                ->leftJoin('resultado_oraculo', function ($join) {
+                    $join->on('asignacion_oraculo.humano_id', '=', 'resultado_oraculo.humano_id')
+                        ->on('asignacion_oraculo.oraculo_id', '=', 'resultado_oraculo.prueba_id');
                 })
+                ->select(
+                    'asignacion_oraculo.*',
+                    'oraculo.pregunta',
+                    'oraculo.tipo',
+                    'resultado_oraculo.resultado' 
+                )
+                ->where('user.id', $userId)
+                ->whereNull('resultado_oraculo.resultado')
+                ->orWhere('resultado_oraculo.resultado', '=', null) // Añadido para incluir asignaciones sin resultados
                 ->get();
     
-            return response()->json($asignaciones, 200);    
+            return response()->json($asignaciones, 200);
         } catch (Exception $e){
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -206,49 +213,62 @@ class AsignacionController extends Controller
 
     public function comprobarRespuesta(Request $request, $id){
         $respuestaHumano = ResultadoOraculo::find($id);
-
+    
         if (!$respuestaHumano) {
             return response()->json(['error' => 'Respuesta del humano no encontrada'], 404);
         }
-
+    
         $oraculo = $respuestaHumano->oraculo;
-
+    
         if (!$oraculo) {
             return response()->json(['error' => 'Oráculo no encontrado'], 404);
         }
-
+    
         $tipoPregunta = $oraculo->tipo;
-
+    
         $puntuacion = 0;
-
+    
         switch ($tipoPregunta) {
             case 'libre':
-                $respuestaCorrecta = $oraculo->resultado_correcto;
-
+                $pruebaLibre = $oraculo->pruebaLibre; 
+                if (!$pruebaLibre) {
+                    return response()->json(['error' => 'Prueba libre no encontrada'], 404);
+                }
+    
+                $respuestaCorrecta = $pruebaLibre->palabra_clave;
+    
                 $puntuacion = ($respuestaHumano->resultado === $respuestaCorrecta) ? 10 : -5;
                 break;
-
             case 'valoracion':
-                $respuestaCorrecta = $oraculo->resultado_correcto;
-
-                $puntuacion = ($respuestaHumano->resultado == $respuestaCorrecta) ? 10 : -5;
+                $pruebaValoracion = $oraculo->pruebaValoracion; 
+                if (!$pruebaValoracion) {
+                    return response()->json(['error' => 'Prueba de valoración no encontrada'], 404);
+                }
+    
+                $valorMaximo = $pruebaValoracion->valor_maximo;
+    
+                $puntuacion = ($respuestaHumano->resultado == $valorMaximo) ? 10 : -5;
                 break;
-
             case 'eleccion':
-                $respuestaCorrecta = $oraculo->resultado_correcto;
-
-                $puntuacion = ($respuestaHumano->resultado === $respuestaCorrecta) ? 10 : -5;
+                $pruebaEleccion = $oraculo->pruebaEleccion; // Accede a la relación directamente
+                if (!$pruebaEleccion) {
+                    return response()->json(['error' => 'Prueba de elección no encontrada'], 404);
+                }
+    
+                $opcionCorrecta = $pruebaEleccion->opcion_correcta;
+    
+                $puntuacion = ($respuestaHumano->resultado === $opcionCorrecta) ? 10 : -5;
                 break;
             default:
                 return response()->json(['error' => 'Tipo de pregunta no válido'], 400);
         }
-
+    
         $humano = $respuestaHumano->humano;
-
+    
         if (!$humano) {
             return response()->json(['error' => 'Humano no encontrado'], 404);
         }
-
+    
         $humano->destino += $puntuacion;
         $humano->save();
         return response()->json(['puntuacion' => $puntuacion, 'puntuacion_total' => $humano->puntuacion]);

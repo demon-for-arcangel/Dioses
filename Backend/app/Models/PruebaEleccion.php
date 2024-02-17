@@ -10,7 +10,9 @@ class PruebaEleccion extends Model
     protected $table = 'prueba_eleccion';
 
     protected $fillable = [
-        'opciones',
+        'opcion_1',
+        'opcion_2',
+        'opcion_correcta'
     ];
 
     public function oraculos(){
