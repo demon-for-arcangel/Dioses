@@ -56,7 +56,7 @@ consultarHumano(token, idHumano)
                                     enviarLibre.prueba = prueba;
                                     enviarLibre.addEventListener('click', () => {
                                         let respuesta = inputElement.value;
-                                        guardarRespuesta(userId, prueba.id, respuesta, token)
+                                        guardarRespuesta(idHumano, prueba.id, respuesta, token)
                                             .then(data => {
                                                 modal.close();
                                             })
@@ -145,7 +145,7 @@ consultarHumano(token, idHumano)
                                             const respuesta = parseInt(numberInput.value, 10);
 
                                             console.log(respuesta)
-                                            guardarRespuesta(userId, prueba.id, respuesta, token)
+                                            guardarRespuesta(idHumano, prueba.id, respuesta, token)
                                                 .then(data => {
                                                     modal.close();
                                                 })

@@ -89,33 +89,122 @@ class AsignacionController extends Controller
         return response()->json(['message' => 'Pruebas asignadas exitosamente'],  200);
     }
 
-    public function guardarRespuesta(Request $request)
-    {
+    public function guardarRespuesta(Request $request){
         try {
             $humano_id = $request->input('humano_id');
             $prueba_id = $request->input('prueba_id');
             $resultado = $request->input('resultado');
     
-            $resultadoExistente = ResultadoOraculo::where('humano_id', $humano_id)
-                                                   ->where('prueba_id', $prueba_id)
-                                                   ->first();
+            $respuestaExistente = ResultadoOraculo::where('humano_id', $humano_id)
+                ->where('prueba_id', $prueba_id)
+                ->first();
     
-            if ($resultadoExistente) {
-                $resultadoExistente->resultado = $resultado;
-                $resultadoExistente->save();
+            if ($respuestaExistente) {
+                $respuestaExistente->resultado = $resultado;
+                $respuestaExistente->save();
                 return response()->json(['message' => 'La respuesta ya estaba realizada'], 200);
+            } else {
+                $tipoPrueba = $this->infoTipoPrueba($prueba_id);
+    
+                switch ($tipoPrueba) {
+                    case 'libre':
+                        return $this->guardarRespuestaLibre($request, $humano_id, $prueba_id, $resultado);
+                    case 'valoracion':
+                        return $this->guardarRespuestaValoracion($request, $humano_id, $prueba_id, $resultado);
+                    case 'eleccion':
+                        return $this->guardarRespuestaEleccion($request, $humano_id, $prueba_id, $resultado);
+                    default:
+                        throw new Exception('Tipo de prueba desconocido');
+                }
             }
-            else {
-                $resultadoCreado = ResultadoOraculo::create([
+        } catch (Exception $e) {
+            Log::error('Error en guardarRespuesta: ' . $e->getMessage());
+            return response()->json(['error' => 'Error interno en el servidor', 'details' => $e->getMessage()], 500);
+        }
+    }
+    private function infoTipoPrueba($prueba_id){
+        $tipoPrueba = DB::table('oraculo')->where('id', $prueba_id)->value('tipo');
+        return $tipoPrueba;
+    }
+
+    private function guardarRespuestaLibre(Request $request, $humano_id, $prueba_id, $resultado){
+        try {
+            $respuestaExistente = ResultadoOraculo::where('humano_id', $humano_id)
+                                                ->where('prueba_id', $prueba_id)
+                                                ->first();
+
+            if ($respuestaExistente) {
+                $respuestaExistente->resultado = $resultado;
+                $respuestaExistente->save();
+                return response()->json(['message' => 'La respuesta ya estaba realizada'], 200);
+            } else {
+                $respuestaCreada = ResultadoOraculo::create([
                     'humano_id' => $humano_id,
                     'prueba_id' => $prueba_id,
                     'resultado' => $resultado
                 ]);
-                return response()->json(['message' => 'Respuesta guardada con éxito', 'resultado' => $resultadoCreado], 200);
+
+                if (!is_string($resultado)) {
+                    throw new Exception('El resultado de la prueba libre debe ser una cadena');
+                }
+
+                return response()->json(['message' => 'Respuesta guardada con éxito', 'resultado' => $respuestaCreada], 200);
+            }
+        } catch (Exception $e) {
+            Log::error('Error en guardarRespuestaLibre: ' . $e->getMessage());
+            return response()->json(['error' => 'Error interno en el servidor', 'details' => $e->getMessage()], 500);
+        }
+    }
+
+    public function guardarRespuestaValoracion($humano_id, $prueba_id, $resultado){
+        try {
+            $respuestaExistente = ResultadoOraculo::where('humano_id', $humano_id)
+                                                ->where('prueba_id', $prueba_id)
+                                                ->first();
+
+            if ($respuestaExistente) {
+                $respuestaExistente->resultado = $resultado;
+                $respuestaExistente->save();
+                return response()->json(['message' => 'La respuesta ya estaba realizada'], 200);
+            } else {
+                $respuestaCreada = ResultadoOraculo::create([
+                    'humano_id' => $humano_id,
+                    'prueba_id' => $prueba_id,
+                    'resultado' => $resultado
+                ]);
+                if (!is_numeric($resultado)) {
+                    throw new Exception('El resultado de la prueba de valoración debe ser un número');
+                }
+                return response()->json(['message' => 'Respuesta valoración guardada con éxito', 'resultado' => $respuestaCreada], 200);
+            }
+        } catch (Exception $e) {
+            Log::error('Error en guardarRespuestaLibre: ' . $e->getMessage());
+            return response()->json(['error' => 'Error interno en el servidor'], 500);
+        }
+    }
+
+    public function guardarRespuestaEleccion($humano_id, $prueba_id, $resultado){
+        try {
+            $respuestaExistente = ResultadoOraculo::where('humano_id', $humano_id)
+                                                ->where('prueba_id', $prueba_id)
+                                                ->first();
+
+            if ($respuestaExistente) {
+                $respuestaExistente->resultado = $resultado;
+                $respuestaExistente->save();
+                return response()->json(['message' => 'La respuesta ya estaba realizada'], 200);
+            } else {
+                $respuestaCreada = ResultadoOraculo::create([
+                    'humano_id' => $humano_id,
+                    'prueba_id' => $prueba_id,
+                    'resultado' => $resultado
+                ]);
+                return response()->json(['message' => 'Respuesta elección guardada con éxito', 'resultado' => $respuestaCreada], 200);
             }
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
 }
 
