@@ -142,7 +142,7 @@ consultarHumano(token, idHumano)
                                         let enviarValoracion = document.createElement('button');
                                         enviarValoracion.textContent = 'Enviar';
                                         enviarValoracion.addEventListener('click', () => {
-                                            const respuesta = parseInt(numberInput.value, 10);
+                                            const respuesta = numberInput.value;
 
                                             console.log(respuesta)
                                             guardarRespuesta(idHumano, prueba.id, respuesta, token)
