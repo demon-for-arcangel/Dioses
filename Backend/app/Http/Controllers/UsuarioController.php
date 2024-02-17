@@ -28,64 +28,13 @@ class UsuarioController extends Controller
                 'nombre' => $request->input('nombre'),
                 'email' => $request->input('email'),
                 'password' => bcrypt($request->input('password')),
+                'img' => ('https://dioses-griegos-daw2.s3.eu-north-1.amazonaws.com/humano.jpg'),
                 'tipo' => 'humano',
                 'sabiduria' => rand(1, 5),
                 'nobleza' => rand(1, 5),
                 'virtud' => rand(1, 5),
                 'maldad' => rand(1, 5),
                 'audacia' => rand(1, 5),
-            ]);
-    
-            $diosSeleccionado = $this -> asignarProteccion($usuario);
-    
-            $humano = Humano::where('user_id', $usuario->id)->first();
-    
-            if (!$humano || !$humano->dios_id) {
-                if ($diosSeleccionado && $diosSeleccionado->user){
-                    $afinidad = $this->calcularAfinidad(
-                        $usuario->sabiduria, $usuario->nobleza, $usuario->virtud, $usuario->maldad, $usuario->audacia,
-                        $diosSeleccionado->user->sabiduria, $diosSeleccionado->user->nobleza, $diosSeleccionado->user->virtud, $diosSeleccionado->user->maldad, $diosSeleccionado->user->audacia
-                    );
-
-                    $humano = Humano::create([
-                        'user_id' => $usuario->id,
-                        'dios_id' => $diosSeleccionado->id,
-                        'destino' => 0,
-                        'afinidad' => $afinidad,
-                    ]); 
-                }else{
-                    throw new Exception('No se encontró un dios seleccionado o falta la relación de usuario en el dios seleccionado', 404);
-                }           
-            }
-                 
-            $msg = ['message' => 'Humano creado exitosamente', 'usuario' => $usuario];
-            $cod = 200;
-        } catch (Exception $e) {
-            $msg = ['error' => $e->getMessage()];
-            $cod = 404;
-        }
-    
-        return response()->json(['mens' => $msg], $cod);
-    } 
-
-    public function crearUsuario(Request $request){
-        try {
-            $request->validate([
-                'nombre' => 'required|string',
-                'email' => 'required|email|unique:user,email',
-                'password' => 'required|string|min:8',
-            ]);
-    
-            $usuario = User::create([
-                'nombre' => $request->input('nombre'),
-                'email' => $request->input('email'),
-                'password' => bcrypt($request->input('password')),
-                'tipo' => 'humano',
-                'sabiduria' => $request->input('sabiduria'),
-                'nobleza' => $request->input('nobleza'),
-                'virtud' => $request->input('virtud'),
-                'maldad' => $request->input('maldad'),
-                'audacia' => $request->input('audacia'),
             ]);
     
             $diosSeleccionado = $this -> asignarProteccion($usuario);
@@ -179,9 +128,9 @@ class UsuarioController extends Controller
     public function listarHumanos(){
         $humanos = DB::table('humano')
             ->join('user', 'humano.user_id', '=', 'user.id')
-            ->select('user.nombre', 'user.email')
+            ->select('humano.id as id', 'user.nombre', 'user.email', 'humano.fecha_muerte')
             ->get();
-
+    
         return response()->json(['humanos' => $humanos], 200);
     }
 
@@ -249,8 +198,59 @@ class UsuarioController extends Controller
          } catch (\Exception $exception) {
              return response()->json(["msg" => $exception->getMessage()], 500);
          }
-     }
+    }
 
+    public function nuevoHumano(Request $request, $diosId){
+        try {
+            $request->validate([
+                'nombre' => 'required|string',
+                'email' => 'required|email|unique:user,email',
+                'password' => 'required|string|min:8',
+            ]);
+    
+            $usuario = User::create([
+                'nombre' => $request->input('nombre'),
+                'email' => $request->input('email'),
+                'password' => bcrypt($request->input('password')),
+                'img' => ('https://dioses-griegos-daw2.s3.eu-north-1.amazonaws.com/humano.jpg'),
+                'tipo' => 'humano',
+                'sabiduria' => rand(1, 5),
+                'nobleza' => rand(1, 5),
+                'virtud' => rand(1, 5),
+                'maldad' => rand(1, 5),
+                'audacia' => rand(1, 5),
+            ]);
+    
+            $diosSeleccionado = Dios::findOrFail($diosId);
+
+            $sabiduriaUsuario = $usuario->sabiduria;
+            $noblezaUsuario = $usuario->nobleza;
+            $virtudUsuario = $usuario->virtud;
+            $maldadUsuario = $usuario->maldad;
+            $audaciaUsuario = $usuario->audacia;
+
+            $afinidad = $this->calcularAfinidad(
+                $sabiduriaUsuario, $noblezaUsuario, $virtudUsuario, $maldadUsuario, $audaciaUsuario,
+                $diosSeleccionado->user->sabiduria, $diosSeleccionado->user->nobleza, $diosSeleccionado->user->virtud, $diosSeleccionado->user->maldad, $diosSeleccionado->user->audacia
+            );
+    
+            $humano = Humano::create([
+                'user_id' => $usuario->id,
+                'dios_id' => $diosSeleccionado->id,
+                'destino' => 0,
+                'afinidad' => $afinidad,
+            ]);
+    
+            $msg = ['message' => 'Humano creado exitosamente', 'usuario' => $usuario, 'humano' => $humano];
+            $cod = 200;
+        } catch (Exception $e) {
+            $msg = ['error' => $e->getMessage()];
+            $cod = 404;
+        }
+    
+        return response()->json(['mens' => $msg], $cod);
+    }
+    
     public function modificarHumano(Request $request, $id){
         try {
             $request->validate([
@@ -279,9 +279,32 @@ class UsuarioController extends Controller
             $cod = 200;
         } catch (Exception $e) {
             $msg = ['error' => $e->getMessage()];
-            $cod = 404;
+            $cod = 500;
         }
+        return response()->json(['mens' => $msg], $cod);
+    }
 
+    public function eliminarHumano($id){
+        try {
+            $humano = Humano::with('user')->find($id);
+    
+            if (!$humano) {
+                throw new Exception('Humano no encontrado', 404);
+            }
+    
+            $fechaActual = now()->toDateString(); 
+    
+            $humano->fecha_muerte = $fechaActual;
+    
+            $humano->save();
+    
+            $msg = ['message' => 'Fecha de muerte actualizada exitosamente'];
+            $cod = 200;
+        } catch (Exception $e) {
+            $msg = ['error' => $e->getMessage()];
+            $cod = 500;
+        }
+    
         return response()->json(['mens' => $msg], $cod);
     }
 
@@ -306,10 +329,8 @@ class UsuarioController extends Controller
             return response()->json(['error' => 'Error al listar humanos protegidos'], 500);
         }
     }
-    
 
-    public function obtenerIdDelDios($usuarioId)
-    {
+    public function obtenerIdDelDios($usuarioId){
         $dios = Dios::where('user_id', $usuarioId)->first();
 
         if ($dios) {
@@ -319,4 +340,158 @@ class UsuarioController extends Controller
             return response()->json(['error' => 'No se encontro el id del dios'], 500);
         }
     }
+
+    public function obtenerIdHumano($usuarioId){
+        $humano = Humano::where('user_id', $usuarioId)->first();
+
+        if ($humano) {
+            $id_humano = $humano->id;
+            return response()->json(['id_humano' => $id_humano]);
+        } else {
+            return response()->json(['error' => 'No se encontro el id del humano'], 500);
+        }
+    }
+
+    public function consultarHumano($id){
+        try {
+            $humano = Humano::with('user')->find($id);
+
+            if (!$humano) {
+                throw new Exception('Humano no encontrado', 404);
+            }
+
+            $usuario = $humano->user;
+
+            $datosUsuario = [
+                'nombre' => $usuario->nombre,
+                'email' => $usuario->email,
+                'img' => $usuario->img,
+                'sabiduria' => $usuario->sabiduria,
+                'nobleza' => $usuario->nobleza,
+                'virtud' => $usuario->virtud,
+                'maldad' => $usuario->maldad,
+                'audacia' => $usuario->audacia,
+            ];
+
+            $humanoData = [
+                'id' => $humano->id,
+                'dios_id' => $humano->dios_id,
+                'destino' => $humano->destino,
+                'afinidad' => $humano->afinidad,
+                'fecha_muerte' => $humano->fecha_muerte,
+            ];
+
+            $msg = ['datosUsuario' => $datosUsuario, 'humano' => $humanoData];
+            $cod = 200;
+        } catch (Exception $e) {
+            $msg = ['error' => $e->getMessage()];
+            $cod = 404;
+        }
+
+        return response()->json(['mens' => $msg], $cod);
+    }
+
+    public function consultarUser($id){
+        try {
+            $user = User::find($id);
+    
+            if (!$user) {
+                throw new Exception('Usuario no encontrado', 404);
+            }
+    
+            $datosUsuario = [
+                'nombre' => $user->nombre,
+                'email' => $user->email,
+                'img' => $user->img,
+                'sabiduria' => $user->sabiduria,
+                'nobleza' => $user->nobleza,
+                'virtud' => $user->virtud,
+                'maldad' => $user->maldad,
+                'audacia' => $user->audacia,
+            ];
+    
+            $msg = ['datosUsuario' => $datosUsuario];
+            $cod = 200;
+        } catch (Exception $e) {
+            $msg = ['error' => $e->getMessage()];
+            $cod = 404;
+        }
+    
+        return response()->json(['mens' => $msg], $cod);
+    } 
+    
+    public function subirImagen(Request $request){
+        
+        $msg=['max'=>'El campo se excede del tamaño máximo'];
+    
+        $validator=Validator::make($request->all(),[
+            'image'=>'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        ],$msg);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(),202);
+        }
+
+        if ($request->hasFile('image')) {
+            $file=$request->file('image');
+            $path=$file->store('perfiles','s3');
+            
+            $url=Storage::disk('s3')->url($path);
+            return response()->json(['path'=>$path,'url'=>$url],202);
+        }
+        return response()->json(['error'=>'No se recibió ningún archivo.'],400);
+    }
+
+    public function actualizarImagenUsuario(Request $request){
+        try {
+
+            $id=$request->get('id');
+
+            $usuario=User::find($id);
+
+            $usuario->img=$request->get('img');
+            
+            $usuario->save();
+            
+            $msg=$usuario;
+            $cod=200;
+
+        } catch (Exception $e) {
+            $msg=$e;
+            $cod=404;
+        }
+
+        return response()->json($msg,$cod);
+    }
+
+    public function modificarPassword(Request $request, $id){
+        try {
+            $request->validate([
+                'old_password' => 'required|string',
+                'new_password' => 'required|string|min:8',
+            ]);
+    
+            $oldPassword = $request->input('old_password');
+            $newPassword = $request->input('new_password');
+    
+            $usuario = User::findOrFail($id);
+    
+            if (!Hash::check($oldPassword, $usuario->password)) {
+                throw new Exception('La contraseña antigua no coincide', 400);
+            }
+    
+            $usuario->password = bcrypt($newPassword);
+            $usuario->save();
+    
+            $msg = ['message' => 'Contraseña modificada exitosamente'];
+            $cod = 200;
+    
+        } catch (Exception $e) {
+            $msg = ['error' => $e->getMessage()];
+            $cod = 404;
+        }
+    
+        return response()->json($msg, $cod);
+    }
 }
+

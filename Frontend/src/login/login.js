@@ -14,23 +14,29 @@ btnIniciarSesion.addEventListener('click', function(event){
         var token = response.data.token;
         var id = response.data.id;
         var tipoUsuario = response.data.tipoUsuario;
-        sessionStorage.setItem('nombre',response.data.nombre)
-        enviarSessionStorage(id, token)
+        var nombre = response.data.nombre;
+        var email = correo.value;
+        sessionStorage.setItem('nombre', nombre);
+        sessionStorage.setItem('id', id);
+        sessionStorage.setItem('token', token);
+        sessionStorage.setItem('tipoUsuario', tipoUsuario);
+        sessionStorage.setItem('email', email);
+        enviarSessionStorage(id, token);
 
         if (tipoUsuario === 'dios'){
             window.location.href='./dashboard/dashboard.html';
         } else if (tipoUsuario === 'humano'){
             window.location.href='./inicio/inicio.html';
         } else {
-            mostrarError('Tipo de usuario desconocido. Por favor, inténtelo de nuevo')
+            mostrarError('Tipo de usuario desconocido. Por favor, inténtelo de nuevo');
         }
     })
     .catch(error => {
         console.error('Error durante el inicio de sesión:', error);
-    mostrarError('Error durante el inicio de sesión. Por favor, inténtalo de nuevo.');
+        mostrarError('Error durante el inicio de sesión. Por favor, inténtalo de nuevo.');
         errorContainer.style.color = 'red';
     });
-})
+});
 
 function mostrarError(mensaje) {
     errorContainer.textContent = mensaje;

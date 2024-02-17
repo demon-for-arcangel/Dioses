@@ -28,12 +28,21 @@ Route::group(['middleware' => ['cors']], function () {
     
     Route::get('', function () {
         return response()->json("No logeado", 203);
-    })->name('nologin');          
+    })->name('nologin');   
+    
+    Route::post('subirImagen',[UsuarioController::class,'subirImagen']);
+    Route::put('actualizarImagen',[UsuarioController::class,'actualizarImagenUsuario']);
+    Route::put('modificar-password/{id}', [UsuarioController::class, 'modificarPassword']);
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::middleware('HumanoMid')->group(function () {
             Route::prefix('humano')->group(function () {
-                Route::get('/pruebas-asignadas/{userId}', [AsignacionController::class, 'mostrarAsignacionesUsuario']);
+                Route::get('consultarHumano/{id}', [UsuarioController::class, 'consultarHumano']);
+                Route::get('obtener-id-humano/{usuarioId}', [UsuarioController::class, 'obtenerIdHumano']);
+                Route::middleware(['MuertoONo'])->group(function () {
+                    Route::get('/pruebas-asignadas/{userId}', [AsignacionController::class, 'mostrarAsignacionesUsuario']);
+                    Route::post('/guardar-respuesta', [AsignacionController::class, 'guardarRespuesta']);
+                });
             });
         });
 
@@ -42,11 +51,18 @@ Route::group(['middleware' => ['cors']], function () {
                 //Humanos
                 Route::get('listar-humanos', [UsuarioController::class, 'listarHumanos']);
                 Route::get('listar-humanos-protegidos/{id}', [UsuarioController::class, 'listarHumanosProtegidos']);
-                Route::post('crear-usuario', [UsuarioController::class, 'crearUsuario']);
+                Route::get('listar-humano/{id}', [UsuarioController::class, 'consultarHumano']);
+                Route::post('crear-usuario/{id}', [UsuarioController::class, 'nuevoHumano']);
                 Route::put('modificar-humano/{id}', [UsuarioController::class, 'modificarHumano']);
-
+                Route::middleware(['comprobarHades'])->group(function () {
+                    Route::delete('eliminar-humano/{id}', [UsuarioController::class, 'eliminarHumano']);
+                });
+                
                 //Dios
                 Route::get('obtener-id-dios/{usuarioId}', [UsuarioController::class, 'obtenerIdDelDios']);
+
+                //user
+                Route::get('consultar-user/{id}', [UsuarioController::class, 'consultarUser']);
                 
                 //Pruebas
                 Route::get('mostrar-pruebas', [OraculoController::class, 'mostrarOraculos']);
