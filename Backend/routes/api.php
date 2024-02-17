@@ -37,6 +37,7 @@ Route::group(['middleware' => ['cors']], function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::middleware('HumanoMid')->group(function () {
             Route::prefix('humano')->group(function () {
+                Route::get('consultar-user/{id}', [UsuarioController::class, 'consultarUser']);
                 Route::get('consultarHumano/{id}', [UsuarioController::class, 'consultarHumano']);
                 Route::get('obtener-id-humano/{usuarioId}', [UsuarioController::class, 'obtenerIdHumano']);
                 Route::middleware(['MuertoONo'])->group(function () {
@@ -61,7 +62,6 @@ Route::group(['middleware' => ['cors']], function () {
                 //Dios
                 Route::get('obtener-id-dios/{usuarioId}', [UsuarioController::class, 'obtenerIdDelDios']);
 
-                //user
                 Route::get('consultar-user/{id}', [UsuarioController::class, 'consultarUser']);
                 
                 //Pruebas

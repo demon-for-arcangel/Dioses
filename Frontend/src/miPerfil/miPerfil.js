@@ -1,6 +1,5 @@
 import { consultarUser, subirImagenS3, actualizarImg, modificarContra  } from "../http/http-miPerfil.js";
 
-// Obtener referencia a los elementos de los inputs
 const nombreInput = document.getElementById('nombre');
 const emailInput = document.getElementById('email');
 const passwordInput = document.getElementById('password');

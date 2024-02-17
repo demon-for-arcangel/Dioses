@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Oraculo;
 use App\Models\ResultadoOraculo;
 use Illuminate\Http\Request;
 use Exception;
@@ -139,18 +140,18 @@ class AsignacionController extends Controller
                 'prueba_id' => $prueba_id,
             ]);
     
-            if (!$respuestaExistente->exists) {
-                $respuestaExistente->resultado = $resultado;
-                $respuestaExistente->save();
+            $respuestaExistente->resultado = $resultado;
+            $respuestaExistente->save();
     
-                if (!is_string($resultado)) {
-                    throw new Exception('El resultado de la prueba libre debe ser una cadena');
-                }
-    
-                return response()->json(['message' => 'Respuesta guardada con éxito', 'resultado' => $respuestaExistente], 200);
-            } else {
-                return response()->json(['message' => 'La respuesta ya estaba realizada'], 200);
+            if (!is_string($resultado)) {
+                throw new Exception('El resultado de la prueba libre debe ser una cadena');
             }
+    
+            $respuestaCreada = $respuestaExistente; 
+    
+            $this->comprobarRespuesta($request, $respuestaCreada->id);
+    
+            return response()->json(['message' => 'Respuesta guardada con éxito', 'resultado' => $respuestaCreada], 200);
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -173,6 +174,7 @@ class AsignacionController extends Controller
                 if (!is_numeric($resultado)) {
                     throw new Exception('El resultado de la prueba de valoración debe ser un número');
                 }
+                $this->comprobarRespuesta($request, $respuestaCreada->id);
                 return response()->json(['message' => 'Respuesta valoración guardada con éxito', 'resultado' => $respuestaCreada], 200);
             }
         } catch (Exception $e) {
@@ -180,7 +182,7 @@ class AsignacionController extends Controller
         }
     }
 
-    public function guardarRespuestaEleccion($humano_id, $prueba_id, $resultado){
+    public function guardarRespuestaEleccion(Request $request, $humano_id, $prueba_id, $resultado){
         try {
             $respuestaExistente = ResultadoOraculo::where('humano_id', $humano_id)
                                             ->where('prueba_id', $prueba_id)
@@ -194,10 +196,61 @@ class AsignacionController extends Controller
                     'prueba_id' => $prueba_id,
                     'resultado' => $resultado
                 ]);
+                $this->comprobarRespuesta($request, $respuestaCreada->id);
                 return response()->json(['message' => 'Respuesta elección guardada con éxito', 'resultado' => $respuestaCreada], 200);
             }
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
+    }
+
+    public function comprobarRespuesta(Request $request, $id){
+        $respuestaHumano = ResultadoOraculo::find($id);
+
+        if (!$respuestaHumano) {
+            return response()->json(['error' => 'Respuesta del humano no encontrada'], 404);
+        }
+
+        $oraculo = $respuestaHumano->oraculo;
+
+        if (!$oraculo) {
+            return response()->json(['error' => 'Oráculo no encontrado'], 404);
+        }
+
+        $tipoPregunta = $oraculo->tipo;
+
+        $puntuacion = 0;
+
+        switch ($tipoPregunta) {
+            case 'libre':
+                $respuestaCorrecta = $oraculo->resultado_correcto;
+
+                $puntuacion = ($respuestaHumano->resultado === $respuestaCorrecta) ? 10 : -5;
+                break;
+
+            case 'valoracion':
+                $respuestaCorrecta = $oraculo->resultado_correcto;
+
+                $puntuacion = ($respuestaHumano->resultado == $respuestaCorrecta) ? 10 : -5;
+                break;
+
+            case 'eleccion':
+                $respuestaCorrecta = $oraculo->resultado_correcto;
+
+                $puntuacion = ($respuestaHumano->resultado === $respuestaCorrecta) ? 10 : -5;
+                break;
+            default:
+                return response()->json(['error' => 'Tipo de pregunta no válido'], 400);
+        }
+
+        $humano = $respuestaHumano->humano;
+
+        if (!$humano) {
+            return response()->json(['error' => 'Humano no encontrado'], 404);
+        }
+
+        $humano->destino += $puntuacion;
+        $humano->save();
+        return response()->json(['puntuacion' => $puntuacion, 'puntuacion_total' => $humano->puntuacion]);
     }
 }

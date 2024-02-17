@@ -1,28 +1,27 @@
-export async function consultarUser(token, id){
+export async function consultarUser(token, id) {
     try {
         let headersList = {
             "Content-Type": "application/json",
             "Authorization": "Bearer " + token
         };
 
-        console.log(headersList)
-
-        let response = await fetch(`http://127.0.0.1:8000/api/dios/consultar-user/${id}`, {
-            method: "GET",    
+        let response = await fetch(`http://127.0.0.1:8000/api/consultar-user/${id}`, {
+            method: "GET",
             headers: headersList
         });
 
-        console.log(response);
+        console.log('Response status:', response.status);
+        console.log('Response headers:', response.headers);
 
-        if (!response.ok) {
-            throw new Error(`Error en la solicitud: ${response.status} - ${response.statusText}`);
-        }
+        const responseBody = await response.text();
 
-        let usuario = await response.json();
+        console.log('Response body:', responseBody);
+
+        const usuario = JSON.parse(responseBody);
 
         return usuario;
     } catch (error) {
-        console.error('Error al obtener la información del usuario: ', error);
+        console.error('Error al obtener la información del usuario:', error);
         throw error;
     }
 }

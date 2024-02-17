@@ -1,4 +1,4 @@
-import { consultarUser, subirImagenS3, actualizarImg, modificarContra  } from "../http/http-miPerfil.js";
+import { consultarUser, subirImagenS3, actualizarImg, modificarContra  } from "../http/http-miPerfilHumano.js";
 
 const nombreInput = document.getElementById('nombre');
 const emailInput = document.getElementById('email');
