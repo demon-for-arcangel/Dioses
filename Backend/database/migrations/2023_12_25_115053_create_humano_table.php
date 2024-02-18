@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('destino')->default(0);
             $table->integer('afinidad');
             $table->string('fecha_muerte')->nullable();
+            $table->enum('ubicacion', ['Campos Eliseos', 'Tartaro'])->nullable();
             $table->bigInteger('dios_id')->unsigned();
             $table->foreignId('user_id')->nullable()->constrained('user');
             $table->timestamps();
