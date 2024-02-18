@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     obtenerPruebasResueltas(token, idHumano)
         .then(pruebas => {
-            console.log(pruebas)
             if (pruebas.length > 0) {
                 llenarTabla(pruebas);
             } else {

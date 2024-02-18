@@ -13,7 +13,9 @@ module.exports = {
       crearHumanos: './src/crearHumanos/crearHumanos.js',
       crearPruebas: './src/crearPruebas/crearPruebas.js',
       miPerfil: './src/miPerfil/miPerfil.js',
-      miPerfilHumano: './src/miPerfilHumano/miPerfilHumano.js'
+      miPerfilHumano: './src/miPerfilHumano/miPerfilHumano.js',
+      perfilHumanoMuerto: './src/miPerfilHumano/perfilHumanoMuerto.js',
+      pruebasResueltas: './src/pruebasResueltas/pruebasResueltas.js'
   },
     output: {
       filename: '[name].main.js',

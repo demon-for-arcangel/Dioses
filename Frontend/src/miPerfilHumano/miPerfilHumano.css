@@ -44,7 +44,7 @@ body {
 .sidebar {
     width: 200px;
     background-color: #3c3b3b;
-    height: 100vh;
+    min-height: 100vh;
     padding: 20px;
     margin: 0px;
     color: black;

@@ -10,12 +10,7 @@ export async function consultarUser(token, id) {
             headers: headersList
         });
 
-        console.log('Response status:', response.status);
-        console.log('Response headers:', response.headers);
-
         const responseBody = await response.text();
-
-        console.log('Response body:', responseBody);
 
         const usuario = JSON.parse(responseBody);
 
@@ -48,7 +43,6 @@ export async function actualizarImg(datos){
     
     let bodyContent = datos;
     
-    console.log(bodyContent)
     let response = await fetch("http://127.0.0.1:8000/api/actualizarImagen", { 
       method: "PUT",
       body: bodyContent,

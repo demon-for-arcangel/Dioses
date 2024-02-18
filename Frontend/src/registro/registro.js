@@ -19,7 +19,6 @@ formulario.addEventListener("input", function(){
 
 btnRegistro.addEventListener("click", async function(){
     event.preventDefault();
-    console.log('Click event triggered')
     if (comprobarValidaciones(nombre.value, email.value, password.value, confpass.value)) {
         var datos=cargarDatos();
         await crearUsuario(datos).then(function(data){
