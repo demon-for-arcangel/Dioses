@@ -296,9 +296,11 @@ class UsuarioController extends Controller
     
             $humano->fecha_muerte = $fechaActual;
     
+            $humano->ubicacion = ($humano->destino < 0) ? 'Tartaro' : 'Campos Eliseos';
+    
             $humano->save();
     
-            $msg = ['message' => 'Fecha de muerte actualizada exitosamente'];
+            $msg = ['message' => 'Fecha de muerte y ubicación actualizadas exitosamente'];
             $cod = 200;
         } catch (Exception $e) {
             $msg = ['error' => $e->getMessage()];
