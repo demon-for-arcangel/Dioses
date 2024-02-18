@@ -5,7 +5,7 @@ export async function consultarUser(token, id) {
             "Authorization": "Bearer " + token
         };
 
-        let response = await fetch(`http://127.0.0.1:8000/api/consultar-user/${id}`, {
+        let response = await fetch(`http://127.0.0.1:8000/api/humano/consultar-user/${id}`, {
             method: "GET",
             headers: headersList
         });
