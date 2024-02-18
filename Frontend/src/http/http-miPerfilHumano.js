@@ -1,11 +1,13 @@
 export async function consultarUser(token, id) {
     try {
+        console.log(token)
+        console.log(id)
         let headersList = {
             "Content-Type": "application/json",
             "Authorization": "Bearer " + token
         };
 
-        let response = await fetch(`http://127.0.0.1:8000/api/consultar-user/${id}`, {
+        let response = await fetch(`http://127.0.0.1:8000/api/humano/consultar-user/${id}`, {
             method: "GET",
             headers: headersList
         });
@@ -13,11 +15,7 @@ export async function consultarUser(token, id) {
         console.log('Response status:', response.status);
         console.log('Response headers:', response.headers);
 
-        const responseBody = await response.text();
-
-        console.log('Response body:', responseBody);
-
-        const usuario = JSON.parse(responseBody);
+        const usuario = await response.json();
 
         return usuario;
     } catch (error) {
@@ -25,6 +23,7 @@ export async function consultarUser(token, id) {
         throw error;
     }
 }
+
 
 export async function subirImagenS3(ruta){
     let response = await fetch("http://127.0.0.1:8000/api/subirImagen", { 
