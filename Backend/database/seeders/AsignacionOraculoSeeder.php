@@ -16,7 +16,7 @@ class AsignacionOraculoSeeder extends Seeder
         DB::table('asignacion_oraculo')->insert([
             'id' => 1,
             'dios_id' => 1,
-            'oraculo_id' => 1,
+            'oraculo_id' => 2,
             'humano_id' => 1,
         ]);
         DB::table('asignacion_oraculo')->insert([

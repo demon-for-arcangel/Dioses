@@ -15,7 +15,7 @@ class ResultadoOraculoSeeder extends Seeder
     {
         DB::table('resultado_oraculo')->insert([
             'id' => 1,
-            'humano_id' => 1,
+            'humano_id' => 2,
             'prueba_id' => 1,
             'resultado' => 'mi destino es...',
         ]);

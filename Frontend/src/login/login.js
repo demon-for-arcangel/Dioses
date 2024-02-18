@@ -29,7 +29,7 @@ btnIniciarSesion.addEventListener('click', function(event){
             window.location.href='./dashboard/dashboard.html';
         } else if (tipoUsuario === 'humano'){
             if (humanoMuerto !== null) {
-                window.location.href='./pruebasResueltas/pruebasResueltas.html';
+                window.location.href='./miPerfilHumano/perfilHumanoMuerto.html';
             } else {
                 window.location.href='./inicio/inicio.html';
             }

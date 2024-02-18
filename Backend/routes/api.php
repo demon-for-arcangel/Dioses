@@ -43,6 +43,7 @@ Route::group(['middleware' => ['cors']], function () {
                 Route::middleware(['MuertoONo'])->group(function () {
                     Route::get('/pruebas-asignadas/{userId}', [AsignacionController::class, 'mostrarAsignacionesUsuario']);
                     Route::post('/guardar-respuesta', [AsignacionController::class, 'guardarRespuesta']);
+                    Route::get('pruebas-resueltas/{id}', [AsignacionController::class, 'pruebasResueltasHumano']);
                 });
             });
         });

@@ -19,12 +19,6 @@ class MuertoONoMid
         $usuario = $request->user();
 
         if ($usuario && $usuario->fecha_muerte !== null) {
-            // Agrega mensajes de depuración
-            Log::info('El usuario ' . $usuario->id . ' está muerto');
-            // o usa dd() para detener la ejecución y mostrar información
-            dd('El usuario ' . $usuario->id . ' está muerto');
-
-            // También puedes retornar una respuesta JSON con un código de estado
             return response()->json('El usuario está muerto', 403);
         }
 

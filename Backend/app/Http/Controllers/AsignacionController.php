@@ -32,7 +32,7 @@ class AsignacionController extends Controller
                 )
                 ->where('user.id', $userId)
                 ->whereNull('resultado_oraculo.resultado')
-                ->orWhere('resultado_oraculo.resultado', '=', null) // Añadido para incluir asignaciones sin resultados
+                ->orWhere('resultado_oraculo.resultado', '=', null) //incluir asignaciones sin resultados
                 ->get();
     
             return response()->json($asignaciones, 200);
@@ -40,6 +40,32 @@ class AsignacionController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+    public function pruebasResueltasHumano($userId){
+        try {
+            $asignaciones = DB::table('asignacion_oraculo')
+                ->join('humano', 'asignacion_oraculo.humano_id', '=', 'humano.id')
+                ->join('user', 'humano.user_id', '=', 'user.id')
+                ->join('oraculo', 'oraculo.id', '=', 'asignacion_oraculo.oraculo_id')
+                ->join('resultado_oraculo', function ($join) {
+                    $join->on('asignacion_oraculo.humano_id', '=', 'resultado_oraculo.humano_id')
+                        ->on('asignacion_oraculo.oraculo_id', '=', 'resultado_oraculo.prueba_id');
+                })
+                ->select(
+                    'asignacion_oraculo.*',
+                    'oraculo.pregunta',
+                    'oraculo.tipo',
+                    'resultado_oraculo.resultado' 
+                )
+                ->where('user.id', $userId)
+                ->whereNotNull('resultado_oraculo.resultado') // pruebas con resultados
+                ->get();
+    
+            return response()->json($asignaciones, 200);
+        } catch (Exception $e){
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }    
 
     public function asignarPrueba(Request $request)
     {
