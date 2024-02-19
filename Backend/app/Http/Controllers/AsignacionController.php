@@ -41,31 +41,24 @@ class AsignacionController extends Controller
         }
     }
 
-    public function pruebasResueltasHumano($userId){
+    public function pruebasResueltasHumano($humanoId){
         try {
-            $asignaciones = DB::table('asignacion_oraculo')
-                ->join('humano', 'asignacion_oraculo.humano_id', '=', 'humano.id')
-                ->join('user', 'humano.user_id', '=', 'user.id')
-                ->join('oraculo', 'oraculo.id', '=', 'asignacion_oraculo.oraculo_id')
-                ->join('resultado_oraculo', function ($join) {
-                    $join->on('asignacion_oraculo.humano_id', '=', 'resultado_oraculo.humano_id')
-                        ->on('asignacion_oraculo.oraculo_id', '=', 'resultado_oraculo.prueba_id');
-                })
+            $asignaciones = DB::table('resultado_oraculo')
+                ->join('oraculo', 'resultado_oraculo.prueba_id', '=', 'oraculo.id')
                 ->select(
-                    'asignacion_oraculo.*',
-                    'oraculo.pregunta',
+                    'resultado_oraculo.*',
                     'oraculo.tipo',
-                    'resultado_oraculo.resultado' 
+                    'oraculo.pregunta'
                 )
-                ->where('user.id', $userId)
-                ->whereNotNull('resultado_oraculo.resultado') // pruebas con resultados
+                ->where('resultado_oraculo.humano_id', $humanoId)
+                ->whereNotNull('resultado_oraculo.resultado')
                 ->get();
     
             return response()->json($asignaciones, 200);
         } catch (Exception $e){
             return response()->json(['error' => $e->getMessage()], 500);
         }
-    }    
+    }      
 
     public function asignarPrueba(Request $request)
     {
