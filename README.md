@@ -49,16 +49,31 @@ Este documento proporciona una breve descripción general y una guía de uso par
 - [Restablecer Contraseña](#restablecer-contraseña)
 - [Verificar Existencia de Correo Electrónico](#verificar-existencia-de-correo-electrónico)
 - [Acceso No Autenticado](#acceso-no-autenticado)
-- [Rutas para Usuarios Humanos](#rutas-para-usuarios-humanos)
-    - [Pruebas Asignadas]()
-    - [Guardar Respuesta de Prueba]()
+- [Subir Imágen](#subir-imágen)
+- [Actualizar Imágen](#actualizar-imagen)
+- [Modificar Contraseña](#modificar-contraseña)
+- [Rutas para Usuarios "Humanos"](#rutas-para-usuarios-humanos)
+    - [Pruebas Asignadas](#ver-pruebas-asignadas)
+    - [Guardar Respuesta de Prueba](#guardar-respuesta-de-pruebas)
+    - [Pruebas Resueltas]()
+    - [Consultar Usuario]()
+    - [Consultar Humano](#consultar-humano)
+    - [Obtener Id de Humano](#obtener-id-de-humano)
 - [Rutas para Usuarios "Dios"](#rutas-para-usuarios-dios)
-    - [Mostrar Pruebas Creadas]()
+    - [Listar Humanos](#listar-humanos)
+    - [Listar Humanos Protegidos](#listar-humanos-protegidos)
+    - [Listar Humano]()
     - [Crear Usuario]()
-    - [Crear Pruebas]()
+    - [Modificar Humano]()
+    - [Eliminar Humano]()
+    - [Obtener Id Dios]()
+    - [Consultar Usuario]()
+    - [Mostrar Pruebas]()
+    - [Listar Óraculos]()
+    - [Crear Prueba]()
     - [Modificar Prueba]()
     - [Eliminar Prueba]()
-    - [Asignar Prueba]()
+    - [Asignar Oraculo]()
 
 
 ## Registro
@@ -107,33 +122,96 @@ Verifica si un correo electrónico ya está registrado.
 ### `GET /`
 Devuelve una respuesta indicando que el usuario no ha iniciado sesión.
 
+## Subir Imagen
+### `POST /subirImagen`
+Podremos subir cualquier archivo de imágen. Token requerido.
+
+## Actualizar Imagen
+### `PUT /actualizarImagen`
+La imagen que habremos subido anteriormente la actualizaremos con esta ruta.
+
+| Parametro | Tipo     | Descripción                |
+| :-------- | :------- | :------------------------- |
+| `id` | `integer` | **Requerido**.  |
+| `img` | `url de la imagen` | **Requerido** |
+
+La url de la imagen la podremos coger en la respuesta al subir la imagen.
+
+## Modificar Contraseña
+### `PUT /modificar-password/{id}`
+El usuario podrá modificar la contraseña.
+
+| Parametro | Tipo     | Descripción                |
+| :-------- | :------- | :------------------------- |
+| `old_password` | `string` | **Requerido**.  |
+| `new_password` | `string` | **Requerido** |
+
 ## Rutas para Usuarios Humanos
-### `GET /humano/pruebas-asignadas/{userId}`
+### Ver pruebas asignadas
+#### `GET /humano/pruebas-asignadas/{userId}`
 Recupera las pruebas asignadas para un usuario específico.
 
+### Guardar Respuesta de Pruebas
+#### `POST /humano/guardar-respuesta`
+Ruta en la que se guardará la respuesta que den los humanos a las pruebas.
+
+| Parametro | Tipo     | Descripción                |
+| :-------- | :------- | :------------------------- |
+| `humano_id` | `integer` | **Requerido**.  |
+| `prueba_id` | `integer` | **Requerido** |
+| `resultado` | `integer`/`string` | **Requerido** |
+
+### Pruebas resueltas
+#### ``
+Devolverá todas las pruebas que se hayan resuelto
+
+### Consultar Usuario
+##### `GET /`
+
+### Consultar Humano
+#### ` GET /humano/consultarHumano/{id}`
+Devuelve los datos del humano que hemos buscado.
+
+### Obtener Id de Humano
+#### ` GET /humano/obtener-id-humano/{id}`
+Devuelve el id del humano cuando lo buscamos con el id del usuario.
+
+
 ## Rutas para Usuarios "Dios"
-### `GET /dios/listar-humanos`
+### Listar Humanos
+#### `GET /dios/listar-humanos`
 Recupera una lista de todos los usuarios.
 
-### `POST /dios/crear-usuario`
+### Listar Humanos Protegidos
+#### `GET /dios/listar-humanos-protegidos/1`
+Recupera una lista de todos los humanos que tiene el dios bajo su protección.
+
+###
+#### `POST /dios/crear-usuario`
 Crea un nuevo usuario.
 
-### `PUT /dios/modificar-humano/{id}`
+### 
+#### `PUT /dios/modificar-humano/{id}`
 Modifica un usuario existente.
 
-### `GET /dios/mostrar-pruebas`
+###
+#### `GET /dios/mostrar-pruebas`
 Recupera una lista de todas las pruebas.
 
-### `POST /dios/crear-prueba`
+###
+#### `POST /dios/crear-prueba`
 Crea una nueva prueba.
 
-### `PUT /dios/modificar-prueba/{id}`
+###
+#### `PUT /dios/modificar-prueba/{id}`
 Actualiza una prueba existente.
 
-### `DELETE /dios/eliminar-prueba/{id}`
+###
+#### `DELETE /dios/eliminar-prueba/{id}`
 Elimina una prueba.
 
-### `POST /dios/asignar-oraculo`
+###
+#### `POST /dios/asignar-oraculo`
 Asigna una prueba a un usuario.
 
 ## Middlewares
