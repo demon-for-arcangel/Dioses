@@ -14,7 +14,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
 class AsignacionController extends Controller
 {
-    public function mostrarAsignacionesUsuario($userId){
+    public function mostrarAsignacionesUsuario($userId)
+    {
         try {
             $asignaciones = DB::table('asignacion_oraculo')
                 ->join('humano', 'asignacion_oraculo.humano_id', '=', 'humano.id')
@@ -24,23 +25,28 @@ class AsignacionController extends Controller
                     $join->on('asignacion_oraculo.humano_id', '=', 'resultado_oraculo.humano_id')
                         ->on('asignacion_oraculo.oraculo_id', '=', 'resultado_oraculo.prueba_id');
                 })
+                ->leftJoin('prueba_eleccion', 'oraculo.prueba_eleccion_id', '=', 'prueba_eleccion.id')
                 ->select(
                     'asignacion_oraculo.*',
                     'oraculo.pregunta',
                     'oraculo.tipo',
+                    'prueba_eleccion.opcion_1',
+                    'prueba_eleccion.opcion_2',
                     'resultado_oraculo.resultado' 
                 )
                 ->where('user.id', $userId)
-                ->whereNull('resultado_oraculo.resultado')
-                ->orWhere('resultado_oraculo.resultado', '=', null) //incluir asignaciones sin resultados
+                ->where(function ($query) {
+                    $query->whereNull('resultado_oraculo.resultado')
+                        ->orWhere('resultado_oraculo.resultado', '=', null);
+                })
                 ->get();
     
             return response()->json($asignaciones, 200);
         } catch (Exception $e){
             return response()->json(['error' => $e->getMessage()], 500);
         }
-    }
-
+    }        
+    
     public function pruebasResueltasHumano($humanoId){
         try {
             $asignaciones = DB::table('resultado_oraculo')
@@ -135,6 +141,7 @@ class AsignacionController extends Controller
             if ($respuestaExistente) {
                 $respuestaExistente->resultado = $resultado;
                 $respuestaExistente->save();
+                $respuestaExistente->refresh();
                 return response()->json(['message' => 'La respuesta ya estaba realizada'], 200);
             } else {
                 $tipoPrueba = $this->infoTipoPrueba($prueba_id);
@@ -168,7 +175,6 @@ class AsignacionController extends Controller
     
             $respuestaExistente->resultado = $resultado;
             $respuestaExistente->save();
-    
             if (!is_string($resultado)) {
                 throw new Exception('El resultado de la prueba libre debe ser una cadena');
             }
@@ -186,8 +192,8 @@ class AsignacionController extends Controller
     public function guardarRespuestaValoracion(Request $request, $humano_id, $prueba_id, $resultado){
         try {
             $respuestaExistente = ResultadoOraculo::where('humano_id', $humano_id)
-                                            ->where('prueba_id', $prueba_id)
-                                            ->exists();
+                ->where('prueba_id', $prueba_id)
+                ->exists();
     
             if ($respuestaExistente) {
                 return response()->json(['message' => 'La respuesta ya estaba realizada'], 200);
@@ -197,9 +203,6 @@ class AsignacionController extends Controller
                     'prueba_id' => $prueba_id,
                     'resultado' => $resultado
                 ]);
-                if (!is_numeric($resultado)) {
-                    throw new Exception('El resultado de la prueba de valoración debe ser un número');
-                }
                 $this->comprobarRespuesta($request, $respuestaCreada->id);
                 return response()->json(['message' => 'Respuesta valoración guardada con éxito', 'resultado' => $respuestaCreada], 200);
             }
@@ -207,13 +210,13 @@ class AsignacionController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-
+    
     public function guardarRespuestaEleccion(Request $request, $humano_id, $prueba_id, $resultado){
         try {
             $respuestaExistente = ResultadoOraculo::where('humano_id', $humano_id)
-                                            ->where('prueba_id', $prueba_id)
-                                            ->exists();
-
+                ->where('prueba_id', $prueba_id)
+                ->exists();
+    
             if ($respuestaExistente) {
                 return response()->json(['message' => 'La respuesta ya estaba realizada'], 200);
             } else { 
@@ -229,7 +232,7 @@ class AsignacionController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-
+    
     public function comprobarRespuesta(Request $request, $id){
         $respuestaHumano = ResultadoOraculo::find($id);
     
@@ -253,31 +256,43 @@ class AsignacionController extends Controller
                 if (!$pruebaLibre) {
                     return response()->json(['error' => 'Prueba libre no encontrada'], 404);
                 }
-    
+            
                 $respuestaCorrecta = $pruebaLibre->palabra_clave;
-    
-                $puntuacion = ($respuestaHumano->resultado === $respuestaCorrecta) ? 10 : -5;
-                break;
-            case 'valoracion':
-                $pruebaValoracion = $oraculo->pruebaValoracion; 
-                if (!$pruebaValoracion) {
-                    return response()->json(['error' => 'Prueba de valoración no encontrada'], 404);
+            
+                if ($respuestaHumano->resultado === $respuestaCorrecta) {
+                    $puntuacion = 10;
+                } else {
+                    $puntuacion = -5;
                 }
-    
-                $valorMaximo = $pruebaValoracion->valor_maximo;
-    
-                $puntuacion = ($respuestaHumano->resultado == $valorMaximo) ? 10 : -5;
                 break;
-            case 'eleccion':
-                $pruebaEleccion = $oraculo->pruebaEleccion; // Accede a la relación directamente
-                if (!$pruebaEleccion) {
-                    return response()->json(['error' => 'Prueba de elección no encontrada'], 404);
-                }
-    
-                $opcionCorrecta = $pruebaEleccion->opcion_correcta;
-    
-                $puntuacion = ($respuestaHumano->resultado === $opcionCorrecta) ? 10 : -5;
-                break;
+                case 'valoracion':
+                    $pruebaValoracion = $oraculo->pruebaValoracion; 
+                    if (!$pruebaValoracion) {
+                        return response()->json(['error' => 'Prueba de valoración no encontrada'], 404);
+                    }
+                
+                    $valorMaximo = $pruebaValoracion->valor_maximo;
+                
+                    if ($respuestaHumano->resultado == $valorMaximo) {
+                        $puntuacion = 10;
+                    } else {
+                        $puntuacion = -5;
+                    }
+                    break;
+                    case 'eleccion':
+                        $pruebaEleccion = $oraculo->pruebaEleccion; 
+                        if (!$pruebaEleccion) {
+                            return response()->json(['error' => 'Prueba de elección no encontrada'], 404);
+                        }
+                    
+                        $opcionCorrecta = $pruebaEleccion->opcion_correcta;
+                    
+                        if ($respuestaHumano->resultado === $opcionCorrecta) {
+                            $puntuacion = 10;
+                        } else {
+                            $puntuacion = -5;
+                        }
+                        break;
             default:
                 return response()->json(['error' => 'Tipo de pregunta no válido'], 400);
         }

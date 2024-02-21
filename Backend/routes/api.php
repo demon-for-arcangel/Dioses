@@ -58,6 +58,7 @@ Route::group(['middleware' => ['cors']], function () {
                 Route::put('modificar-humano/{id}', [UsuarioController::class, 'modificarHumano']);
                 Route::middleware(['comprobarHades'])->group(function () {
                     Route::delete('eliminar-humano/{id}', [UsuarioController::class, 'eliminarHumano']);
+                    Route::delete('eliminar-humamos', [UsuarioController::class, 'eliminarMultiplesHumanos']);
                 });
                 
                 //Dios

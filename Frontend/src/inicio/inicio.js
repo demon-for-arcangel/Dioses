@@ -13,10 +13,11 @@ const idHumano = respuestaIdHumano.id_humano;
 consultarHumano(token, idHumano)
     .then(response => {
         const usuario = response.mens;
-        //if (usuario.humano.fecha_muerte === null) {
             obtenerPruebasAsignadas(userId, token)
                 .then(pruebas => {
-                    const pruebasPendientes = pruebas.filter(prueba => prueba.resultado === null);
+                    console.log('Pruebas antes del filtro:', pruebas);
+                    const pruebasPendientes = pruebas.filter(prueba => !prueba.resultado);
+                    console.log('Pruebas después del filtro:', pruebasPendientes);
                     let cardContainer = document.querySelector('.card-container');
 
                     pruebasPendientes.forEach(prueba => {
@@ -60,6 +61,7 @@ consultarHumano(token, idHumano)
                                         guardarRespuesta(idHumano, prueba.id, respuesta, token)
                                             .then(data => {
                                                 modal.close();
+                                                window.location.reload();
                                             })
                                             .catch(error => {
                                                 console.error('Error al guardar la respuesta: ', error);
@@ -178,9 +180,6 @@ consultarHumano(token, idHumano)
                 .catch(error => {
                     console.error('Error al mostrar las pruebas asignadas: ', error);
                 });
-        /* } else {
-            window.location.href = '../miPerfilHumano/miPerfilHumano.html';
-        } */
     })
     .catch(error => {
         console.error('Error al obtener información del usuario:', error);

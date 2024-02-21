@@ -5,7 +5,6 @@ document.getElementById('mensaje-bienvenida').textContent = `Bienvenido/a ${nomb
 
 let token = sessionStorage.getItem('token');
 let id_usuario = sessionStorage.getItem('id-usuario');
-console.log(id_usuario)
 let tablaOraculos = document.getElementById('tabla-oraculos');
 
 let modalContainer = document.createElement('div');
@@ -15,7 +14,6 @@ document.body.appendChild(modalContainer);
 async function init() {
     try {
         let respuesta = await obtenerOraculos(token);
-        console.log(respuesta);
         let oraculos = respuesta.oraculos;
         ObtencionOraculos(oraculos);
     } catch (error) {
@@ -297,8 +295,6 @@ async function abrirModalConTabla(oraculo_id) {
                 return Number(checkbox.value);
             });
 
-            console.log(oraculo_id)
-            console.log(idsHumanosSeleccionados);
             const respuestaAsignacion = await asignarPrueba(token, idDios, oraculo_id,  { humanos_ids: idsHumanosSeleccionados });
             console.log('Respuesta de asignación:', respuestaAsignacion);
         } catch (error) {

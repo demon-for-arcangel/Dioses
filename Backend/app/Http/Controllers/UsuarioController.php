@@ -296,9 +296,11 @@ class UsuarioController extends Controller
     
             $humano->fecha_muerte = $fechaActual;
     
+            $humano->ubicacion = ($humano->destino < 0) ? 'Tartaro' : 'Campos Eliseos';
+    
             $humano->save();
     
-            $msg = ['message' => 'Fecha de muerte actualizada exitosamente'];
+            $msg = ['message' => 'Fecha de muerte y ubicación actualizadas exitosamente'];
             $cod = 200;
         } catch (Exception $e) {
             $msg = ['error' => $e->getMessage()];
@@ -393,7 +395,7 @@ class UsuarioController extends Controller
 
     public function consultarUser($id){
         try {
-            $user = User::find($id);
+            $user = User::with('humano')->find($id);
     
             if (!$user) {
                 throw new Exception('Usuario no encontrado', 404);
@@ -408,6 +410,8 @@ class UsuarioController extends Controller
                 'virtud' => $user->virtud,
                 'maldad' => $user->maldad,
                 'audacia' => $user->audacia,
+                'fecha_muerte' => $user->humano->fecha_muerte,
+                'ubicacion' => $user->humano->ubicacion,
             ];
     
             $msg = ['datosUsuario' => $datosUsuario];
@@ -418,7 +422,7 @@ class UsuarioController extends Controller
         }
     
         return response()->json(['mens' => $msg], $cod);
-    } 
+    }    
     
     public function subirImagen(Request $request){
         
