@@ -6,7 +6,7 @@ Esta app servirá para realizar el registro de los humanos que nazcan en todo el
 - Los Campos Elíseos
 - El Tártaro
 ## Logo para la aplicación
-![Logo](https://seeklogo.com/images/O/olimpo-logo-B7735CCFD8-seeklogo.com.png)
+<img src="Frontend/src/assets/logo1.png">
 
 ## Requisitos
 - Tener instalado NodeJS. Si no tenemos NodeJS en nuestro dispositivo:<br>
@@ -20,79 +20,204 @@ Para poder instalarlo nos dirigiremos a la página oficial de <a href="https://c
 Para poder gestionar la base de datos con xampp nos dirigiremos a la pagina oficial de xampp <a href="https://www.apachefriends.org/es/download.html"></a>.
 ## Instalación
 
-Install my-project with npm
+Para la instalación del proyecto nos dirigiremos a GitHub y usaremos el siguiente comando:
 
-```bash
-  npm install my-project
-  cd my-project
-```
-    
+`git clone https://github.com/demon-for-arcangel/Dioses`.<br>
+
+Después de la clonación del proyecto lo abriremos en nuestro IDE favorito y añadiremos el archivo `.env` en el directorio llamado Backend.
+
+Iniciaremos Apache y MySQL desde Xampp y crearemos una base de datos llamada `dioses`.
+
+Desde la terminal ejecutaremos el comando `npm install` asegurandonos de estar en el directorio correcto que sería el de Frontend y desde el directorio de Backend ejecutaremos el comando `composer update` y cuando haya finalizado habrá que ejecutar el script `.\script.bat` este nos realizara las migrations y los seeders en la base de datos.
+
+Para arrancar el Backend usaremos el comando `php artisan serve` y para el Frontend usaremos primero el comando `npm run build` que nos creará el directorio llamado `dist` y para ejecutar webpack con su servidor ejecutamos el comando `npm run dev`.
 ## Autor/es
 
 - [@demon-for-arcangel](https://github.com/demon-for-arcangel)
-## Requisitos
-- Tener instalado NodeJS. Si no tenemos NodeJS en nuestro dispositivo:<br>
-Lo instalaremos en la página oficial de <a href="https://nodejs.org/en">NodeJS</a>.
-- Tener una cuenta en GitHub. Si no tenemos una cuenta de GitHub:<br>
-Podremos crearnos una cuenta en GitHub en la pagina oficial de <a href="https://github.com">GitHub</a>.
 
-- Tener instalado Visual Studio Code u otro IDE:<br>
-Para poder instalarlo nos dirigiremos a la página oficial de <a href="https://code.visualstudio.com/download">Visual Studio Code</a>.
-- Deberemos tener instalado xampp:<br>
-Para poder gestionar la base de datos con xampp nos dirigiremos a la pagina oficial de xampp <a href="https://www.apachefriends.org/es/download.html"></a>.
+---
+---
 
-## Manual para la API
+# Documentación de la API
 
-### Manual para los Dioses
+Este documento proporciona una breve descripción general y una guía de uso para la API. La API está diseñada para el registro de usuarios, autenticación y gestión de usuarios y pruebas. Está implementada en el framework Laravel PHP.
 
-#### Get all items
+## Tabla de Contenidos
+- [Registro](#registro)
+- [Inicio de Sesión](#inicio-de-sesión)
+- [Cierre de Sesión](#cierre-de-sesión)
+- [Restablecer Contraseña](#restablecer-contraseña)
+- [Verificar Existencia de Correo Electrónico](#verificar-existencia-de-correo-electrónico)
+- [Acceso No Autenticado](#acceso-no-autenticado)
+- [Subir Imágen](#subir-imágen)
+- [Actualizar Imágen](#actualizar-imagen)
+- [Modificar Contraseña](#modificar-contraseña)
+- [Rutas para Usuarios "Humanos"](#rutas-para-usuarios-humanos)
+    - [Pruebas Asignadas](#ver-pruebas-asignadas)
+    - [Guardar Respuesta de Prueba](#guardar-respuesta-de-pruebas)
+    - [Pruebas Resueltas]()
+    - [Consultar Usuario]()
+    - [Consultar Humano](#consultar-humano)
+    - [Obtener Id de Humano](#obtener-id-de-humano)
+- [Rutas para Usuarios "Dios"](#rutas-para-usuarios-dios)
+    - [Listar Humanos](#listar-humanos)
+    - [Listar Humanos Protegidos](#listar-humanos-protegidos)
+    - [Listar Humano]()
+    - [Crear Usuario]()
+    - [Modificar Humano]()
+    - [Eliminar Humano]()
+    - [Obtener Id Dios]()
+    - [Consultar Usuario]()
+    - [Mostrar Pruebas]()
+    - [Listar Óraculos]()
+    - [Crear Prueba]()
+    - [Modificar Prueba]()
+    - [Eliminar Prueba]()
+    - [Asignar Oraculo]()
 
-```http
-  GET /api/items
-```
 
-| Parameter | Type     | Description                |
+## Registro
+### `POST api/registro`
+Registra un nuevo usuario.
+
+| Parametro | Tipo     | Descripción                |
 | :-------- | :------- | :------------------------- |
-| `api_key` | `string` | **Required**. Your API key |
+| `nombre` | `string` | Nombre del usuario con el que queremos registrarnos. | 
+| `email` | `string` | Correo electronico para el usuario.  |
+| `password` | `string` | Contraseña para poder acceder. |
 
-#### Get item
+## Inicio de Sesión
+### `POST api/login`
+Inicia sesión para un usuario.
 
-```http
-  GET /api/items/${id}
-```
-
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `id`      | `string` | **Required**. Id of item to fetch |
-
-#### add(num1, num2)
-
-Takes two numbers and returns the sum.
-
-
-### Manual para los Humanos
-
-#### Get all items
-
-```http
-  GET /api/items
-```
-
-| Parameter | Type     | Description                |
+| Parametro | Tipo     | Descripción                |
 | :-------- | :------- | :------------------------- |
-| `api_key` | `string` | **Required**. Your API key |
+| `email` | `string` | **Requerido**.  |
+| `password` | `string` | **Requerido**. |
 
-#### Get item
+## Cierre de Sesión **HACER**
+### `POST api/cerrarSesion/{id}`
+Cierra la sesión de un usuario.
 
-```http
-  GET /api/items/${id}
-```
+Parámetros:
+- `id` (entero): ID del usuario.
 
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `id`      | `string` | **Required**. Id of item to fetch |
+## Restablecer Contraseña
+### `POST /restablecer-pass`
+Restablece la contraseña del usuario.
 
-#### add(num1, num2)
+| Parametro | Tipo     | Descripción                |
+| :-------- | :------- | :------------------------- |
+| `email` | `string` | **Requerido**.  |
 
-Takes two numbers and returns the sum.
+## Verificar Existencia de Correo Electrónico
+### `POST /email-existente`
+Verifica si un correo electrónico ya está registrado.
 
+| Parametro | Tipo     | Descripción                |
+| :-------- | :------- | :------------------------- |
+| `email` | `string` | **Requerido**.  |
+
+## Acceso No Autenticado
+### `GET /`
+Devuelve una respuesta indicando que el usuario no ha iniciado sesión.
+
+## Subir Imagen
+### `POST /subirImagen`
+Podremos subir cualquier archivo de imágen. Token requerido.
+
+## Actualizar Imagen
+### `PUT /actualizarImagen`
+La imagen que habremos subido anteriormente la actualizaremos con esta ruta.
+
+| Parametro | Tipo     | Descripción                |
+| :-------- | :------- | :------------------------- |
+| `id` | `integer` | **Requerido**.  |
+| `img` | `url de la imagen` | **Requerido** |
+
+La url de la imagen la podremos coger en la respuesta al subir la imagen.
+
+## Modificar Contraseña
+### `PUT /modificar-password/{id}`
+El usuario podrá modificar la contraseña.
+
+| Parametro | Tipo     | Descripción                |
+| :-------- | :------- | :------------------------- |
+| `old_password` | `string` | **Requerido**.  |
+| `new_password` | `string` | **Requerido** |
+
+## Rutas para Usuarios Humanos
+### Ver pruebas asignadas
+#### `GET /humano/pruebas-asignadas/{userId}`
+Recupera las pruebas asignadas para un usuario específico.
+
+### Guardar Respuesta de Pruebas
+#### `POST /humano/guardar-respuesta`
+Ruta en la que se guardará la respuesta que den los humanos a las pruebas.
+
+| Parametro | Tipo     | Descripción                |
+| :-------- | :------- | :------------------------- |
+| `humano_id` | `integer` | **Requerido**.  |
+| `prueba_id` | `integer` | **Requerido** |
+| `resultado` | `integer`/`string` | **Requerido** |
+
+### Pruebas resueltas
+#### ``
+Devolverá todas las pruebas que se hayan resuelto
+
+### Consultar Usuario
+##### `GET /`
+
+### Consultar Humano
+#### ` GET /humano/consultarHumano/{id}`
+Devuelve los datos del humano que hemos buscado.
+
+### Obtener Id de Humano
+#### ` GET /humano/obtener-id-humano/{id}`
+Devuelve el id del humano cuando lo buscamos con el id del usuario.
+
+
+## Rutas para Usuarios "Dios"
+### Listar Humanos
+#### `GET /dios/listar-humanos`
+Recupera una lista de todos los usuarios.
+
+### Listar Humanos Protegidos
+#### `GET /dios/listar-humanos-protegidos/1`
+Recupera una lista de todos los humanos que tiene el dios bajo su protección.
+
+###
+#### `POST /dios/crear-usuario`
+Crea un nuevo usuario.
+
+### 
+#### `PUT /dios/modificar-humano/{id}`
+Modifica un usuario existente.
+
+###
+#### `GET /dios/mostrar-pruebas`
+Recupera una lista de todas las pruebas.
+
+###
+#### `POST /dios/crear-prueba`
+Crea una nueva prueba.
+
+###
+#### `PUT /dios/modificar-prueba/{id}`
+Actualiza una prueba existente.
+
+###
+#### `DELETE /dios/eliminar-prueba/{id}`
+Elimina una prueba.
+
+###
+#### `POST /dios/asignar-oraculo`
+Asigna una prueba a un usuario.
+
+## Middlewares
+- `cors`: Maneja el intercambio de recursos entre dominios (CORS).
+- `auth:sanctum`: Asegura la autenticación del usuario.
+- `HumanoMid`: Middleware para rutas accesibles solo para usuarios humanos.
+- `DiosMid`: Middleware para rutas accesibles solo para usuarios "dios".
+
+Siéntete libre de explorar y utilizar estas rutas de la API según las funcionalidades descritas. Asegúrate de utilizar una autenticación y autorización adecuadas para un uso seguro de la API.

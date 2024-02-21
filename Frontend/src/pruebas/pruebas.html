@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="./pruebas.css">
+   <link rel="icon" href="../assets/logo1.png">
+   <title>Pruebas</title>
+</head>
+
+<body>
+    <div class = "dashboard-container">
+        <div class="sidebar">
+            <ul>
+                <li><a href="../dashboard/dashboard.html">Dashboard</a></li>
+                <li><a href="../humanos/humanos.html">Ver Humanos Asignados</a></li>
+                <li><a href="../miPerfil/miPerfil.html">Mi perfil</a></li>
+            </ul>
+        </div>
+
+        <div class="content">
+            <div class = "logo">
+                <img src="../assets/logo1.png" alt="logo" width="350px"/>
+                <h2 id="mensaje-bienvenida">Bienvenido/a </h2>
+            </div>
+            <div class="dashboard">
+                <div class="main-content">
+                    <h2>Almacen de todas las Pruebas disponibles</h2>
+                    <a href="../crearPruebas/crearPruebas.html"><img src="../assets/crear.png" alt="Crear Prueba" width="50px"/></a>
+                    <table class="table" id="tabla-oraculos">
+                        <thead>
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Pregunta</th>
+                                <th>Cantidad Destino</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="../../dist/pruebas.main.js"></script>
+</html>

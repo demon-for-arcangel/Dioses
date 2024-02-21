@@ -1,0 +1,128 @@
+:root{
+    color-scheme: light dark;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.content {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0; 
+}
+
+.logo h2 {
+    padding-left: 75px;
+}
+
+.dashboard-container{
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+}
+
+.dashboard{
+    background-color: #201f1f;
+    margin-left: 25px;
+    border-radius: 15px;
+}
+
+.sidebar {
+    width: 200px;
+    background-color: #e1ab08;
+    min-height: 100vh;
+    padding: 20px;
+    margin: 0px;
+    color: black;
+    flex-shrink: 0;
+}
+a {
+    text-decoration: none;
+    color: black;
+}
+
+a:visited{
+    color:bisque;
+}
+.main-content {
+    padding: 20px;
+}
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+
+.table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+}
+
+/* -------------- Modal --------------*/
+/* Estilos generales del modal */
+.modal {
+    position: fixed;
+    background-color: #201f1f;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2; /* Asegura que el modal esté en la parte superior */
+}
+
+/* Estilos del contenido del modal */
+.modal-content {
+    padding: 20px;
+    border: 1px solid #888;
+    border-radius: 5px;
+    max-width: 400px;
+    width: 100%;
+}
+
+/* Estilos para los input del formulario */
+input {
+    margin-bottom: 10px;
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Estilos específicos para el botón del formulario */
+button {
+    padding: 10px;
+    background-color: #4caf50; /* Verde */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Estilos para el botón de cerrar del formulario */
+.cancelar-button {
+    margin-left: 20px;
+    background-color: #f44336; /* Rojo */
+}
