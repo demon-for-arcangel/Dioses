@@ -1,5 +1,7 @@
 export async function consultarUser(token, id) {
     try {
+        console.log(token)
+        console.log(id)
         let headersList = {
             "Content-Type": "application/json",
             "Authorization": "Bearer " + token
@@ -20,6 +22,7 @@ export async function consultarUser(token, id) {
         throw error;
     }
 }
+
 
 export async function subirImagenS3(ruta){
     let response = await fetch("http://127.0.0.1:8000/api/subirImagen", { 

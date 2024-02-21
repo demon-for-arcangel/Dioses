@@ -94,8 +94,6 @@ export async function guardarRespuesta(humano_id, prueba_id, respuesta, token) {
             body: JSON.stringify(body)
         });
 
-        console.log(response)
-
         if (response.ok) {
             let data = await response.json();
             console.log(data);
