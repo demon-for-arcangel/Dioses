@@ -74,7 +74,6 @@ export async function obtenerIdHumano(id, token){
 
 
 export async function guardarRespuesta(humano_id, prueba_id, respuesta, token) {
-    try {
         console.log(respuesta)
         let headersList = {
             "Content-Type": "application/json",
@@ -101,10 +100,8 @@ export async function guardarRespuesta(humano_id, prueba_id, respuesta, token) {
             return data;
         } else {
             console.error('Error en la solicitud: ', response);
+            console.error('Contenido del error:', await response.text());  // Agrega esta línea
             throw new Error(`Error en la solicitud: ${response.status} - ${response.statusText}`);
         }
-    } catch (error) {
-        console.error('Error al mostrar las pruebas asignadas: ', error.message); 
-        throw error;
-    }
+
 }
