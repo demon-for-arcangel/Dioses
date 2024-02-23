@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="./miPerfil.css">
+   <link rel="icon" href="../assets/logo1.png">
+   <title>Mi Perfil</title>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <ul>
+                <li><a href="../dashboard/dashboard.html">Dashboard</a></li>
+                <li><a href="../humanos/humanos.html">Ver Humanos Asignados</a></li>
+                <li><a href="../pruebas/pruebas.html">Ver Pruebas</a></li>
+            </ul>
+        </div>
+
+        <div class="content">
+            <div class="logo">
+                <img src="../assets/logo1.png" alt="logo" width="350px"/>
+                <h2>Configuración de Mi Perfil</h2>
+            </div>
+            <div class="dashboard">
+                <div class="main-content">
+                    <img class="mt-4 rounded shadow" src="" id="imgSubida" width="200px">
+                    <br>
+                    <input type="file" name="image" id="inputImage" accept="image/png, image/jpeg, image/webp">
+                    <button id="btnSubir" width="50px">Actualizar</button>
+                </div>
+                <br>
+                <div class="main-content">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" id="nombre" name="nombre" disabled>
+                    <br>
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" disabled>
+                    <br>
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password">
+                    <br>
+                    <label for="newPassword">New Password</label>
+                    <input type="password" id="newPassword" name="newPassword">
+                </div>
+                <br>
+                <div class="main-content">
+                    <label for="sabiduria">Sabiduría</label>
+                    <input type="number" id="sabiduria" name="sabiduria" disabled>
+                    <br>
+                    <label for="nobleza">Nobleza</label>
+                    <input type="number" id="nobleza" name="nobleza" disabled>
+                    <br>
+                    <label for="virtud">Virtud</label>
+                    <input type="number" id="virtud" name="virtud" disabled>
+                    <br>
+                    <label for="maldad">Maldad</label>
+                    <input type="number" id="maldad" name="maldad" disabled>
+                    <br>
+                    <label for="audacia">Audacia</label>
+                    <input type="number" id="audacia" name="audacia" disabled>
+                </div>
+                <p id="mensajeResultado"></p>
+                <button id="guardar">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="../../dist/miPerfil.main.js"></script>
+</html>

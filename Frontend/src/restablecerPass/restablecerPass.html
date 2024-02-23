@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restablecer Contraseña</title>
+    <link rel="stylesheet" href="./restablecerPass.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Rellena el siguiente campo para recuperar tu contraseña</h2>
+        <form>
+            <div id="notification">
+                <div id="noti"></div>
+            </div> 
+            <label>Introduce el correo electrónico que este asociado a la cuenta</label>
+            <input type="email" id="email" placeholder="Correo Electrónico" required/>
+            <br><br>
+            <input type="button" id="btnPass" autocomplete="email" value="Resetear contraseña">
+        </form>    
+    </div>
+</body>
+<script src="../../dist/restablecerPass.main.js"></script>
+</html>
